@@ -10,6 +10,7 @@ import { StatList, StatListItem } from '@/components/StatList'
 import { TagList, TagListItem } from '@/components/TagList'
 import { ServiceQuoteForm } from '@/components/ServiceQuoteForm'
 import { ServiceFAQSection, type FAQ } from '@/components/ServiceFAQSection'
+import { RelatedServices } from '@/components/RelatedServices'
 import { RootLayout } from '@/components/RootLayout'
 
 import imageHero from './hero.jpg'
@@ -319,6 +320,8 @@ export default function LocalPDService() {
       <ImageSection2 />
       <SpecializedServices />
       <ImageSection3 />
+
+      <RelatedServices currentService="/services/local-pd" />
 
       <ServiceFAQSection
         title="Local Pickup & Delivery FAQs"

@@ -10,6 +10,7 @@ import { StatList, StatListItem } from '@/components/StatList'
 import { TagList, TagListItem } from '@/components/TagList'
 import { ServiceQuoteForm } from '@/components/ServiceQuoteForm'
 import { ServiceFAQSection, type FAQ } from '@/components/ServiceFAQSection'
+import { RelatedServices } from '@/components/RelatedServices'
 import { RootLayout } from '@/components/RootLayout'
 
 import imageHero from './hero.jpg'
@@ -318,6 +319,8 @@ export default function OverTheRoadService() {
       <ImageSection2 />
       <Services />
       <ImageSection3 />
+
+      <RelatedServices currentService="/services/over-the-road" />
 
       <ServiceFAQSection
         title="Over the Road FAQs"
