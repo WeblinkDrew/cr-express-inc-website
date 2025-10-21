@@ -31,8 +31,8 @@ function Culture() {
       >
         <p>
           Founded by truck drivers who understand logistics from the ground up,
-          we've built a culture centered on reliability, expertise, and putting
-          our customers' success first.
+          we&apos;ve built a culture centered on reliability, expertise, and putting
+          our customers&apos; success first.
         </p>
       </SectionIntro>
       <Container className="mt-16">
@@ -44,7 +44,7 @@ function Culture() {
           </GridListItem>
           <GridListItem title="24/7 Commitment" invert>
             Logistics never sleeps, and neither does our dedication. With round-the-clock
-            operations and support, we're always ready when our customers need us,
+            operations and support, we&apos;re always ready when our customers need us,
             ensuring their supply chains never stop moving.
           </GridListItem>
           <GridListItem title="Safety First" invert>
@@ -161,8 +161,8 @@ function ServiceSatisfaction() {
             <div className="mt-6 space-y-6 text-base text-neutral-600">
               <p>
                 CR Express was built on unmatched service that goes above and beyond
-                customer expectations. The industry recognition and trust we've formed
-                over the years is a true staple in the organization's success and how
+                customer expectations. The industry recognition and trust we&apos;ve formed
+                over the years is a true staple in the organization&apos;s success and how
                 customers will continue to recognize us for many years to come.
               </p>
             </div>
@@ -170,8 +170,8 @@ function ServiceSatisfaction() {
               author={{ name: 'Carlos Rosales', role: 'Founder' }}
               className="mt-12"
             >
-              CR Express is not like any other trucking company. It's first class
-              service on a large scale and that's what makes us such a great partner
+              CR Express is not like any other trucking company. It&apos;s first class
+              service on a large scale and that&apos;s what makes us such a great partner
               to work with.
             </Blockquote>
           </FadeIn>
@@ -187,7 +187,7 @@ function ServiceSatisfaction() {
             </h2>
             <div className="mt-6 space-y-6 text-base text-neutral-600">
               <p>
-                CR Express aims to be our valued customers' one-stop solution for all
+                CR Express aims to be our valued customers&apos; one-stop solution for all
                 their logistics needs. What do we offer?
               </p>
             </div>
@@ -275,7 +275,7 @@ function Philanthropy() {
           remains fundamentally involved in charitable foundations.
         </p>
         <p className="mt-6">
-          CR Express' staff also helps local communities through volunteerism, connecting
+          CR Express&apos; staff also helps local communities through volunteerism, connecting
           non-profits and communities to much needed resources.
         </p>
       </SectionIntro>
@@ -290,8 +290,8 @@ function Philanthropy() {
           <GridListItem title="Boys and Girls Club" invert>
             CR Express wrapped a Semi-Truck with the Boys and Girls Club Branding to
             Spread Awareness Statistics about the Free Membership Club. It also hosted a
-            "touch a truck" event for the club, to showcase how the logistics industry
-            works and let the members of the club get a first-hand look at CR Express' day to day.
+            &quot;touch a truck&quot; event for the club, to showcase how the logistics industry
+            works and let the members of the club get a first-hand look at CR Express&apos; day to day.
           </GridListItem>
           <GridListItem title="Wings Soccer Club" invert>
             CR Express is a sponsor of the competitive soccer team, Wings SC. The Wings
@@ -321,20 +321,20 @@ export default async function About() {
     <RootLayout>
       <PageIntro eyebrow="About CR Express" title="Founded by drivers, powered by expertise">
         <p>
-          Since 1999, we've built our reputation on understanding logistics from
-          the ground up, delivering solutions that keep America's supply chains moving.
+          Since 1999, we&apos;ve built our reputation on understanding logistics from
+          the ground up, delivering solutions that keep America&apos;s supply chains moving.
         </p>
         <div className="mt-10 max-w-2xl space-y-6 text-base">
           <p>
             CR Express was founded by truck drivers who saw an opportunity to do
             logistics differently. Starting with a handful of trucks and a commitment
-            to exceptional service, we've grown into a comprehensive logistics provider
+            to exceptional service, we&apos;ve grown into a comprehensive logistics provider
             operating from a strategic 280,000 square foot facility less than 5 miles
-            from O'Hare International Airport.
+            from O&apos;Hare International Airport.
           </p>
           <p>
             Our founder-driven perspective means we understand the challenges our
-            customers face because we've been there ourselves. From navigating Chicago's
+            customers face because we&apos;ve been there ourselves. From navigating Chicago&apos;s
             21 railyards to managing time-critical air cargo operations, our team brings
             26+ years of hands-on experience to every shipment we handle.
           </p>

@@ -60,7 +60,7 @@ export function VideoSection() {
         <p>
           Take a virtual tour of our 280,000 sq ft bonded warehouse facility and
           see how we handle your cargo with precision and care. From our intermodal
-          drayage operations to air cargo services at O'Hare, discover what makes
+          drayage operations to air cargo services at O&apos;Hare, discover what makes
           CR Express your trusted logistics partner.
         </p>
       </SectionIntro>

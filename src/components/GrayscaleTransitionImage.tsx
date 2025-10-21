@@ -32,7 +32,7 @@ export function GrayscaleTransitionImage(
         className="pointer-events-none absolute top-0 left-0 w-full opacity-0 transition duration-300 group-hover:opacity-100"
         aria-hidden="true"
       >
-        <Image {...props} />
+        <Image {...props} alt={props.alt || ""} />
       </div>
     </div>
   )

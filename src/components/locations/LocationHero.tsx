@@ -36,7 +36,7 @@ export function LocationHero({ city }: LocationHeroProps) {
           <p className="mt-6 text-xl text-neutral-600">
             Professional CBW Class 3 bonded warehouse services for businesses in {city.name}, Illinois.
             Only {city.distance} miles from our 280,000 sq ft facility in Elk Grove Village,
-            with customs compliance, duty-free storage up to 5 years, and strategic access to O'Hare Airport.
+            with customs compliance, duty-free storage up to 5 years, and strategic access to O&apos;Hare Airport.
           </p>
 
           {/* CTA Buttons */}
