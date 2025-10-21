@@ -119,6 +119,61 @@ function Stats() {
   )
 }
 
+function ImageSection1() {
+  return (
+    <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <FadeIn>
+        <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
+          <Image
+            src={imageHero}
+            alt="Over the road freight facility"
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 67rem, 100vw"
+          />
+        </div>
+      </FadeIn>
+    </Container>
+  )
+}
+
+function ImageSection2() {
+  return (
+    <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <FadeIn>
+        <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
+          <Image
+            src={imageHero}
+            alt="Over the road freight operations"
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 67rem, 100vw"
+          />
+        </div>
+      </FadeIn>
+    </Container>
+  )
+}
+
+function ImageSection3() {
+  return (
+    <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <FadeIn>
+        <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
+          <Image
+            src={imageHero}
+            alt="Over the road freight services"
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 67rem, 100vw"
+          />
+        </div>
+      </FadeIn>
+    </Container>
+  )
+}
+
+
 function Benefits() {
   return (
     <>
@@ -258,8 +313,11 @@ export default function OverTheRoadService() {
       <Hero />
       <Clients />
       <Stats />
+      <ImageSection1 />
       <Benefits />
+      <ImageSection2 />
       <Services />
+      <ImageSection3 />
 
       <ServiceFAQSection
         title="Over the Road FAQs"

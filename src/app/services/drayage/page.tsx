@@ -119,6 +119,61 @@ function Stats() {
   )
 }
 
+function ImageSection1() {
+  return (
+    <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <FadeIn>
+        <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
+          <Image
+            src={imageHero}
+            alt="Drayage facility"
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 67rem, 100vw"
+          />
+        </div>
+      </FadeIn>
+    </Container>
+  )
+}
+
+function ImageSection2() {
+  return (
+    <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <FadeIn>
+        <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
+          <Image
+            src={imageHero}
+            alt="Drayage operations"
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 67rem, 100vw"
+          />
+        </div>
+      </FadeIn>
+    </Container>
+  )
+}
+
+function ImageSection3() {
+  return (
+    <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <FadeIn>
+        <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
+          <Image
+            src={imageHero}
+            alt="Drayage services"
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 67rem, 100vw"
+          />
+        </div>
+      </FadeIn>
+    </Container>
+  )
+}
+
+
 function Benefits() {
   return (
     <>
@@ -265,8 +320,11 @@ export default function DrayageService() {
       <Hero />
       <Clients />
       <Stats />
+      <ImageSection1 />
       <Benefits />
+      <ImageSection2 />
       <RailyardNetwork />
+      <ImageSection3 />
 
       <ServiceFAQSection
         title="Drayage Services FAQs"

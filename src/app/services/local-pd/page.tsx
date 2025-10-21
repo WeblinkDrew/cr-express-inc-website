@@ -119,6 +119,61 @@ function Stats() {
   )
 }
 
+function ImageSection1() {
+  return (
+    <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <FadeIn>
+        <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
+          <Image
+            src={imageHero}
+            alt="Local delivery facility"
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 67rem, 100vw"
+          />
+        </div>
+      </FadeIn>
+    </Container>
+  )
+}
+
+function ImageSection2() {
+  return (
+    <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <FadeIn>
+        <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
+          <Image
+            src={imageHero}
+            alt="Local delivery operations"
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 67rem, 100vw"
+          />
+        </div>
+      </FadeIn>
+    </Container>
+  )
+}
+
+function ImageSection3() {
+  return (
+    <Container className="mt-24 sm:mt-32 lg:mt-40">
+      <FadeIn>
+        <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
+          <Image
+            src={imageHero}
+            alt="Local delivery services"
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 67rem, 100vw"
+          />
+        </div>
+      </FadeIn>
+    </Container>
+  )
+}
+
+
 function Benefits() {
   return (
     <>
@@ -259,8 +314,11 @@ export default function LocalPDService() {
       <Hero />
       <Clients />
       <Stats />
+      <ImageSection1 />
       <Benefits />
+      <ImageSection2 />
       <SpecializedServices />
+      <ImageSection3 />
 
       <ServiceFAQSection
         title="Local Pickup & Delivery FAQs"
