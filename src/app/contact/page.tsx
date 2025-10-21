@@ -10,6 +10,7 @@ import { Offices } from '@/components/Offices'
 import { PageIntro } from '@/components/PageIntro'
 import { SocialMedia } from '@/components/SocialMedia'
 import { RootLayout } from '@/components/RootLayout'
+import { ServiceFAQSection, type FAQ } from '@/components/ServiceFAQSection'
 
 function TextInput({
   label,
@@ -179,6 +180,39 @@ function ContactDetails() {
   )
 }
 
+const contactFAQs: FAQ[] = [
+  {
+    question: 'What information do I need to provide for a freight quote?',
+    answer:
+      'For an accurate quote, please provide: pickup and delivery locations (city, state, zip), shipment details (weight, dimensions, number of pieces), freight class or product description, desired pickup/delivery dates, and any special handling requirements (liftgate, inside delivery, refrigeration, etc.). The more details you provide, the more accurate your quote will be.',
+  },
+  {
+    question: 'How quickly can I get a quote?',
+    answer:
+      'Most standard freight quotes are provided within 1-2 hours during business hours. For urgent requests, call (847) 354-7979 and speak directly with our dispatch team for immediate pricing. Complex shipments requiring specialized equipment or permits may take slightly longer as we coordinate with our operations team.',
+  },
+  {
+    question: 'What are your business hours?',
+    answer:
+      'Our main office is open Monday through Friday, 8:00 AM to 5:00 PM Central Time. However, our dispatch team operates 24/7 for time-critical shipments and customer support. For after-hours emergencies, urgent pickups, or deliveries, call our main number (847) 354-7979 and you\'ll be connected to our on-duty dispatcher.',
+  },
+  {
+    question: 'Do you offer facility tours?',
+    answer:
+      'Yes, we welcome potential customers to tour our 280,000 sq ft bonded warehouse facility in Elk Grove Village. Tours provide an opportunity to see our CBW Class 3 operations, climate-controlled storage, security systems, and value-added services firsthand. Contact us to schedule a facility tour with one of our logistics specialists.',
+  },
+  {
+    question: 'How do I track my shipment?',
+    answer:
+      'All shipments include real-time GPS tracking. You can track your freight by accessing our online customer portal with your tracking number, calling our dispatch team at (847) 354-7979, or using the contact form with your shipment details. You\'ll receive automated notifications for pickup confirmation, delivery updates, and POD documentation.',
+  },
+  {
+    question: 'What payment methods do you accept?',
+    answer:
+      'We accept various payment methods including ACH transfers, credit cards, wire transfers, and checks. Established customers can apply for credit terms with our accounting department. For new customers, we may require payment in advance or upon delivery for the first few shipments until credit is established.',
+  },
+]
+
 export const metadata: Metadata = {
   title: 'Contact CR Express | Get a Logistics Quote',
   description: 'Contact CR Express for bonded warehouse, air cargo, drayage, and freight services. Located in Elk Grove Village, IL near O\'Hare Airport. Call (847) 354-7979.',
@@ -200,6 +234,12 @@ export default function Contact() {
           <ContactDetails />
         </div>
       </Container>
+
+      <ServiceFAQSection
+        title="Contact & Quote FAQs"
+        description="Common questions about getting quotes, contacting our team, and working with CR Express."
+        faqs={contactFAQs}
+      />
     </RootLayout>
   )
 }

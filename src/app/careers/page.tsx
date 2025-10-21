@@ -14,6 +14,7 @@ import { TagList, TagListItem } from '@/components/TagList'
 import imageLaptop from '@/images/laptop.jpg'
 import imageCareers from '@/images/IMG 4739 from CR Express.jpg'
 import { RootLayout } from '@/components/RootLayout'
+import { ServiceFAQSection, type FAQ } from '@/components/ServiceFAQSection'
 
 function Positions() {
   const positions = [
@@ -345,6 +346,39 @@ function ApplicationProcess() {
   )
 }
 
+const careersFAQs: FAQ[] = [
+  {
+    question: 'What types of driving positions do you have available?',
+    answer:
+      'We hire CDL-A drivers for several types of positions: Local pickup & delivery (home daily), Over-the-road (regional and long-haul routes), Drayage/container work (21 Chicago railyards), and Dedicated account positions. Both company drivers and owner-operators are welcome. Requirements include valid CDL-A, clean driving record, and DOT medical card.',
+  },
+  {
+    question: 'Do local drivers get home every night?',
+    answer:
+      'Yes, our local pickup & delivery drivers and drayage drivers are home daily. These positions operate within the Chicago metropolitan area with routes designed to ensure you\'re home each night. We value work-life balance and understand the importance of time with family.',
+  },
+  {
+    question: 'What benefits do you offer?',
+    answer:
+      'We provide comprehensive benefits including medical, dental, and vision insurance for you and your family, 401(k) with company matching, paid time off and holidays, company-paid life insurance and disability coverage, ongoing training and career development, safety bonuses and performance incentives, and modern, well-maintained equipment.',
+  },
+  {
+    question: 'Do you require experience for warehouse positions?',
+    answer:
+      'Experience requirements vary by position. For forklift operators and specialized roles, we prefer 1-2 years of warehouse experience. However, we also hire entry-level candidates for general warehouse positions and provide comprehensive training. Certifications like forklift operation can be obtained through our training programs. The most important qualities are reliability, attention to detail, and willingness to learn.',
+  },
+  {
+    question: 'How does the application process work?',
+    answer:
+      'The process typically takes 1-2 weeks: Submit your online application or call (847) 354-7979, complete a phone screening with our HR team (usually within 48 hours), attend an in-person interview at our Elk Grove Village facility, pass background check and drug screening, receive job offer with start date, and complete onboarding and orientation. For driving positions, bring your CDL, medical card, and driving record to your interview.',
+  },
+  {
+    question: 'What opportunities are there for career advancement?',
+    answer:
+      'CR Express promotes from within whenever possible. Warehouse associates can advance to lead positions, supervisors, and management roles. Drivers can move into dispatcher, operations coordinator, or driver trainer positions. We provide ongoing training, tuition reimbursement for job-related education, and clear advancement paths. Many of our managers started in entry-level positions and grew their careers with us over the years.',
+  },
+]
+
 export const metadata: Metadata = {
   title: 'Careers at CR Express - Chicago Logistics Jobs',
   description:
@@ -367,6 +401,13 @@ export default function Careers() {
       <Benefits />
       <Values />
       <ApplicationProcess />
+
+      <ServiceFAQSection
+        title="Careers FAQs"
+        description="Common questions about working at CR Express, benefits, and the application process."
+        faqs={careersFAQs}
+      />
+
       <ContactSection />
     </RootLayout>
   )

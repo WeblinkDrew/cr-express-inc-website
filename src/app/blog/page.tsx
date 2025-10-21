@@ -11,6 +11,35 @@ import { PageIntro } from '@/components/PageIntro'
 import { RootLayout } from '@/components/RootLayout'
 import { formatDate } from '@/lib/formatDate'
 import { loadArticles } from '@/lib/mdx'
+import { ServiceFAQSection, type FAQ } from '@/components/ServiceFAQSection'
+
+const blogFAQs: FAQ[] = [
+  {
+    question: 'How often do you publish new blog content?',
+    answer:
+      'We publish new articles regularly, typically 2-3 times per month. Our content calendar focuses on timely industry topics, seasonal logistics considerations, regulatory updates, and best practices based on our 26+ years of experience in transportation and warehousing.',
+  },
+  {
+    question: 'Can I subscribe to blog updates?',
+    answer:
+      'Yes! You can stay informed about our latest blog posts and logistics insights by following us on LinkedIn where we share all new articles. You can also contact us to join our email newsletter for monthly updates on industry trends, company news, and helpful logistics tips.',
+  },
+  {
+    question: 'Do you accept guest blog posts or industry contributions?',
+    answer:
+      'We occasionally feature guest posts from industry experts, partners, and thought leaders in the logistics and supply chain space. If you have expertise to share that would benefit our audience, please contact us at quotes@crexpressinc.com with your topic proposal and a brief outline.',
+  },
+  {
+    question: 'Can I share your blog articles?',
+    answer:
+      'Absolutely! We encourage sharing our content. All our blog articles can be shared via social media, email, or linked from your own website. We appreciate proper attribution and a link back to the original article on our site.',
+  },
+  {
+    question: 'How can I get answers to specific logistics questions not covered in the blog?',
+    answer:
+      'If you have specific questions about logistics, shipping, warehousing, or our services that aren\'t addressed in our blog content, we\'re here to help! Call our team at (847) 354-7979 or submit your question through our contact form. Our logistics experts are happy to provide personalized answers and guidance.',
+  },
+]
 
 export const metadata: Metadata = {
   title: 'CR Express Blog - Logistics Insights & Industry News',
@@ -85,6 +114,12 @@ export default async function Blog() {
           ))}
         </div>
       </Container>
+
+      <ServiceFAQSection
+        title="Blog FAQs"
+        description="Questions about our blog content, subscriptions, and how to stay informed about logistics industry insights."
+        faqs={blogFAQs}
+      />
 
       <ContactSection />
     </RootLayout>
