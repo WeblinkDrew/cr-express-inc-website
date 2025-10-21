@@ -24,12 +24,15 @@ export function VideoSection() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !isVideoLoaded) {
-            setIsVideoLoaded(true)
-            // Auto-play only on desktop
-            if (!isMobile) {
-              setIsPlaying(true)
-            }
+          if (entry.isIntersecting) {
+            setIsVideoLoaded((loaded) => {
+              if (!loaded) {
+                // Auto-play only on desktop
+                setIsPlaying(window.innerWidth >= 768)
+                return true
+              }
+              return loaded
+            })
           }
         })
       },
@@ -44,7 +47,7 @@ export function VideoSection() {
       observer.disconnect()
       window.removeEventListener('resize', checkMobile)
     }
-  }, [isVideoLoaded, isMobile])
+  }, [])
 
   const handlePlayClick = () => {
     setIsPlaying(true)

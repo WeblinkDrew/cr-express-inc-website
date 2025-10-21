@@ -49,6 +49,12 @@ export function GridPattern({
       return
     }
 
+    // Only enable interactive grid on desktop (non-touch devices)
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    if (isTouchDevice) {
+      return
+    }
+
     function onMouseMove(event: MouseEvent) {
       if (!ref.current) {
         return

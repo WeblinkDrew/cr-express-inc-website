@@ -246,6 +246,7 @@ export default function Home() {
             loop
             muted
             playsInline
+            preload="metadata"
             className="h-[calc(100%+8rem)] w-full object-cover"
           >
             <source src="/videos/hero-background-video.webm" type="video/webm" />
