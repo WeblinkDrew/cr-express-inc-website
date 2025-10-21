@@ -24,9 +24,9 @@ export function StatListItem({
   value: string
 }) {
   return (
-    <Border as={FadeIn} position="left" className="flex flex-col-reverse pl-8">
-      <dt className="mt-2 text-base text-neutral-600">{label}</dt>
-      <dd className="font-display text-3xl font-semibold text-neutral-950 sm:text-4xl">
+    <Border as={FadeIn} position="left" className="flex flex-col-reverse pl-8 border-l-[#13B5EA]">
+      <dt className="mt-2 text-base text-[#4A5568]">{label}</dt>
+      <dd className="font-display text-3xl font-semibold text-[#2C3E50] sm:text-4xl">
         {value}
       </dd>
     </Border>

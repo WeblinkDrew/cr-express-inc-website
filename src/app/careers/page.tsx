@@ -175,7 +175,7 @@ function Positions() {
 
 function Benefits() {
   return (
-    <div className="mt-24 rounded-4xl bg-neutral-950 py-24 sm:mt-32 lg:mt-40 lg:py-32">
+    <div className="mt-24 rounded-4xl bg-[#2C3E50] py-24 sm:mt-32 lg:mt-40 lg:py-32">
       <SectionIntro
         eyebrow="Why work at CR Express"
         title="Benefits that drive success"

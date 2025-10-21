@@ -11,7 +11,7 @@ interface SpotlightCardProps {
 export function SpotlightCard({
   children,
   className = '',
-  spotlightColor = 'rgba(255, 255, 255, 0.1)',
+  spotlightColor = 'rgba(19, 181, 234, 0.1)',
 }: SpotlightCardProps) {
   const divRef = useRef<HTMLDivElement>(null)
 

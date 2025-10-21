@@ -12,7 +12,6 @@ import {
 import { ContactSection } from '@/components/ContactSection'
 import { Container } from '@/components/Container'
 import { FadeIn, FadeInStagger } from '@/components/FadeIn'
-import { SpotlightCard } from '@/components/SpotlightCard'
 import { FAQSection } from '@/components/FAQSection'
 import { List, ListItem } from '@/components/List'
 import { SectionIntro } from '@/components/SectionIntro'
@@ -23,18 +22,6 @@ import { VideoSection } from '@/components/VideoSection'
 import { Clients } from '@/components/Clients'
 import imageLaptop from '@/images/IMG 4204 Media Library.jpg'
 import { RootLayout } from '@/components/RootLayout'
-
-// Icon wrapper component with circle
-function IconWithCircle({ icon: Icon }: { icon: React.ComponentType<{ className?: string }> }) {
-  return (
-    <div className="relative h-16 w-16 transition-transform duration-300 group-hover:scale-110">
-      <div className="absolute inset-0 rounded-full border-2 border-neutral-950 transition-colors duration-300 group-hover:border-neutral-700" />
-      <div className="flex h-full w-full items-center justify-center">
-        <Icon className="h-8 w-8 text-neutral-950 transition-colors duration-300 group-hover:text-neutral-700" />
-      </div>
-    </div>
-  )
-}
 
 // CR Express core services for homepage
 const services = [
@@ -98,7 +85,7 @@ function CoreServices() {
         <div className="flex justify-end">
           <Link
             href="/services"
-            className="group inline-flex items-center gap-x-2 rounded-full bg-neutral-950 px-4 py-1.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-neutral-800 hover:gap-x-3"
+            className="group inline-flex items-center gap-x-2 rounded-full bg-[#415568] px-4 py-1.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#2C3E50] hover:gap-x-3"
           >
             Explore Our Services
             <svg
@@ -116,30 +103,67 @@ function CoreServices() {
             </svg>
           </Link>
         </div>
-        <FadeInStagger className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-6">
-          {services.map((service, index) => (
-            <FadeIn
-              key={service.href}
-              className={`flex ${index < 3 ? 'lg:col-span-2' : 'lg:col-span-3'}`}
-            >
-              <SpotlightCard className="w-full transition-transform duration-300 hover:-translate-y-1" spotlightColor="rgba(0, 0, 101, 0.15)">
-                <article className="group relative flex w-full flex-col">
-                  <h3>
-                    <Link href={service.href}>
-                      <span className="absolute inset-0 rounded-3xl" />
-                      <IconWithCircle icon={service.icon} />
-                    </Link>
-                  </h3>
-                  <p className="mt-6 font-display text-2xl font-semibold text-neutral-950 transition-colors duration-300 group-hover:text-neutral-700">
-                    {service.title}
-                  </p>
-                  <p className="mt-4 text-base text-neutral-600">
-                    {service.description}
-                  </p>
-                </article>
-              </SpotlightCard>
-            </FadeIn>
-          ))}
+        <FadeInStagger className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2">
+          {services.map((service, index) => {
+            // Conservative color scheme - mostly light with one navy accent
+            const backgrounds = [
+              'bg-[#ECF2F6] border border-neutral-200',
+              'bg-white border border-neutral-200',
+              'bg-white border border-neutral-200',
+              'bg-[#2C3E50] border-0',
+              'bg-[#F5F7F9] border border-neutral-200',
+            ]
+            const textColors = [
+              'text-[#2C3E50]',
+              'text-[#2C3E50]',
+              'text-[#2C3E50]',
+              'text-white',
+              'text-[#2C3E50]',
+            ]
+            const descColors = [
+              'text-[#4A5568]',
+              'text-[#4A5568]',
+              'text-[#4A5568]',
+              'text-white/90',
+              'text-[#4A5568]',
+            ]
+            const iconColors = [
+              { border: 'border-[#13B5EA]', icon: 'text-[#13B5EA]', hoverBorder: 'group-hover:border-[#0078c8]', hoverIcon: 'group-hover:text-[#0078c8]' },
+              { border: 'border-[#13B5EA]', icon: 'text-[#13B5EA]', hoverBorder: 'group-hover:border-[#0078c8]', hoverIcon: 'group-hover:text-[#0078c8]' },
+              { border: 'border-[#13B5EA]', icon: 'text-[#13B5EA]', hoverBorder: 'group-hover:border-[#0078c8]', hoverIcon: 'group-hover:text-[#0078c8]' },
+              { border: 'border-white', icon: 'text-white', hoverBorder: 'group-hover:border-[#6FE9D0]', hoverIcon: 'group-hover:text-[#6FE9D0]' },
+              { border: 'border-[#13B5EA]', icon: 'text-[#13B5EA]', hoverBorder: 'group-hover:border-[#0078c8]', hoverIcon: 'group-hover:text-[#0078c8]' },
+            ]
+
+            return (
+              <FadeIn
+                key={service.href}
+                className={`flex ${index === 4 ? 'sm:col-span-2' : ''}`}
+              >
+                <div className={`w-full rounded-3xl p-6 sm:p-8 transition-all duration-300 hover:-translate-y-1 ${backgrounds[index]}`}>
+                  <article className="group relative flex w-full flex-col">
+                    <h3>
+                      <Link href={service.href}>
+                        <span className="absolute inset-0 rounded-3xl" />
+                        <div className="relative h-16 w-16 transition-transform duration-300 group-hover:scale-110">
+                          <div className={`absolute inset-0 rounded-full border-2 ${iconColors[index].border} ${iconColors[index].hoverBorder} transition-colors duration-300`} />
+                          <div className="flex h-full w-full items-center justify-center">
+                            <service.icon className={`h-8 w-8 ${iconColors[index].icon} ${iconColors[index].hoverIcon} transition-colors duration-300`} />
+                          </div>
+                        </div>
+                      </Link>
+                    </h3>
+                    <p className={`mt-6 font-display text-2xl font-semibold ${textColors[index]} transition-colors duration-300`}>
+                      {service.title}
+                    </p>
+                    <p className={`mt-4 text-base ${descColors[index]}`}>
+                      {service.description}
+                    </p>
+                  </article>
+                </div>
+              </FadeIn>
+            )
+          })}
         </FadeInStagger>
       </Container>
     </>
@@ -227,7 +251,7 @@ export default function Home() {
             <source src="/videos/hero-background-video.webm" type="video/webm" />
           </video>
           {/* Overlay to ensure text readability */}
-          <div className="absolute inset-0 -top-32 h-[calc(100%+8rem)] bg-white/80" />
+          <div className="absolute inset-0 -top-32 h-[calc(100%+8rem)] bg-white/85" />
         </div>
         {/* White background to cover video after hero section */}
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent hidden lg:block z-10" />

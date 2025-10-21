@@ -40,4 +40,28 @@
   --font-display--font-variation-settings: 'wdth' 125;
 
   --font-display-length: 2;
+
+  /* CR Express Brand Colors - Xero Style */
+  --color-brand-blue: #13B5EA;
+  --color-brand-deep-blue: #0078c8;
+  --color-brand-navy: #2C3E50;
+  --color-brand-mint: #6FE9D0;
+  --color-brand-light-cyan: #B8F0F5;
+
+  /* Background Colors */
+  --bg-light-gray: #F5F7F9;
+  --bg-soft-cyan: #E8F7FB;
+
+  /* Text Colors */
+  --text-primary: #2C3E50;
+  --text-body: #4A5568;
+  --text-muted: #718096;
+
+  /* Override neutral-950 to use our navy color */
+  --color-neutral-950: #2C3E50;
+  --color-neutral-900: #1a2633;
+  --color-neutral-800: #415568;
+  --color-neutral-700: #4A5568;
+  --color-neutral-600: #718096;
+  --color-neutral-500: #A0AEC0;
 }

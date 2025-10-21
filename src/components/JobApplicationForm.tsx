@@ -60,10 +60,81 @@ export function JobApplicationForm({ jobTitle, department }: JobApplicationFormP
     }
   }
 
+  const validateStep = (step: number): boolean => {
+    switch (step) {
+      case 1:
+        // Step 1: Personal Information - validate required fields
+        if (!formData.firstName.trim()) {
+          alert('Please enter your first name')
+          return false
+        }
+        if (!formData.lastName.trim()) {
+          alert('Please enter your last name')
+          return false
+        }
+        if (!formData.streetAddress.trim()) {
+          alert('Please enter your street address')
+          return false
+        }
+        if (!formData.city.trim()) {
+          alert('Please enter your city')
+          return false
+        }
+        if (!formData.state.trim()) {
+          alert('Please select your state')
+          return false
+        }
+        if (!formData.zipCode.trim()) {
+          alert('Please enter your zip code')
+          return false
+        }
+        if (!formData.homePhone.trim()) {
+          alert('Please enter your phone number')
+          return false
+        }
+        if (!formData.email.trim()) {
+          alert('Please enter your email address')
+          return false
+        }
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(formData.email)) {
+          alert('Please enter a valid email address')
+          return false
+        }
+        return true
+
+      case 2:
+        // Step 2: Work Preferences - validate required fields
+        if (!formData.employmentStatus) {
+          alert('Please select your current employment status')
+          return false
+        }
+        if (!formData.desiredPay.trim()) {
+          alert('Please enter your desired pay')
+          return false
+        }
+        if (!formData.startDate) {
+          alert('Please select your available start date')
+          return false
+        }
+        if (!formData.positionType) {
+          alert('Please select the position type you are applying for')
+          return false
+        }
+        return true
+
+      default:
+        return true
+    }
+  }
+
   const handleNext = () => {
     if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      if (validateStep(currentStep)) {
+        setCurrentStep(currentStep + 1)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
     }
   }
 
