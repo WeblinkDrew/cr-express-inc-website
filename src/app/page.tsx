@@ -48,10 +48,10 @@ const certifications = [
 // Icon wrapper component with circle
 function IconWithCircle({ icon: Icon }: { icon: React.ComponentType<{ className?: string }> }) {
   return (
-    <div className="relative h-16 w-16">
-      <div className="absolute inset-0 rounded-full border-2 border-neutral-950" />
+    <div className="relative h-16 w-16 transition-transform duration-300 group-hover:scale-110">
+      <div className="absolute inset-0 rounded-full border-2 border-neutral-950 transition-colors duration-300 group-hover:border-neutral-700" />
       <div className="flex h-full w-full items-center justify-center">
-        <Icon className="h-8 w-8 text-neutral-950" />
+        <Icon className="h-8 w-8 text-neutral-950 transition-colors duration-300 group-hover:text-neutral-700" />
       </div>
     </div>
   )
@@ -117,7 +117,7 @@ function Certifications() {
             className="mt-10 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4"
           >
             {certifications.map(([cert, logo]) => (
-              <li key={cert}>
+              <li key={cert} className="transition-transform duration-300 hover:-translate-y-1">
                 <FadeIn>
                   <Image src={logo} alt={cert} unoptimized />
                 </FadeIn>
@@ -147,11 +147,11 @@ function CoreServices() {
         <div className="flex justify-end">
           <Link
             href="/services"
-            className="inline-flex items-center gap-x-2 rounded-full bg-neutral-950 px-4 py-1.5 text-sm font-semibold text-white transition hover:bg-neutral-800"
+            className="group inline-flex items-center gap-x-2 rounded-full bg-neutral-950 px-4 py-1.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-neutral-800 hover:gap-x-3"
           >
             Explore Our Services
             <svg
-              className="h-4 w-4"
+              className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth="2"
@@ -171,15 +171,15 @@ function CoreServices() {
               key={service.href}
               className={`flex ${index < 3 ? 'lg:col-span-2' : 'lg:col-span-3'}`}
             >
-              <SpotlightCard className="w-full" spotlightColor="rgba(0, 0, 101, 0.15)">
-                <article className="relative flex w-full flex-col">
+              <SpotlightCard className="w-full transition-transform duration-300 hover:-translate-y-1" spotlightColor="rgba(0, 0, 101, 0.15)">
+                <article className="group relative flex w-full flex-col">
                   <h3>
                     <Link href={service.href}>
                       <span className="absolute inset-0 rounded-3xl" />
                       <IconWithCircle icon={service.icon} />
                     </Link>
                   </h3>
-                  <p className="mt-6 font-display text-2xl font-semibold text-neutral-950">
+                  <p className="mt-6 font-display text-2xl font-semibold text-neutral-950 transition-colors duration-300 group-hover:text-neutral-700">
                     {service.title}
                   </p>
                   <p className="mt-4 text-base text-neutral-600">

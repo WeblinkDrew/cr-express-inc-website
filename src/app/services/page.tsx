@@ -145,9 +145,9 @@ function Services() {
                     <div className="mt-8 flex">
                       <Button
                         href={service.href}
-                        aria-label={`Learn more about ${service.client}`}
+                        aria-label={`Get a quote for ${service.client}`}
                       >
-                        Learn more
+                        Get a Quote
                       </Button>
                     </div>
                   </div>

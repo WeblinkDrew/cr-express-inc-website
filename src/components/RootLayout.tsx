@@ -193,17 +193,14 @@ function RootLayoutInner({ children }: { children: React.ReactNode }) {
       }
     >
       {/* Fuel Surcharge Banner */}
-      <div className="relative z-50 bg-neutral-950 py-3">
+      <div className="relative z-50 bg-neutral-950 py-3 sm:py-3">
         <Container>
-          <div className="flex items-center justify-center gap-x-4 text-sm">
-            <p className="text-white">
-              Customers can now view the current fuel surcharge for the month.
-            </p>
+          <div className="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:gap-x-4 sm:text-left">
             <Link
               href="/fuel-surcharge"
               className="inline-flex items-center rounded-full bg-white px-4 py-1.5 text-xs font-semibold text-neutral-950 transition hover:bg-neutral-200"
             >
-              Click here
+              View The Current Fuel Surcharge For the month
             </Link>
           </div>
         </Container>
@@ -211,7 +208,7 @@ function RootLayoutInner({ children }: { children: React.ReactNode }) {
 
       <header>
         <div
-          className="absolute top-2 right-0 left-0 z-40 pt-14"
+          className="absolute top-2 right-0 left-0 z-40 pt-20 sm:pt-14"
           aria-hidden={expanded ? 'true' : undefined}
           inert={expanded ? true : undefined}
         >

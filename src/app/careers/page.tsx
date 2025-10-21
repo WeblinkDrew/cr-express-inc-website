@@ -23,21 +23,27 @@ function Positions() {
       openings: [
         {
           title: 'Warehouse Manager',
+          jobId: 'warehouse-manager',
           type: 'Full-time',
           location: 'Elk Grove Village, IL',
-          description: 'Lead our 280,000 sq ft bonded warehouse operations, managing inventory, staff, and ensuring compliance with CBW Class 3 and GDP requirements.'
+          description: 'Lead our 280,000 sq ft bonded warehouse operations, managing inventory, staff, and ensuring compliance with CBW Class 3 and GDP requirements.',
+          isDriverPosition: false,
         },
         {
           title: 'Forklift Operator',
+          jobId: 'forklift-operator',
           type: 'Full-time',
           location: 'Elk Grove Village, IL',
-          description: 'Operate material handling equipment in our bonded warehouse facility. Experience with pharmaceutical and high-value cargo preferred.'
+          description: 'Operate material handling equipment in our bonded warehouse facility. Experience with pharmaceutical and high-value cargo preferred.',
+          isDriverPosition: false,
         },
         {
           title: 'Inventory Control Specialist',
+          jobId: 'inventory-control-specialist',
           type: 'Full-time',
           location: 'Elk Grove Village, IL',
-          description: 'Manage inventory accuracy and cycle counting in our WMS system. Ensure compliance with bonded warehouse regulations.'
+          description: 'Manage inventory accuracy and cycle counting in our WMS system. Ensure compliance with bonded warehouse regulations.',
+          isDriverPosition: false,
         }
       ]
     },
@@ -46,21 +52,27 @@ function Positions() {
       openings: [
         {
           title: 'CDL-A Driver - Local',
+          jobId: 'cdl-driver-local',
           type: 'Full-time',
           location: 'Chicago Metro Area',
-          description: 'Local pickup and delivery routes throughout Chicagoland. Home daily, competitive pay, and comprehensive benefits.'
+          description: 'Local pickup and delivery routes throughout Chicagoland. Home daily, competitive pay, and comprehensive benefits.',
+          isDriverPosition: true,
         },
         {
           title: 'CDL-A Driver - OTR',
+          jobId: 'cdl-driver-otr',
           type: 'Full-time',
           location: 'Nationwide',
-          description: 'Over-the-road positions with dedicated lanes and competitive mileage pay. Owner-operators welcome.'
+          description: 'Over-the-road positions with dedicated lanes and competitive mileage pay. Owner-operators welcome.',
+          isDriverPosition: true,
         },
         {
           title: 'Drayage Driver',
+          jobId: 'drayage-driver',
           type: 'Full-time',
           location: 'Chicago, IL',
-          description: 'Container movements between O\'Hare, Chicago\'s 21 railyards, and customer locations. TWIC card required.'
+          description: 'Container movements between O\'Hare, Chicago\'s 21 railyards, and customer locations. TWIC card required.',
+          isDriverPosition: true,
         }
       ]
     },
@@ -69,21 +81,27 @@ function Positions() {
       openings: [
         {
           title: 'Logistics Coordinator',
+          jobId: 'logistics-coordinator',
           type: 'Full-time',
           location: 'Elk Grove Village, IL',
-          description: 'Coordinate shipments, manage carrier relationships, and ensure on-time delivery. Experience with TMS systems required.'
+          description: 'Coordinate shipments, manage carrier relationships, and ensure on-time delivery. Experience with TMS systems required.',
+          isDriverPosition: false,
         },
         {
           title: 'Customer Service Representative',
+          jobId: 'customer-service-representative',
           type: 'Full-time',
           location: 'Elk Grove Village, IL',
-          description: 'Support our 24/7 operations, handling customer inquiries, tracking shipments, and providing logistics solutions.'
+          description: 'Support our 24/7 operations, handling customer inquiries, tracking shipments, and providing logistics solutions.',
+          isDriverPosition: false,
         },
         {
           title: 'Dispatch Coordinator',
+          jobId: 'dispatch-coordinator',
           type: 'Full-time',
           location: 'Elk Grove Village, IL',
-          description: 'Manage driver assignments, route optimization, and real-time problem-solving for our transportation network.'
+          description: 'Manage driver assignments, route optimization, and real-time problem-solving for our transportation network.',
+          isDriverPosition: false,
         }
       ]
     }
@@ -130,7 +148,14 @@ function Positions() {
                             {position.description}
                           </p>
                           <div className="mt-6">
-                            <Button href="/contact" invert={false}>
+                            <Button
+                              href={
+                                position.isDriverPosition
+                                  ? `/careers/apply/driver/${position.jobId}`
+                                  : `/careers/apply/${position.jobId}`
+                              }
+                              invert={false}
+                            >
                               Apply now
                             </Button>
                           </div>
@@ -396,8 +421,8 @@ export default function Careers() {
         </p>
       </PageIntro>
 
-      <Culture />
       <Positions />
+      <Culture />
       <Benefits />
       <Values />
       <ApplicationProcess />
