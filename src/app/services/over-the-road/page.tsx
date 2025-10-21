@@ -36,7 +36,7 @@ const clients = [
 
 function Hero() {
   return (
-    <div className="relative isolate bg-neutral-50">
+    <div className="relative isolate">
       <Container className="relative py-24 sm:py-32 lg:py-40">
         <div className="lg:grid lg:grid-cols-12 lg:gap-x-8 xl:gap-x-20">
           <div className="lg:col-span-7">
