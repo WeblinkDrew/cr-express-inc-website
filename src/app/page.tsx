@@ -1,11 +1,18 @@
 import { type Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { BuildingStorefrontIcon, TruckIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline'
+import {
+  BuildingStorefrontIcon,
+  TruckIcon,
+  RocketLaunchIcon,
+  GlobeAltIcon,
+  MapPinIcon,
+} from '@heroicons/react/24/outline'
 
 import { ContactSection } from '@/components/ContactSection'
 import { Container } from '@/components/Container'
 import { FadeIn, FadeInStagger } from '@/components/FadeIn'
+import { SpotlightCard } from '@/components/SpotlightCard'
 import { FAQSection } from '@/components/FAQSection'
 import { List, ListItem } from '@/components/List'
 import { SectionIntro } from '@/components/SectionIntro'
@@ -61,19 +68,35 @@ const services = [
     year: '1999',
   },
   {
-    href: '/services/drayage',
-    title: 'Intermodal Drayage',
-    description:
-      'Private chassis fleet serving 21 major Chicagoland railyards with 7-day operations, tri-axle capacity, and 500+ container storage.',
-    icon: TruckIcon,
-    year: '1999',
-  },
-  {
     href: '/services/air-cargo',
     title: 'Air Cargo Services',
     description:
       'Full-service air freight at O\'Hare and Rockford airports with TSA-approved operations, SIDA-badged drivers, and same-day recovery.',
-    icon: PaperAirplaneIcon,
+    icon: RocketLaunchIcon,
+    year: '1999',
+  },
+  {
+    href: '/services/drayage',
+    title: 'Intermodal Drayage',
+    description:
+      'Private chassis fleet serving 21 major Chicagoland railyards with 7-day operations, tri-axle capacity, and 500+ container storage.',
+    icon: GlobeAltIcon,
+    year: '1999',
+  },
+  {
+    href: '/services/over-the-road',
+    title: 'Over the Road Freight',
+    description:
+      'Top 1-2% U.S. carrier with coverage across all 48 continental states. Full truckload and LTL services with real-time GPS tracking.',
+    icon: TruckIcon,
+    year: '1999',
+  },
+  {
+    href: '/services/local-pd',
+    title: 'Local Pickup & Delivery',
+    description:
+      'Same-day and next-day delivery throughout Chicagoland with time-critical capabilities. Specialized handling for medical and automotive.',
+    icon: MapPinIcon,
     year: '1999',
   },
 ]
@@ -142,23 +165,28 @@ function CoreServices() {
             </svg>
           </Link>
         </div>
-        <FadeInStagger className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {services.map((service) => (
-            <FadeIn key={service.href} className="flex">
-              <article className="relative flex w-full flex-col rounded-3xl p-6 ring-1 ring-neutral-950/5 transition hover:bg-neutral-50 sm:p-8">
-                <h3>
-                  <Link href={service.href}>
-                    <span className="absolute inset-0 rounded-3xl" />
-                    <IconWithCircle icon={service.icon} />
-                  </Link>
-                </h3>
-                <p className="mt-6 font-display text-2xl font-semibold text-neutral-950">
-                  {service.title}
-                </p>
-                <p className="mt-4 text-base text-neutral-600">
-                  {service.description}
-                </p>
-              </article>
+        <FadeInStagger className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-6">
+          {services.map((service, index) => (
+            <FadeIn
+              key={service.href}
+              className={`flex ${index < 3 ? 'lg:col-span-2' : 'lg:col-span-3'}`}
+            >
+              <SpotlightCard className="w-full" spotlightColor="rgba(0, 0, 101, 0.15)">
+                <article className="relative flex w-full flex-col">
+                  <h3>
+                    <Link href={service.href}>
+                      <span className="absolute inset-0 rounded-3xl" />
+                      <IconWithCircle icon={service.icon} />
+                    </Link>
+                  </h3>
+                  <p className="mt-6 font-display text-2xl font-semibold text-neutral-950">
+                    {service.title}
+                  </p>
+                  <p className="mt-4 text-base text-neutral-600">
+                    {service.description}
+                  </p>
+                </article>
+              </SpotlightCard>
             </FadeIn>
           ))}
         </FadeInStagger>

@@ -12,7 +12,6 @@ import { SectionIntro } from '@/components/SectionIntro'
 import { StatList, StatListItem } from '@/components/StatList'
 import imageCarlosRosales from '@/images/team/carlos-rosales.jpg'
 import imageJamalAmro from '@/images/team/jamal-amro.jpg'
-import imageTonyMemishi from '@/images/team/tony-memishi.jpg'
 import imageAlexAmro from '@/images/team/alex-amro.jpg'
 import imageDerekMalazdra from '@/images/team/derek-malazdra.jpg'
 import imageCarlosTruck from '@/images/Carlos Picture CR Express.png'
@@ -74,11 +73,6 @@ const team = [
         image: { src: imageJamalAmro },
       },
       {
-        name: 'Tony Memishi',
-        role: 'VP, Transportation',
-        image: { src: imageTonyMemishi },
-      },
-      {
         name: 'Alex Amro',
         role: 'Project Manager',
         image: { src: imageAlexAmro },
@@ -108,7 +102,7 @@ function Team() {
               <div className="lg:col-span-3">
                 <ul
                   role="list"
-                  className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8"
+                  className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:gap-8"
                 >
                   {group.people.map((person) => (
                     <li key={person.name}>
