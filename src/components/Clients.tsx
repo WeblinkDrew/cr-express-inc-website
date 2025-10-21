@@ -4,7 +4,7 @@ import { FadeIn, FadeInStagger } from '@/components/FadeIn'
 
 import logoDHL from '@/images/clients/new-clients/DHL Global Forwarding.svg'
 import logoDSV from '@/images/clients/new-clients/DSV Logo Small (1).svg'
-import logoGebruder from '@/images/clients/new-clients/Gebrüder Weiss Logo 2020.svg'
+import logoGebruder from '@/images/clients/new-clients/Gebruder-Weiss-Logo-2020.svg'
 import logoHankyu from '@/images/clients/new-clients/Hankyu Hanshin Express logo.svg'
 import logoKintetsu from '@/images/clients/new-clients/Kintetsu World Express Logos.svg'
 import logoMOL from '@/images/clients/new-clients/MOL Logistics Logo.svg'
