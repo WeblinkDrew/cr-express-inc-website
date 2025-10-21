@@ -20,30 +20,9 @@ import { SectorsWeServe } from '@/components/SectorsWeServe'
 import { StylizedImage } from '@/components/StylizedImage'
 import { Testimonial } from '@/components/Testimonial'
 import { VideoSection } from '@/components/VideoSection'
-import logoBrightPath from '@/images/clients/bright-path/logo-light.svg'
-import logoFamilyFund from '@/images/clients/family-fund/logo-light.svg'
-import logoGreenLife from '@/images/clients/green-life/logo-light.svg'
-import logoHomeWork from '@/images/clients/home-work/logo-light.svg'
-import logoMailSmirk from '@/images/clients/mail-smirk/logo-light.svg'
-import logoNorthAdventures from '@/images/clients/north-adventures/logo-light.svg'
-import logoPhobiaDark from '@/images/clients/phobia/logo-dark.svg'
-import logoPhobiaLight from '@/images/clients/phobia/logo-light.svg'
-import logoUnseal from '@/images/clients/unseal/logo-light.svg'
+import { Clients } from '@/components/Clients'
 import imageLaptop from '@/images/IMG 4204 Media Library.jpg'
 import { RootLayout } from '@/components/RootLayout'
-
-// Trust badges and certifications for CR Express
-// TODO: Replace with actual certification badge images
-const certifications = [
-  ['CBW Class 3', logoPhobiaLight],
-  ['TSA Approved', logoFamilyFund],
-  ['GDP Compliant', logoUnseal],
-  ['SmartWay Partner', logoMailSmirk],
-  ['ISO Certified', logoHomeWork],
-  ['CTPAT Member', logoGreenLife],
-  ['IATA Certified', logoBrightPath],
-  ['Hazmat Certified', logoNorthAdventures],
-]
 
 // Icon wrapper component with circle
 function IconWithCircle({ icon: Icon }: { icon: React.ComponentType<{ className?: string }> }) {
@@ -101,34 +80,6 @@ const services = [
   },
 ]
 
-function Certifications() {
-  return (
-    <div className="mt-24 rounded-4xl bg-neutral-950 py-20 sm:mt-32 sm:py-32 lg:mt-40">
-      <Container>
-        <FadeIn className="flex items-center gap-x-8">
-          <h2 className="text-center font-display text-sm font-semibold tracking-wider text-white sm:text-left">
-            Trusted certifications and industry partnerships since 1999
-          </h2>
-          <div className="h-px flex-auto bg-neutral-800" />
-        </FadeIn>
-        <FadeInStagger faster>
-          <ul
-            role="list"
-            className="mt-10 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4"
-          >
-            {certifications.map(([cert, logo]) => (
-              <li key={cert} className="transition-transform duration-300 hover:-translate-y-1">
-                <FadeIn>
-                  <Image src={logo} alt={cert} unoptimized />
-                </FadeIn>
-              </li>
-            ))}
-          </ul>
-        </FadeInStagger>
-      </Container>
-    </div>
-  )
-}
 
 function CoreServices() {
   return (
@@ -297,13 +248,13 @@ export default function Home() {
 
       {/* White background for content below hero */}
       <div className="relative bg-white">
-        <Certifications />
+        <Clients />
 
         <CoreServices />
 
         <Testimonial
           className="mt-24 sm:mt-32 lg:mt-40"
-          client={{ name: 'Phobia', logo: logoPhobiaDark }}
+          client={{ name: 'Michael Chen, Operations Manager' }}
         >
           CR Express has been our go-to logistics partner for over 10 years. Their
           bonded warehouse services and customs expertise have streamlined our

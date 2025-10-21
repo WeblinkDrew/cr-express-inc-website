@@ -18,17 +18,15 @@ import {
   TruckIcon,
   RocketLaunchIcon,
   MapPinIcon,
+  ShieldCheckIcon,
+  BeakerIcon,
 } from '@heroicons/react/24/outline'
 
 // Trust badges and certifications
-import logoBrightPath from '@/images/clients/bright-path/logo-light.svg'
-import logoGreenLife from '@/images/clients/green-life/logo-light.svg'
-import logoNorthAdventures from '@/images/clients/north-adventures/logo-light.svg'
-import logoPhobia from '@/images/clients/phobia/logo-dark.svg'
-import logoFamilyFund from '@/images/clients/family-fund/logo-dark.svg'
-import logoUnseal from '@/images/clients/unseal/logo-dark.svg'
-import logoHomeWork from '@/images/clients/home-work/logo-dark.svg'
-import logoMailSmirk from '@/images/clients/mail-smirk/logo-dark.svg'
+import logoTSA from '@/images/certifications/TSA Logo.svg'
+import logoSmartWay from '@/images/certifications/SmartWay Partner Logo.svg'
+import logoCTPAT from '@/images/certifications/C-TPAT Logo.svg'
+import logoIATA from '@/images/certifications/IATA Air Cargo Logo.svg'
 
 // CR Express Services with Heroicons
 const services = [
@@ -162,14 +160,12 @@ function Services() {
 }
 
 const certifications = [
-  ['CBW Class 3', logoBrightPath],
-  ['TSA Approved', logoFamilyFund],
-  ['GDP Compliant', logoUnseal],
-  ['SmartWay Partner', logoMailSmirk],
-  ['ISO Certified', logoHomeWork],
-  ['CTPAT Member', logoGreenLife],
-  ['IATA Certified', logoBrightPath],
-  ['Hazmat Certified', logoNorthAdventures],
+  { name: 'TSA Approved', logo: logoTSA, type: 'image' },
+  { name: 'SmartWay Partner', logo: logoSmartWay, type: 'image' },
+  { name: 'C-TPAT Certified', logo: logoCTPAT, type: 'image' },
+  { name: 'IATA Certified', logo: logoIATA, type: 'image' },
+  { name: 'GDP Compliant', icon: BeakerIcon, type: 'text' },
+  { name: 'Hazmat/DOT Certified', icon: ShieldCheckIcon, type: 'text' },
 ]
 
 function Certifications() {
@@ -180,17 +176,38 @@ function Certifications() {
           Industry Certifications & Compliance
         </h2>
       </FadeIn>
-      <FadeInStagger className="mt-10" faster>
-        <Border as={FadeIn} />
+      <FadeInStagger className="mt-16" faster>
         <ul
           role="list"
-          className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3 lg:grid-cols-4"
+          className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3 lg:grid-cols-3"
         >
-          {certifications.map(([cert, logo]) => (
-            <li key={cert} className="group">
-              <FadeIn className="overflow-hidden">
-                <Border className="pt-12 group-nth-[-n+2]:-mt-px sm:group-nth-3:-mt-px lg:group-nth-4:-mt-px">
-                  <Image src={logo} alt={cert} unoptimized />
+          {certifications.map((cert) => (
+            <li key={cert.name} className="group flex items-center justify-center">
+              <FadeIn className="flex items-center justify-center w-full min-h-36">
+                <Border className="pt-12 pb-8 group-nth-[-n+2]:-mt-px sm:group-nth-3:-mt-px lg:group-nth-3:-mt-px w-full flex items-center justify-center">
+                  {cert.type === 'image' ? (
+                    <Image
+                      src={cert.logo}
+                      alt={cert.name}
+                      unoptimized
+                      className={`max-h-20 max-w-[200px] w-auto h-auto object-contain ${
+                        cert.name === 'C-TPAT Certified' || cert.name === 'IATA Certified'
+                          ? 'invert'
+                          : ''
+                      }`}
+                    />
+                  ) : (
+                    <div className="flex items-center gap-3">
+                      {cert.icon && (
+                        <cert.icon className="h-12 w-12 text-neutral-950" />
+                      )}
+                      <div className="text-left">
+                        <p className="font-display text-lg font-semibold text-neutral-950">
+                          {cert.name}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </Border>
               </FadeIn>
             </li>
@@ -226,7 +243,7 @@ export default function ServicesPage() {
 
       <Testimonial
         className="mt-24 sm:mt-32 lg:mt-40"
-        client={{ name: 'Fortune 500 Automotive', logo: logoPhobia }}
+        client={{ name: 'Sarah Johnson, Supply Chain Director' }}
       >
         CR Express has been instrumental in streamlining our supply chain operations.
         Their bonded warehouse services and seamless customs handling have reduced our

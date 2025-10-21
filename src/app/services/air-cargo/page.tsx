@@ -11,29 +11,10 @@ import { TagList, TagListItem } from '@/components/TagList'
 import { ServiceQuoteForm } from '@/components/ServiceQuoteForm'
 import { ServiceFAQSection, type FAQ } from '@/components/ServiceFAQSection'
 import { RelatedServices } from '@/components/RelatedServices'
+import { Clients } from '@/components/Clients'
 import { RootLayout } from '@/components/RootLayout'
 
 import imageHero from './hero.jpg'
-
-import logoBrightPath from '@/images/clients/bright-path/logo-light.svg'
-import logoFamilyFund from '@/images/clients/family-fund/logo-light.svg'
-import logoGreenLife from '@/images/clients/green-life/logo-light.svg'
-import logoHomeWork from '@/images/clients/home-work/logo-light.svg'
-import logoMailSmirk from '@/images/clients/mail-smirk/logo-light.svg'
-import logoNorthAdventures from '@/images/clients/north-adventures/logo-light.svg'
-import logoPhobia from '@/images/clients/phobia/logo-light.svg'
-import logoUnseal from '@/images/clients/unseal/logo-light.svg'
-
-const clients = [
-  ['Phobia', logoPhobia],
-  ['Family Fund', logoFamilyFund],
-  ['Unseal', logoUnseal],
-  ['Mail Smirk', logoMailSmirk],
-  ['Home Work', logoHomeWork],
-  ['Green Life', logoGreenLife],
-  ['Bright Path', logoBrightPath],
-  ['North Adventures', logoNorthAdventures],
-]
 
 function Hero() {
   return (
@@ -69,34 +50,6 @@ function Hero() {
             </FadeIn>
           </div>
         </div>
-      </Container>
-    </div>
-  )
-}
-
-function Clients() {
-  return (
-    <div className="mt-24 rounded-4xl bg-neutral-950 py-20 sm:mt-32 sm:py-32 lg:mt-40">
-      <Container>
-        <FadeIn>
-          <h2 className="font-display text-2xl font-semibold text-white text-center">
-            Trusted by Leading Companies
-          </h2>
-        </FadeIn>
-        <FadeInStagger faster>
-          <ul
-            role="list"
-            className="mt-12 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3 lg:grid-cols-4"
-          >
-            {clients.map(([client, logo]) => (
-              <li key={client} className="flex justify-center">
-                <FadeIn>
-                  <Image src={logo} alt={client} unoptimized />
-                </FadeIn>
-              </li>
-            ))}
-          </ul>
-        </FadeInStagger>
       </Container>
     </div>
   )
