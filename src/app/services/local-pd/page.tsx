@@ -15,6 +15,9 @@ import { Clients } from '@/components/Clients'
 import { RootLayout } from '@/components/RootLayout'
 
 import imageHero from './hero.jpg'
+import imageLocal1 from '@/images/service-photos/Media Library Image 3.webp'
+import imageLocal2 from '@/images/service-photos/IMG 4656 Media Library.webp'
+import imageLocal3 from '@/images/service-photos/IMG 4739 scaled.webp'
 
 function Hero() {
   return (
@@ -79,7 +82,7 @@ function ImageSection1() {
       <FadeIn>
         <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
           <Image
-            src={imageHero}
+            src={imageLocal1}
             alt="Local delivery facility"
             fill
             className="object-cover"
@@ -97,7 +100,7 @@ function ImageSection2() {
       <FadeIn>
         <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
           <Image
-            src={imageHero}
+            src={imageLocal2}
             alt="Local delivery operations"
             fill
             className="object-cover"
@@ -115,7 +118,7 @@ function ImageSection3() {
       <FadeIn>
         <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
           <Image
-            src={imageHero}
+            src={imageLocal3}
             alt="Local delivery services"
             fill
             className="object-cover"

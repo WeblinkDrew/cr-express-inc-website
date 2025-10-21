@@ -11,7 +11,7 @@ import { PageIntro } from '@/components/PageIntro'
 import { SectionIntro } from '@/components/SectionIntro'
 import { StylizedImage } from '@/components/StylizedImage'
 import { TagList, TagListItem } from '@/components/TagList'
-import imageLaptop from '@/images/laptop.jpg'
+import imageLaptop from '@/images/service-photos/Media Library Image 6986.webp'
 import imageCareers from '@/images/IMG 4739 from CR Express.jpg'
 import { RootLayout } from '@/components/RootLayout'
 import { ServiceFAQSection, type FAQ } from '@/components/ServiceFAQSection'
@@ -358,12 +358,14 @@ function ApplicationProcess() {
         </div>
         <div className="mt-12 lg:mt-0 flex justify-center">
           <FadeIn className="w-135 flex-none lg:w-180">
-            <StylizedImage
-              src={imageLaptop}
-              sizes="(min-width: 1024px) 41rem, 31rem"
-              className="justify-center"
-              shape={1}
-            />
+            <div className="group">
+              <StylizedImage
+                src={imageLaptop}
+                sizes="(min-width: 1024px) 41rem, 31rem"
+                className="justify-center grayscale transition duration-500 group-hover:grayscale-0"
+                shape={1}
+              />
+            </div>
           </FadeIn>
         </div>
       </div>

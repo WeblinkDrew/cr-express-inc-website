@@ -15,6 +15,9 @@ import { Clients } from '@/components/Clients'
 import { RootLayout } from '@/components/RootLayout'
 
 import imageHero from './hero.jpg'
+import imageAir1 from '@/images/service-photos/Media Library Image.webp'
+import imageAir2 from '@/images/service-photos/Media Library Image 3.webp'
+import imageAir3 from '@/images/service-photos/Media Library Image from CR Express.webp'
 
 function Hero() {
   return (
@@ -79,7 +82,7 @@ function ImageSection1() {
       <FadeIn>
         <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
           <Image
-            src={imageHero}
+            src={imageAir1}
             alt="Air cargo facility"
             fill
             className="object-cover"
@@ -97,7 +100,7 @@ function ImageSection2() {
       <FadeIn>
         <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
           <Image
-            src={imageHero}
+            src={imageAir2}
             alt="Air cargo operations"
             fill
             className="object-cover"
@@ -115,7 +118,7 @@ function ImageSection3() {
       <FadeIn>
         <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
           <Image
-            src={imageHero}
+            src={imageAir3}
             alt="Air cargo services"
             fill
             className="object-cover"

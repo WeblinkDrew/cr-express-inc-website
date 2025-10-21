@@ -21,7 +21,9 @@ import { Clients } from '@/components/Clients'
 import { RootLayout } from '@/components/RootLayout'
 
 import imageHero from './hero.jpg'
-import imageWarehouse from './warehouse-interior.jpg'
+import imageWarehouse1 from '@/images/service-photos/IMG 4739 scaled.webp'
+import imageWarehouse2 from '@/images/service-photos/Media Library Image 6986.webp'
+import imageWarehouse3 from '@/images/service-photos/IMG 4656 Media Library.webp'
 
 function Hero() {
   return (
@@ -89,7 +91,7 @@ function ImageSection1() {
       <FadeIn>
         <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
           <Image
-            src={imageHero}
+            src={imageWarehouse1}
             alt="Bonded warehouse facility exterior"
             fill
             className="object-cover"
@@ -107,7 +109,7 @@ function ImageSection2() {
       <FadeIn>
         <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
           <Image
-            src={imageWarehouse}
+            src={imageWarehouse2}
             alt="Warehouse interior operations"
             fill
             className="object-cover"
@@ -125,7 +127,7 @@ function ImageSection3() {
       <FadeIn>
         <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
           <Image
-            src={imageHero}
+            src={imageWarehouse3}
             alt="Bonded warehouse services"
             fill
             className="object-cover"

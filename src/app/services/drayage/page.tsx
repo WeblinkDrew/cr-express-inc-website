@@ -15,6 +15,9 @@ import { Clients } from '@/components/Clients'
 import { RootLayout } from '@/components/RootLayout'
 
 import imageHero from './hero.jpg'
+import imageDrayage1 from '@/images/service-photos/Media Library Image from CR Express.webp'
+import imageDrayage2 from '@/images/service-photos/IMG 4739 scaled.webp'
+import imageDrayage3 from '@/images/service-photos/Media Library Image.webp'
 
 function Hero() {
   return (
@@ -79,7 +82,7 @@ function ImageSection1() {
       <FadeIn>
         <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
           <Image
-            src={imageHero}
+            src={imageDrayage1}
             alt="Drayage facility"
             fill
             className="object-cover"
@@ -97,7 +100,7 @@ function ImageSection2() {
       <FadeIn>
         <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
           <Image
-            src={imageHero}
+            src={imageDrayage2}
             alt="Drayage operations"
             fill
             className="object-cover"
@@ -115,7 +118,7 @@ function ImageSection3() {
       <FadeIn>
         <div className="relative aspect-[16/9] overflow-hidden rounded-4xl bg-neutral-100">
           <Image
-            src={imageHero}
+            src={imageDrayage3}
             alt="Drayage services"
             fill
             className="object-cover"
