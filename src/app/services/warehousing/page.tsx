@@ -1,5 +1,11 @@
 import { type Metadata } from 'next'
 import Image from 'next/image'
+import {
+  DocumentTextIcon,
+  CircleStackIcon,
+  WrenchScrewdriverIcon,
+  TruckIcon,
+} from '@heroicons/react/24/outline'
 
 import { ContactSection } from '@/components/ContactSection'
 import { Container } from '@/components/Container'
@@ -223,6 +229,33 @@ function Benefits() {
 }
 
 function Process() {
+  const steps = [
+    {
+      title: 'Cargo Receipt & Documentation',
+      description:
+        'Your shipment arrives and our team immediately manages all CBP documentation including customs entry forms, bonded warehouse receipts, and inventory tracking. We coordinate with customs brokers ensuring complete compliance from day one.',
+      icon: DocumentTextIcon,
+    },
+    {
+      title: 'Secure Storage & Real-Time Visibility',
+      description:
+        'Goods are stored in our secure, climate-controlled facility with 24/7 monitoring. Access real-time inventory visibility through our WMS, track stock levels, monitor expiration dates, and generate detailed reports through our secure online portal.',
+      icon: CircleStackIcon,
+    },
+    {
+      title: 'Value-Added Services',
+      description:
+        'While under bond, we can transform your goods with sorting, repackaging, labeling, quality inspections, and assembly operations. Customize products for specific markets without paying duties until they\'re ready for distribution.',
+      icon: WrenchScrewdriverIcon,
+    },
+    {
+      title: 'Customs Release & Distribution',
+      description:
+        'When you\'re ready to release goods, we handle all withdrawal documentation and coordinate final delivery. Whether distributing domestically or re-exporting internationally, we ensure seamless transitions from bonded storage to final destination.',
+      icon: TruckIcon,
+    },
+  ]
+
   return (
     <Container className="mt-24 sm:mt-32 lg:mt-40">
       <FadeIn>
@@ -230,69 +263,24 @@ function Process() {
           Simple, Streamlined Bonded Operations
         </h2>
         <div className="mt-12 space-y-12">
-          <div className="flex gap-6">
-            <div className="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-neutral-950 text-white font-display text-xl font-semibold">
-              1
-            </div>
-            <div className="flex-1">
-              <h3 className="font-display text-xl font-semibold text-neutral-950">
-                Cargo Receipt & Documentation
-              </h3>
-              <p className="mt-2 text-base text-neutral-600">
-                Your shipment arrives and our team immediately manages all CBP documentation including
-                customs entry forms, bonded warehouse receipts, and inventory tracking. We coordinate
-                with customs brokers ensuring complete compliance from day one.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex gap-6">
-            <div className="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-neutral-950 text-white font-display text-xl font-semibold">
-              2
-            </div>
-            <div className="flex-1">
-              <h3 className="font-display text-xl font-semibold text-neutral-950">
-                Secure Storage & Real-Time Visibility
-              </h3>
-              <p className="mt-2 text-base text-neutral-600">
-                Goods are stored in our secure, climate-controlled facility with 24/7 monitoring. Access
-                real-time inventory visibility through our WMS, track stock levels, monitor expiration dates,
-                and generate detailed reports through our secure online portal.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex gap-6">
-            <div className="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-neutral-950 text-white font-display text-xl font-semibold">
-              3
-            </div>
-            <div className="flex-1">
-              <h3 className="font-display text-xl font-semibold text-neutral-950">
-                Value-Added Services
-              </h3>
-              <p className="mt-2 text-base text-neutral-600">
-                While under bond, we can transform your goods with sorting, repackaging, labeling, quality
-                inspections, and assembly operations. Customize products for specific markets without paying
-                duties until they're ready for distribution.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex gap-6">
-            <div className="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-neutral-950 text-white font-display text-xl font-semibold">
-              4
-            </div>
-            <div className="flex-1">
-              <h3 className="font-display text-xl font-semibold text-neutral-950">
-                Customs Release & Distribution
-              </h3>
-              <p className="mt-2 text-base text-neutral-600">
-                When you're ready to release goods, we handle all withdrawal documentation and coordinate
-                final delivery. Whether distributing domestically or re-exporting internationally, we ensure
-                seamless transitions from bonded storage to final destination.
-              </p>
-            </div>
-          </div>
+          {steps.map((step, index) => {
+            const Icon = step.icon
+            return (
+              <div key={index} className="flex gap-6">
+                <div className="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-neutral-950">
+                  <Icon className="h-6 w-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-display text-xl font-semibold text-neutral-950">
+                    {step.title}
+                  </h3>
+                  <p className="mt-2 text-base text-neutral-600">
+                    {step.description}
+                  </p>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </FadeIn>
     </Container>
