@@ -26,7 +26,6 @@ import {
 import logoTSA from '@/images/certifications/TSA Logo.svg'
 import logoSmartWay from '@/images/certifications/SmartWay Partner Logo.svg'
 import logoCTPAT from '@/images/certifications/C-TPAT Logo.svg'
-import logoIATA from '@/images/certifications/IATA Air Cargo Logo.svg'
 import logoCBP from '@/images/certifications/Customs Border Protection Logo.svg'
 
 // CR Express Services with Heroicons
@@ -163,8 +162,7 @@ function Services() {
 const certifications = [
   { name: 'TSA Approved', logo: logoTSA, type: 'image' },
   { name: 'SmartWay Partner', logo: logoSmartWay, type: 'image' },
-  { name: 'IATA Certified', logo: logoIATA, type: 'image' },
-  { name: 'Customs Bonded', logo: logoCBP, type: 'image' },
+  { name: 'Customs Bonded', logo: logoCBP, type: 'logo-text' },
   { name: 'GDP Compliant', icon: BeakerIcon, type: 'text' },
   { name: 'Hazmat/High Value Carrier', icon: ShieldCheckIcon, type: 'text' },
 ]
@@ -192,11 +190,25 @@ function Certifications() {
                       alt={cert.name}
                       unoptimized
                       className={`max-h-20 max-w-[200px] w-auto h-auto object-contain ${
-                        cert.name === 'C-TPAT Certified' || cert.name === 'IATA Certified'
+                        cert.name === 'C-TPAT Certified'
                           ? 'invert'
                           : ''
                       }`}
                     />
+                  ) : cert.type === 'logo-text' ? (
+                    <div className="flex items-center gap-3">
+                      <Image
+                        src={cert.logo}
+                        alt={cert.name}
+                        unoptimized
+                        className="h-12 w-12 object-contain"
+                      />
+                      <div className="text-left">
+                        <p className="font-display text-lg font-semibold text-neutral-950">
+                          {cert.name}
+                        </p>
+                      </div>
+                    </div>
                   ) : (
                     <div className="flex items-center gap-3">
                       {cert.icon && (
