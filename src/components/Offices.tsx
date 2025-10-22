@@ -47,9 +47,9 @@ export function Offices({
       </li>
       <li>
         <Office name="Contact" invert={invert}>
-          Phone: +1 (224) 402-9537
+          Sales: +1 (224) 402-9537
           <br />
-          Sales: (224) 402-9537
+          Operations: +1 (847) 354-7979
         </Office>
       </li>
     </ul>

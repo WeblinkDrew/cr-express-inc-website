@@ -131,8 +131,8 @@ export function Footer() {
                 <div className="mt-4 text-sm text-neutral-700 space-y-2">
                   <p>Main: 2400 Arthur Ave, Elk Grove Village, IL 60007</p>
                   <p>Second: 301 W Oakton St, Des Plaines, IL 60018</p>
-                  <p>Phone: <a href="tel:+12244029537" className="hover:text-neutral-950 transition">+1 (224) 402-9537</a></p>
-                  <p>Sales: <a href="tel:+12244029537" className="hover:text-neutral-950 transition">(224) 402-9537</a></p>
+                  <p>Sales: <a href="tel:+12244029537" className="hover:text-neutral-950 transition">+1 (224) 402-9537</a></p>
+                  <p>Operations: <a href="tel:+18473547979" className="hover:text-neutral-950 transition">+1 (847) 354-7979</a></p>
                 </div>
               </div>
             </div>

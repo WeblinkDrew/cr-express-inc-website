@@ -122,7 +122,7 @@ export function LocationQuoteForm({ city }: LocationQuoteFormProps) {
 
               <div className="mt-10 space-y-8">
                 <div>
-                  <dt className="text-sm font-semibold text-neutral-400">Main Office</dt>
+                  <dt className="text-sm font-semibold text-neutral-400">Sales</dt>
                   <dd className="mt-2">
                     <a
                       href="tel:+12244029537"
@@ -134,13 +134,13 @@ export function LocationQuoteForm({ city }: LocationQuoteFormProps) {
                 </div>
 
                 <div>
-                  <dt className="text-sm font-semibold text-neutral-400">Alternative</dt>
+                  <dt className="text-sm font-semibold text-neutral-400">Operations</dt>
                   <dd className="mt-2">
                     <a
-                      href="tel:+12244029537"
+                      href="tel:+18473547979"
                       className="text-2xl font-semibold hover:text-neutral-300 transition"
                     >
-                      (224) 402-9537
+                      +1 (847) 354-7979
                     </a>
                   </dd>
                 </div>
