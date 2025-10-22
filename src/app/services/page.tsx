@@ -27,6 +27,7 @@ import logoTSA from '@/images/certifications/TSA Logo.svg'
 import logoSmartWay from '@/images/certifications/SmartWay Partner Logo.svg'
 import logoCTPAT from '@/images/certifications/C-TPAT Logo.svg'
 import logoIATA from '@/images/certifications/IATA Air Cargo Logo.svg'
+import logoCBP from '@/images/certifications/Customs Border Protection Logo.svg'
 
 // CR Express Services with Heroicons
 const services = [
@@ -163,6 +164,7 @@ const certifications = [
   { name: 'TSA Approved', logo: logoTSA, type: 'image' },
   { name: 'SmartWay Partner', logo: logoSmartWay, type: 'image' },
   { name: 'IATA Certified', logo: logoIATA, type: 'image' },
+  { name: 'Customs Bonded', logo: logoCBP, type: 'image' },
   { name: 'GDP Compliant', icon: BeakerIcon, type: 'text' },
   { name: 'Hazmat/High Value Carrier', icon: ShieldCheckIcon, type: 'text' },
 ]
