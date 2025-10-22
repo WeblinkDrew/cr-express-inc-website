@@ -27,16 +27,16 @@ function Hero() {
           <div className="lg:col-span-7">
             <FadeIn>
               <h1 className="font-display text-5xl font-medium tracking-tight text-neutral-950 sm:text-6xl">
-                Stop Waiting for Chassis. Start Moving Containers.
+                Owned Equipment Means Saying Goodbye to Container Delays
               </h1>
               <p className="mt-6 text-xl text-neutral-600">
-                Private chassis fleet serving all 21 Chicagoland railyards. No "grey pool" shortages.
-                Same-day and next-day pickup with 7-day operations and 500+ container storage.
+                Private chassis fleet serving all major Chicagoland railyards. No "grey pool" shortages.
+                Same-day and next-day pickup with 7-day operations and 500+ Container Storage Spaces.
               </p>
               <div className="mt-8">
                 <TagList>
                   <TagListItem>Private Chassis Fleet</TagListItem>
-                  <TagListItem>21 Railyards</TagListItem>
+                  <TagListItem>All Major Railyards</TagListItem>
                   <TagListItem>7-Day Operations</TagListItem>
                   <TagListItem>500+ Storage</TagListItem>
                 </TagList>
@@ -66,7 +66,7 @@ function Stats() {
           By The Numbers
         </h2>
         <StatList className="mt-16">
-          <StatListItem value="21" label="Railyards serviced" />
+          <StatListItem value="All" label="Railyards serviced" />
           <StatListItem value="500+" label="Container storage capacity" />
           <StatListItem value="7 days" label="Weekly operations" />
           <StatListItem value="100%" label="Private chassis availability" />
@@ -152,14 +152,14 @@ function Benefits() {
             No waiting, no surprise fees.
           </GridListItem>
           <GridListItem title="Complete Railyard Coverage in One Call">
-            Access to all 21 major Chicagoland railyards including BNSF Logistics Park Chicago, UP Global
+            Access to all all major Chicagoland railyards including BNSF Logistics Park Chicago, UP Global
             facilities, CSX Bedford Park, NS Landers, CN Harvey, and CP Bensenville. One provider, complete coverage.
           </GridListItem>
           <GridListItem title="Same-Day and Weekend Service">
             7-day operations with round-the-clock railyard pickup capabilities. Weekend and holiday coverage,
             24/7 dispatch support, and afterhours expedited service for time-sensitive movements.
           </GridListItem>
-          <GridListItem title="Massive 500+ Container Storage Capacity">
+          <GridListItem title="Massive 500+ Container Storage Spaces">
             Secure staging at strategic Chicagoland locations for import containers awaiting delivery,
             export containers before rail movement, or empty equipment repositioning. Flexible daily, weekly,
             or monthly terms.
@@ -170,7 +170,7 @@ function Benefits() {
             machinery, steel, and industrial equipment.
           </GridListItem>
           <GridListItem title="Seamless Warehouse Integration">
-            Containers move directly from railyard to our 280,000 sq ft bonded warehouse for transloading,
+            Containers move directly from railyard to our 227,000 sq ft bonded warehouse for transloading,
             storage, or cross-docking. Single-source accountability from rail arrival through final delivery
             eliminates hand-offs.
           </GridListItem>
@@ -241,7 +241,7 @@ const drayageFAQs: FAQ[] = [
   {
     question: 'Which railyards do you serve and how quickly can you pick up containers?',
     answer:
-      'We serve all 21 major Chicagoland railyards including BNSF Logistics Park Chicago, UP Global facilities, CSX Bedford Park, NS Landers, CN Harvey, and CP Bensenville, plus all Joliet-area terminals. Standard pickup is same-day or next-day depending on arrival time and railyard. Expedited service can retrieve containers within hours of availability for urgent shipments.',
+      'We serve all all major Chicagoland railyards including BNSF Logistics Park Chicago, UP Global facilities, CSX Bedford Park, NS Landers, CN Harvey, and CP Bensenville, plus all Joliet-area terminals. Standard pickup is same-day or next-day depending on arrival time and railyard. Expedited service can retrieve containers within hours of availability for urgent shipments.',
   },
   {
     question: 'Can you handle overweight containers?',
@@ -261,14 +261,14 @@ const drayageFAQs: FAQ[] = [
   {
     question: 'Can you coordinate drayage with your warehouse and distribution services?',
     answer:
-      'Yes, that\'s one of our key advantages. Containers can move directly from railyard to our 280,000 sq ft bonded warehouse for transloading, storage, or cross-docking. This integrated approach eliminates multiple hand-offs, reduces costs, and provides single-source accountability from rail arrival through final delivery. We can also coordinate with our air cargo and OTR services for complete supply chain solutions.',
+      'Yes, that\'s one of our key advantages. Containers can move directly from railyard to our 227,000 sq ft bonded warehouse for transloading, storage, or cross-docking. This integrated approach eliminates multiple hand-offs, reduces costs, and provides single-source accountability from rail arrival through final delivery. We can also coordinate with our air cargo and OTR services for complete supply chain solutions.',
   },
 ]
 
 export const metadata: Metadata = {
-  title: 'Intermodal Drayage Services - 21 Chicago Railyards | CR Express',
+  title: 'Intermodal Drayage Services - Chicago Railyards | CR Express',
   description:
-    'Private chassis fleet serving all 21 Chicagoland railyards. No grey pool shortages. 7-day operations, tri-axle service, 500+ container storage. Same-day and next-day pickup available.',
+    'Private chassis fleet serving all major Chicagoland railyards. No grey pool shortages. 7-day operations, tri-axle service, 500+ Container Storage Spaces. Same-day and next-day pickup available.',
 }
 
 export default function DrayageService() {

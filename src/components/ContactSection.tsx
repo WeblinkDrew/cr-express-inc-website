@@ -16,8 +16,8 @@ export function ContactSection() {
               <Button href="/contact" invert>
                 Get a Quote
               </Button>
-              <Button href="tel:+18473547979" invert>
-                Call (847) 354-7979
+              <Button href="tel:+12244029537" invert>
+                Call +1 (224) 402-9537
               </Button>
             </div>
             <div className="mt-10 border-t border-white/10 pt-10">

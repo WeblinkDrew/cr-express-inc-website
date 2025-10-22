@@ -39,10 +39,17 @@ export function Offices({
         </Office>
       </li>
       <li>
-        <Office name="Contact" invert={invert}>
-          Phone: (847) 354-7979
+        <Office name="Second Facility" invert={invert}>
+          301 W Oakton St
           <br />
-          Alt: (224) 402-9537
+          Des Plaines, IL 60018
+        </Office>
+      </li>
+      <li>
+        <Office name="Contact" invert={invert}>
+          Phone: +1 (224) 402-9537
+          <br />
+          Sales: (224) 402-9537
         </Office>
       </li>
     </ul>

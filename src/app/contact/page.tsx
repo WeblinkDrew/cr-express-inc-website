@@ -134,7 +134,7 @@ function ContactDetails() {
         Our facility
       </h2>
       <p className="mt-6 text-base text-neutral-600">
-        Visit our 280,000 sq ft CBW Class 3 certified bonded warehouse facility,
+        Visit our 227,000 sq ft CBW Class 3 certified bonded warehouse facility,
         strategically located less than 5 miles from O'Hare International Airport.
       </p>
 
@@ -146,8 +146,8 @@ function ContactDetails() {
         </h2>
         <dl className="mt-6 grid grid-cols-1 gap-8 text-sm sm:grid-cols-2">
           {[
-            ['Main Office', '(847) 354-7979'],
-            ['Alternative', '(224) 402-9537'],
+            ['Main Office', '+1 (224) 402-9537'],
+            ['Sales', '(224) 402-9537'],
           ].map(([label, phone]) => (
             <div key={phone}>
               <dt className="font-semibold text-neutral-950">{label}</dt>
@@ -189,22 +189,22 @@ const contactFAQs: FAQ[] = [
   {
     question: 'How quickly can I get a quote?',
     answer:
-      'Most standard freight quotes are provided within 1-2 hours during business hours. For urgent requests, call (847) 354-7979 and speak directly with our dispatch team for immediate pricing. Complex shipments requiring specialized equipment or permits may take slightly longer as we coordinate with our operations team.',
+      'Most standard freight quotes are provided within 1-2 hours during business hours. For urgent requests, call +1 (224) 402-9537 and speak directly with our dispatch team for immediate pricing. Complex shipments requiring specialized equipment or permits may take slightly longer as we coordinate with our operations team.',
   },
   {
     question: 'What are your business hours?',
     answer:
-      'Our main office is open Monday through Friday, 8:00 AM to 5:00 PM Central Time. However, our dispatch team operates 24/7 for time-critical shipments and customer support. For after-hours emergencies, urgent pickups, or deliveries, call our main number (847) 354-7979 and you\'ll be connected to our on-duty dispatcher.',
+      'Our main office is open Monday through Friday, 8:00 AM to 5:00 PM Central Time. However, our dispatch team operates 24/7 for time-critical shipments and customer support. For after-hours emergencies, urgent pickups, or deliveries, call our main number +1 (224) 402-9537 and you\'ll be connected to our on-duty dispatcher.',
   },
   {
     question: 'Do you offer facility tours?',
     answer:
-      'Yes, we welcome potential customers to tour our 280,000 sq ft bonded warehouse facility in Elk Grove Village. Tours provide an opportunity to see our CBW Class 3 operations, climate-controlled storage, security systems, and value-added services firsthand. Contact us to schedule a facility tour with one of our logistics specialists.',
+      'Yes, we welcome potential customers to tour our 227,000 sq ft bonded warehouse facility in Elk Grove Village. Tours provide an opportunity to see our CBW Class 3 operations, climate-controlled storage, security systems, and value-added services firsthand. Contact us to schedule a facility tour with one of our logistics specialists.',
   },
   {
     question: 'How do I track my shipment?',
     answer:
-      'All shipments include real-time GPS tracking. You can track your freight by accessing our online customer portal with your tracking number, calling our dispatch team at (847) 354-7979, or using the contact form with your shipment details. You\'ll receive automated notifications for pickup confirmation, delivery updates, and POD documentation.',
+      'All shipments include real-time GPS tracking. You can track your freight by accessing our online customer portal with your tracking number, calling our dispatch team at +1 (224) 402-9537, or using the contact form with your shipment details. You\'ll receive automated notifications for pickup confirmation, delivery updates, and POD documentation.',
   },
   {
     question: 'What payment methods do you accept?',
@@ -215,7 +215,7 @@ const contactFAQs: FAQ[] = [
 
 export const metadata: Metadata = {
   title: 'Contact CR Express | Get a Logistics Quote',
-  description: 'Contact CR Express for bonded warehouse, air cargo, drayage, and freight services. Located in Elk Grove Village, IL near O\'Hare Airport. Call (847) 354-7979.',
+  description: 'Contact CR Express for bonded warehouse, air cargo, drayage, and freight services. Located in Elk Grove Village, IL near O\'Hare Airport. Call +1 (224) 402-9537.',
 }
 
 export default function Contact() {

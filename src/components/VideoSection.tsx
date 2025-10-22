@@ -61,7 +61,7 @@ export function VideoSection() {
         className="mt-24 sm:mt-32 lg:mt-40"
       >
         <p>
-          Take a virtual tour of our 280,000 sq ft bonded warehouse facility and
+          Take a virtual tour of our 227,000 sq ft bonded warehouse facility and
           see how we handle your cargo with precision and care. From our intermodal
           drayage operations to air cargo services at O&apos;Hare, discover what makes
           CR Express your trusted logistics partner.

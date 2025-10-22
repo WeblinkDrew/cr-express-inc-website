@@ -37,7 +37,7 @@ const services = [
     icon: BuildingStorefrontIcon,
     service: 'Storage & Distribution',
     summary: [
-      '280,000 square feet of secure, climate-controlled storage space with 24/7 surveillance and customs compliance.',
+      '227,000 square feet of secure, climate-controlled storage space with 24/7 surveillance and customs compliance.',
       'Strategically located less than 5 miles from O\'Hare International Airport for optimal logistics efficiency.',
     ],
     features: ['Duty-free storage up to 5 years', 'GDP compliant for pharmaceuticals', 'Container devanning services'],
@@ -61,10 +61,10 @@ const services = [
     icon: GlobeAltIcon,
     service: 'Rail & Port',
     summary: [
-      'Private chassis fleet serving 21 major Chicagoland railyards with 7-day operations and tri-axle capacity.',
+      'Private chassis fleet serving all major Chicagoland railyards with 7-day operations and tri-axle capacity.',
       'Over 500 container storage capacity with bonded drivers for secure transportation throughout the Midwest.',
     ],
-    features: ['21 railyard access', 'Private chassis fleet', '500+ container storage'],
+    features: ['All major railyard access', 'Private chassis fleet', '500+ Container Storage Spaces'],
   },
   {
     href: '/services/over-the-road',
@@ -162,10 +162,9 @@ function Services() {
 const certifications = [
   { name: 'TSA Approved', logo: logoTSA, type: 'image' },
   { name: 'SmartWay Partner', logo: logoSmartWay, type: 'image' },
-  { name: 'C-TPAT Certified', logo: logoCTPAT, type: 'image' },
   { name: 'IATA Certified', logo: logoIATA, type: 'image' },
   { name: 'GDP Compliant', icon: BeakerIcon, type: 'text' },
-  { name: 'Hazmat/DOT Certified', icon: ShieldCheckIcon, type: 'text' },
+  { name: 'Hazmat/High Value Carrier', icon: ShieldCheckIcon, type: 'text' },
 ]
 
 function Certifications() {
@@ -232,7 +231,7 @@ export default function ServicesPage() {
         title="Comprehensive logistics solutions for your supply chain"
       >
         <p>
-          From our 280,000 sq ft bonded warehouse to nationwide freight services,
+          From our 227,000 sq ft bonded warehouse to nationwide freight services,
           CR Express delivers integrated logistics solutions that keep your business moving.
           With 26+ years of experience and strategic positioning near O'Hare, we're your
           trusted partner for all transportation and warehousing needs.

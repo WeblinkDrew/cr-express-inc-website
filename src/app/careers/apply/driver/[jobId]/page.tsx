@@ -29,7 +29,7 @@ const driverPositions = {
     type: 'Full-time',
     location: 'Chicago, IL',
     description:
-      "Container movements between O'Hare, Chicago's 21 railyards, and customer locations. TWIC card required.",
+      "Container movements between O'Hare, Chicago's major railyards, and customer locations. TWIC card required.",
   },
 }
 

@@ -97,8 +97,8 @@ export function ServiceQuoteForm({ serviceName, serviceType }: ServiceQuoteFormP
       </form>
       <p className="mt-4 text-sm text-neutral-600 text-center">
         Or call us at{' '}
-        <a href="tel:+18473547979" className="font-semibold text-neutral-950 hover:underline">
-          (847) 354-7979
+        <a href="tel:+12244029537" className="font-semibold text-neutral-950 hover:underline">
+          +1 (224) 402-9537
         </a>
       </p>
     </div>

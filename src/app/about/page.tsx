@@ -311,7 +311,7 @@ function Philanthropy() {
 export const metadata: Metadata = {
   title: 'About CR Express - Chicago Logistics Company Since 1999',
   description:
-    'Founded by truck drivers in 1999, CR Express has grown into a premier logistics provider with 280,000 sq ft of bonded warehouse space and comprehensive transportation services.',
+    'Founded by truck drivers in 1999, CR Express has grown into a premier logistics provider with 227,000 sq ft of bonded warehouse space and comprehensive transportation services.',
 }
 
 export default async function About() {
@@ -329,13 +329,13 @@ export default async function About() {
             CR Express was founded by truck drivers who saw an opportunity to do
             logistics differently. Starting with a handful of trucks and a commitment
             to exceptional service, we&apos;ve grown into a comprehensive logistics provider
-            operating from a strategic 280,000 square foot facility less than 5 miles
+            operating from a strategic 227,000 square foot facility less than 5 miles
             from O&apos;Hare International Airport.
           </p>
           <p>
             Our founder-driven perspective means we understand the challenges our
             customers face because we&apos;ve been there ourselves. From navigating Chicago&apos;s
-            21 railyards to managing time-critical air cargo operations, our team brings
+            all major railyards to managing time-critical air cargo operations, our team brings
             26+ years of hands-on experience to every shipment we handle.
           </p>
           <p>
@@ -349,8 +349,8 @@ export default async function About() {
 
       <Container className="mt-16">
         <StatList>
-          <StatListItem value="280K" label="Square feet of warehouse space" />
-          <StatListItem value="100+" label="Dedicated employees" />
+          <StatListItem value="227K" label="Square feet of warehouse space" />
+          <StatListItem value="150+" label="Drivers" />
           <StatListItem value="26+" label="Years of experience" />
         </StatList>
       </Container>

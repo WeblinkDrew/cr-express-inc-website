@@ -16,7 +16,7 @@ const allServices: Service[] = [
   {
     href: '/services/warehousing',
     name: 'Bonded Warehouse',
-    description: 'CBW Class 3 certified facility with duty-free storage up to 5 years. 280,000 sq ft of secure, compliant warehousing.',
+    description: 'CBW Class 3 certified facility with duty-free storage up to 5 years. 227,000 sq ft of secure, compliant warehousing.',
     icon: BuildingStorefrontIcon,
   },
   {
@@ -28,7 +28,7 @@ const allServices: Service[] = [
   {
     href: '/services/drayage',
     name: 'Intermodal Drayage',
-    description: 'Private chassis fleet serving all 21 Chicagoland railyards. 7-day operations with 500+ container storage.',
+    description: 'Private chassis fleet serving all major Chicagoland railyards. 7-day operations with 500+ Container Storage Spaces.',
     icon: TruckIcon,
   },
   {

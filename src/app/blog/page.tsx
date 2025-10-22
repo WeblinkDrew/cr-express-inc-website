@@ -37,7 +37,7 @@ const blogFAQs: FAQ[] = [
   {
     question: 'How can I get answers to specific logistics questions not covered in the blog?',
     answer:
-      'If you have specific questions about logistics, shipping, warehousing, or our services that aren\'t addressed in our blog content, we\'re here to help! Call our team at (847) 354-7979 or submit your question through our contact form. Our logistics experts are happy to provide personalized answers and guidance.',
+      'If you have specific questions about logistics, shipping, warehousing, or our services that aren\'t addressed in our blog content, we\'re here to help! Call our team at +1 (224) 402-9537 or submit your question through our contact form. Our logistics experts are happy to provide personalized answers and guidance.',
   },
 ]
 

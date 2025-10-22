@@ -20,8 +20,8 @@ export function TrustSection({ city }: TrustSectionProps) {
     'Complete customs compliance and documentation',
     'GDP compliant for pharmaceutical products',
     'Strategic location less than 5 miles from O\'Hare Airport',
-    'Access to 21 major Chicagoland railyards',
-    '280,000 sq ft secure facility',
+    'Access to all major Chicagoland railyards',
+    '227,000 sq ft secure facility',
     '26+ years of logistics expertise',
   ]
 
@@ -647,7 +647,7 @@ export function FAQAccordion({ city }: TrustSectionProps) {
     },
     {
       question: `What makes CR Express different from other bonded warehouses serving ${city.name}?`,
-      answer: `Our Elk Grove Village facility offers unmatched logistics connectivity with only 8 minutes to ORD Airport and direct access to 21 major rail networks. We combine CBW Class 3 certification with GDP compliance for pharmaceuticals, TSA-approved operations, and 26+ years of customs expertise. Plus, we're only ${city.distance} miles from ${city.name} for quick local delivery.`
+      answer: `Our Elk Grove Village facility offers unmatched logistics connectivity with only 8 minutes to ORD Airport and direct access to all major rail networks. We combine CBW Class 3 certification with GDP compliance for pharmaceuticals, TSA-approved operations, and 26+ years of customs expertise. Plus, we're only ${city.distance} miles from ${city.name} for quick local delivery.`
     },
     {
       question: `How long does it take to get goods from the bonded warehouse to ${city.name}?`,
@@ -663,7 +663,7 @@ export function FAQAccordion({ city }: TrustSectionProps) {
     },
     {
       question: `Can I visit the bonded warehouse facility?`,
-      answer: `Absolutely! We welcome ${city.name} businesses to tour our 280,000 sq ft facility in Elk Grove Village. You'll see our security systems, temperature-controlled zones, container transloading operations, and meet our experienced warehouse team. Contact us to schedule a facility tour.`
+      answer: `Absolutely! We welcome ${city.name} businesses to tour our 227,000 sq ft facility in Elk Grove Village. You'll see our security systems, temperature-controlled zones, container transloading operations, and meet our experienced warehouse team. Contact us to schedule a facility tour.`
     },
   ]
 

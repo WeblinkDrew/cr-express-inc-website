@@ -35,17 +35,6 @@ const navigation = [
     ],
   },
   {
-    title: 'Service Area',
-    links: [
-      { title: 'Chicago, IL', href: '/locations/chicago' },
-      { title: 'Schaumburg, IL', href: '/locations/schaumburg' },
-      { title: 'Arlington Heights, IL', href: '/locations/arlington-heights' },
-      { title: 'Palatine, IL', href: '/locations/palatine' },
-      { title: 'Des Plaines, IL', href: '/locations/des-plaines' },
-      { title: 'Mount Prospect, IL', href: '/locations/mount-prospect' },
-    ],
-  },
-  {
     title: 'Connect',
     links: socialMediaProfiles,
   },
@@ -140,9 +129,10 @@ export function Footer() {
                   Quick Contact
                 </h3>
                 <div className="mt-4 text-sm text-neutral-700 space-y-2">
-                  <p>2400 Arthur Ave, Elk Grove Village, IL 60007</p>
-                  <p>Phone: <a href="tel:+18473547979" className="hover:text-neutral-950 transition">(847) 354-7979</a></p>
-                  <p>Alt: <a href="tel:+12244029537" className="hover:text-neutral-950 transition">(224) 402-9537</a></p>
+                  <p>Main: 2400 Arthur Ave, Elk Grove Village, IL 60007</p>
+                  <p>Second: 301 W Oakton St, Des Plaines, IL 60018</p>
+                  <p>Phone: <a href="tel:+12244029537" className="hover:text-neutral-950 transition">+1 (224) 402-9537</a></p>
+                  <p>Sales: <a href="tel:+12244029537" className="hover:text-neutral-950 transition">(224) 402-9537</a></p>
                 </div>
               </div>
             </div>

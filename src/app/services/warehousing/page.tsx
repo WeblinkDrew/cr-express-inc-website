@@ -38,7 +38,7 @@ function Hero() {
               </h1>
               <p className="mt-6 text-xl text-neutral-600">
                 Defer duties for up to 5 years with our CBW Class 3 certified bonded warehouse.
-                280,000 sq ft of secure, compliant storage less than 5 miles from O'Hare Airport.
+                227,000 sq ft of secure, compliant storage less than 5 miles from O'Hare Airport.
               </p>
               <div className="mt-8">
                 <TagList>
@@ -75,7 +75,7 @@ function Stats() {
           By The Numbers
         </h2>
         <StatList className="mt-16">
-          <StatListItem value="280,000" label="Square feet of secure storage" />
+          <StatListItem value="227,000" label="Square feet of secure storage" />
           <StatListItem value="<5 mi" label="Distance from O'Hare Airport" />
           <StatListItem value="5 years" label="Duty-free storage capacity" />
           <StatListItem value="24/7" label="Security & surveillance" />
@@ -168,11 +168,11 @@ function Benefits() {
             and withdrawal paperwork. Focus on your business while we ensure complete compliance.
           </GridListItem>
           <GridListItem title="Scale Flexibly with Your Business">
-            From a few pallets to full truckloads, our 280,000 sq ft facility adapts to your needs.
+            From a few pallets to full truckloads, our 227,000 sq ft facility adapts to your needs.
             Climate-controlled zones, GDP compliant storage, and specialized handling for any cargo type.
           </GridListItem>
           <GridListItem title="Move Goods Faster to Market">
-            Less than 5 miles from ORD, direct access to 21 railyards, and same-day/next-day
+            Less than 5 miles from ORD, direct access to all major railyards, and same-day/next-day
             delivery to 200+ zip codes. Your inventory reaches customers faster from our strategic location.
           </GridListItem>
           <GridListItem title="Protect High-Value Cargo">
@@ -321,7 +321,7 @@ const warehouseFAQs: FAQ[] = [
 export const metadata: Metadata = {
   title: 'Bonded Warehouse Services - CBW Class 3 Certified | CR Express',
   description:
-    'Defer customs duties up to 5 years with our CBW Class 3 certified bonded warehouse. 280,000 sq ft near O\'Hare Airport. GDP compliant, 24/7 security, real-time inventory visibility.',
+    'Defer customs duties up to 5 years with our CBW Class 3 certified bonded warehouse. 227,000 sq ft near O\'Hare Airport. GDP compliant, 24/7 security, real-time inventory visibility.',
 }
 
 export default function WarehousingService() {

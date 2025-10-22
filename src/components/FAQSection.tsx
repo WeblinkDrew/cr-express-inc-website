@@ -20,7 +20,7 @@ const faqs = [
   {
     question: 'What cross docking services are available near Chicago?',
     answer:
-      'Our cross docking facility offers comprehensive freight consolidation and distribution services. We provide cross docking with access to 21 major railyards all across Chicagoland and ORD airport, with capabilities for container devanning, LTL consolidation, and same-day cross docking operations. Our 280,000 square foot facility supports cross docking for e-commerce, retail, and manufacturing clients with 7-days-per-week operations.',
+      'Our cross docking facility offers comprehensive freight consolidation and distribution services. We provide cross docking with access to all major railyards all across Chicagoland and ORD airport, with capabilities for container devanning, LTL consolidation, and same-day cross docking operations. Our 227,000 square foot facility supports cross docking for e-commerce, retail, and manufacturing clients with 7-days-per-week operations.',
   },
   {
     question: 'Do you provide FTL and LTL freight shipping nationwide?',
@@ -35,7 +35,7 @@ const faqs = [
   {
     question: 'What container freight services are available in Chicago?',
     answer:
-      'Our Container Freight Station (CFS) provides complete container freight services including container devanning, transloading, drayage, and intermodal transportation. We handle 20ft, 40ft, and 45ft containers with privately-owned chassis to avoid supply shortages. Our facility with access to 21 major railyards all across Chicagoland offers container storage for over 500 containers and serves 300+ cities nationwide.',
+      'Our Container Freight Station (CFS) provides complete container freight services including container devanning, transloading, drayage, and intermodal transportation. We handle 20ft, 40ft, and 45ft containers with privately-owned chassis to avoid supply shortages. Our facility with access to all major railyards all across Chicagoland offers container storage for over 500 containers and serves 300+ cities nationwide.',
   },
   {
     question: 'How do your logistics solutions support supply chain management?',
@@ -45,12 +45,12 @@ const faqs = [
   {
     question: 'What makes your Chicago logistics location strategically advantageous?',
     answer:
-      'Our Elk Grove Village headquarters is strategically located less than 5 miles from O\'Hare Airport (ORD) with access to 21 major railyards all across Chicagoland. This prime location enables minimal transit times, same-day deliveries within 200+ zip codes, and seamless intermodal connections. Our Chicago logistics hub provides access to the nation\'s transportation network with unmatched efficiency.',
+      'Our Elk Grove Village headquarters is strategically located less than 5 miles from O\'Hare Airport (ORD) with access to all major railyards all across Chicagoland. This prime location enables minimal transit times, same-day deliveries within 200+ zip codes, and seamless intermodal connections. Our Chicago logistics hub provides access to the nation\'s transportation network with unmatched efficiency.',
   },
   {
     question: 'Are you GDP compliant for pharmaceutical and healthcare logistics?',
     answer:
-      'Yes, CR Express is GDP (Good Distribution Practice) compliant for pharmaceutical and healthcare logistics. We maintain temperature-controlled storage, proper documentation, and validated cold chain logistics processes. Our facility is equipped for pharmaceutical freight services, medical device distribution, and healthcare supply chain management with full regulatory compliance and specialized handling protocols.',
+      'Yes, CR Express is GDP (Global Distribution Practice) compliant for pharmaceutical and healthcare logistics. We maintain temperature-controlled storage, proper documentation, and validated cold chain logistics processes. Our facility is equipped for pharmaceutical freight services, medical device distribution, and healthcare supply chain management with full regulatory compliance and specialized handling protocols.',
   },
   {
     question: 'What specialized freight services do you offer for automotive logistics?',

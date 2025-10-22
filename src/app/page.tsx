@@ -29,7 +29,7 @@ const services = [
     href: '/services/warehousing',
     title: 'Bonded Warehouse Services',
     description:
-      '280,000 sq ft CBW Class 3 certified facility with duty-free storage up to 5 years, complete customs compliance, and GDP compliant operations.',
+      '227,000 sq ft CBW Class 3 certified facility with duty-free storage up to 5 years, complete customs compliance, and GDP compliant operations.',
     icon: BuildingStorefrontIcon,
     year: '1999',
   },
@@ -45,7 +45,7 @@ const services = [
     href: '/services/drayage',
     title: 'Intermodal Drayage',
     description:
-      'Private chassis fleet serving 21 major Chicagoland railyards with 7-day operations, tri-axle capacity, and 500+ container storage.',
+      'Private chassis fleet serving all major Chicagoland railyards with 7-day operations, tri-axle capacity, and 500+ Container Storage Spaces.',
     icon: GlobeAltIcon,
     year: '1999',
   },
@@ -61,7 +61,7 @@ const services = [
     href: '/services/local-pd',
     title: 'Local Pickup & Delivery',
     description:
-      'Same-day and next-day delivery throughout Chicagoland with time-critical capabilities. Specialized handling for medical and automotive.',
+      'Same-day and next-day delivery throughout Chicagoland with time-critical capabilities. Specialized handling for medical and pharmaceutical.',
     icon: MapPinIcon,
     year: '1999',
   },
@@ -76,9 +76,9 @@ function CoreServices() {
         className="mt-24 sm:mt-32 lg:mt-40"
       >
         <p>
-          From our 280,000 sq ft bonded warehouse to nationwide freight services,
+          From our 227,000 sq ft bonded warehouse to nationwide freight services,
           CR Express delivers integrated logistics solutions that keep your business moving.
-          Strategically located less than 5 miles from O'Hare Airport with access to 21 major railyards.
+          Strategically located less than 5 miles from O'Hare Airport with access to all major railyards.
         </p>
       </SectionIntro>
       <Container className="mt-16">
@@ -200,15 +200,15 @@ function WhyChooseUs() {
           </div>
           <List className="mt-16 lg:mt-0 lg:w-1/2 lg:min-w-132 lg:pl-4">
             <ListItem title="Bonded warehouse services">
-              280,000 sq ft CBW Class 3 certified facility with duty-free storage
+              227,000 sq ft CBW Class 3 certified facility with duty-free storage
               up to 5 years. Complete customs compliance, GDP compliant for
               pharmaceuticals, and strategically located less than 5 miles from
               O'Hare International Airport.
             </ListItem>
             <ListItem title="Intermodal drayage">
-              Private chassis fleet serving 21 major Chicagoland railyards with
+              Private chassis fleet serving all major Chicagoland railyards with
               7-day operations. Tri-axle capacity for heavy containers, 500+
-              container storage, and TSA-approved bonded drivers for secure
+              Container Storage Spaces, and TSA-approved bonded drivers for secure
               transportation.
             </ListItem>
             <ListItem title="Air cargo operations">

@@ -26,7 +26,7 @@ function Positions() {
           jobId: 'warehouse-manager',
           type: 'Full-time',
           location: 'Elk Grove Village, IL',
-          description: 'Lead our 280,000 sq ft bonded warehouse operations, managing inventory, staff, and ensuring compliance with CBW Class 3 and GDP requirements.',
+          description: 'Lead our 227,000 sq ft bonded warehouse operations, managing inventory, staff, and ensuring compliance with CBW Class 3 and GDP requirements.',
           isDriverPosition: false,
         },
         {
@@ -71,7 +71,7 @@ function Positions() {
           jobId: 'drayage-driver',
           type: 'Full-time',
           location: 'Chicago, IL',
-          description: 'Container movements between O\'Hare, Chicago\'s 21 railyards, and customer locations. TWIC card required.',
+          description: 'Container movements between O\'Hare, Chicago\'s all major railyards, and customer locations. TWIC card required.',
           isDriverPosition: true,
         }
       ]
@@ -195,9 +195,7 @@ function Benefits() {
             mileage pay, detention pay, and safety bonuses.
           </GridListItem>
           <GridListItem title="Health & Wellness" invert>
-            Comprehensive medical, dental, and vision insurance for you and your
-            family. Company-paid life insurance and disability coverage. Employee
-            assistance program for personal and professional support.
+            Comprehensive medical, dental, and vision insurance for you and your family.
           </GridListItem>
           <GridListItem title="Time Off & Balance" invert>
             Paid time off that grows with tenure, paid holidays, and flexible
@@ -205,18 +203,11 @@ function Benefits() {
             drivers home weekly.
           </GridListItem>
           <GridListItem title="Retirement Planning" invert>
-            401(k) retirement plan with company matching to help secure your future.
+            401(k) retirement plan to help secure your future.
             Financial planning resources and retirement counseling available.
           </GridListItem>
-          <GridListItem title="Career Development" invert>
-            Ongoing training programs, CDL school partnerships, and tuition
-            reimbursement for job-related education. Clear paths for advancement
-            within our growing company.
-          </GridListItem>
           <GridListItem title="Safety & Equipment" invert>
-            Modern, well-maintained fleet with latest safety technology. State-of-the-art
-            warehouse equipment. Comprehensive safety training and PPE provided.
-            Commitment to zero incidents.
+            Modern, well-maintained fleet with latest safety technology.
           </GridListItem>
         </GridList>
       </Container>
@@ -340,13 +331,13 @@ function ApplicationProcess() {
             <div className="mt-10 space-y-6 text-base text-neutral-600">
               <p>
                 <strong className="font-semibold text-neutral-950">Ready to join our team?</strong> Apply
-                online or give us a call at (847) 354-7979. We review applications
-                promptly and will contact qualified candidates within 48 hours.
+                online or give us a call at +1 (224) 402-9537. We review applications
+                promptly and will contact qualified candidates promptly.
               </p>
               <p>
                 For driving positions, bring your CDL, medical card, and driving
                 record. For warehouse positions, steel-toed boots are required
-                for facility tours.
+                .
               </p>
             </div>
             <div className="mt-10">
@@ -377,7 +368,7 @@ const careersFAQs: FAQ[] = [
   {
     question: 'What types of driving positions do you have available?',
     answer:
-      'We hire CDL-A drivers for several types of positions: Local pickup & delivery (home daily), Over-the-road (regional and long-haul routes), Drayage/container work (21 Chicago railyards), and Dedicated account positions. Both company drivers and owner-operators are welcome. Requirements include valid CDL-A, clean driving record, and DOT medical card.',
+      'We hire CDL-A drivers for several types of positions: Local pickup & delivery (home daily), Over-the-road (regional and long-haul routes), Drayage/container work (all major Chicago railyards), and Dedicated account positions. Both company drivers and owner-operators are welcome. Requirements include valid CDL-A, clean driving record, and DOT medical card.',
   },
   {
     question: 'Do local drivers get home every night?',
@@ -387,7 +378,7 @@ const careersFAQs: FAQ[] = [
   {
     question: 'What benefits do you offer?',
     answer:
-      'We provide comprehensive benefits including medical, dental, and vision insurance for you and your family, 401(k) with company matching, paid time off and holidays, company-paid life insurance and disability coverage, ongoing training and career development, safety bonuses and performance incentives, and modern, well-maintained equipment.',
+      'We provide comprehensive benefits including medical, dental, and vision insurance for you and your family, 401(k), paid time off and holidays, life insurance and disability coverage, ongoing training and career development, safety bonuses for drivers and performance incentives, and modern, well-maintained equipment.',
   },
   {
     question: 'Do you require experience for warehouse positions?',
@@ -397,12 +388,12 @@ const careersFAQs: FAQ[] = [
   {
     question: 'How does the application process work?',
     answer:
-      'The process typically takes 1-2 weeks: Submit your online application or call (847) 354-7979, complete a phone screening with our HR team (usually within 48 hours), attend an in-person interview at our Elk Grove Village facility, pass background check and drug screening, receive job offer with start date, and complete onboarding and orientation. For driving positions, bring your CDL, medical card, and driving record to your interview.',
+      'The process typically takes 1-2 weeks: Submit your online application or call +1 (224) 402-9537, complete a phone screening with our HR team, attend an in-person interview at our Elk Grove Village facility, pass background check and drug screening, receive job offer with start date, and complete onboarding and orientation. For driving positions, bring your CDL, medical card, and driving record to your interview.',
   },
   {
     question: 'What opportunities are there for career advancement?',
     answer:
-      'CR Express promotes from within whenever possible. Warehouse associates can advance to lead positions, supervisors, and management roles. Drivers can move into dispatcher, operations coordinator, or driver trainer positions. We provide ongoing training, tuition reimbursement for job-related education, and clear advancement paths. Many of our managers started in entry-level positions and grew their careers with us over the years.',
+      'CR Express promotes from within whenever possible. Warehouse associates can advance to lead positions, supervisors, and management roles. Drivers can move into dispatcher, operations coordinator, or driver trainer positions. We provide ongoing training and clear advancement paths. Many of our managers started in entry-level positions and grew their careers with us over the years.',
   },
 ]
 

@@ -13,7 +13,7 @@ const jobPositions = {
     type: 'Full-time',
     location: 'Elk Grove Village, IL',
     description:
-      'Lead our 280,000 sq ft bonded warehouse operations, managing inventory, staff, and ensuring compliance with CBW Class 3 and GDP requirements.',
+      'Lead our 227,000 sq ft bonded warehouse operations, managing inventory, staff, and ensuring compliance with CBW Class 3 and GDP requirements.',
   },
   'forklift-operator': {
     title: 'Forklift Operator',

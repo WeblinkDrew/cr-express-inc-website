@@ -50,10 +50,8 @@ function EmailIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 }
 
 export const socialMediaProfiles = [
-  { title: 'Facebook', href: 'https://facebook.com', icon: FacebookIcon },
-  { title: 'Instagram', href: 'https://instagram.com', icon: InstagramIcon },
   { title: 'LinkedIn', href: 'https://linkedin.com', icon: LinkedInIcon },
-  { title: 'Email', href: 'mailto:info@crexpress.com', icon: EmailIcon },
+  { title: 'Facebook', href: 'https://facebook.com', icon: FacebookIcon },
 ]
 
 export function SocialMedia({
