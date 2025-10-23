@@ -154,6 +154,17 @@ export function Footer() {
             <p className="mt-1 text-xs text-neutral-600">
               Serving Chicago and beyond since 1999
             </p>
+            <p className="mt-1 text-xs text-neutral-500">
+              Built by{' '}
+              <a
+                href="https://www.goweblink.io"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="hover:text-neutral-700 transition-colors"
+              >
+                Weblink
+              </a>
+            </p>
           </div>
         </div>
       </FadeIn>
