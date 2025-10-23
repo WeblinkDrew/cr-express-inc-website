@@ -1,6 +1,7 @@
 import { type Metadata } from 'next'
 
 import '@/styles/tailwind.css'
+import { ReCaptchaProvider } from '@/components/ReCaptchaProvider'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.crexpressinc.com'),
@@ -56,7 +57,9 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="h-full bg-neutral-950 text-base antialiased">
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <ReCaptchaProvider>{children}</ReCaptchaProvider>
+      </body>
     </html>
   )
 }

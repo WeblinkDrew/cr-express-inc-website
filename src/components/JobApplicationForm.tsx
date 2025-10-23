@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/Button'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
 interface JobApplicationFormProps {
   jobTitle: string
@@ -9,8 +10,10 @@ interface JobApplicationFormProps {
 }
 
 export function JobApplicationForm({ jobTitle, department }: JobApplicationFormProps) {
+  const { executeRecaptcha } = useGoogleReCaptcha()
   const [currentStep, setCurrentStep] = useState(1)
   const totalSteps = 3
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [formData, setFormData] = useState({
     // Step 1: Personal Information
@@ -145,11 +148,78 @@ export function JobApplicationForm({ jobTitle, department }: JobApplicationFormP
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Form submitted:', formData)
-    // TODO: Handle form submission
-    alert('Application submitted! (Form submission not yet implemented)')
+
+    if (!executeRecaptcha) {
+      alert('reCAPTCHA not ready. Please try again.')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      // Generate reCAPTCHA token
+      const recaptchaToken = await executeRecaptcha('job_application_submit')
+
+      // Create FormData to handle file uploads
+      const submitData = new FormData()
+
+      // Add all text fields as JSON
+      const textData = {
+        firstName: formData.firstName,
+        middleInitial: formData.middleInitial,
+        lastName: formData.lastName,
+        preferredName: formData.preferredName,
+        streetAddress: formData.streetAddress,
+        aptNumber: formData.aptNumber,
+        city: formData.city,
+        state: formData.state,
+        zipCode: formData.zipCode,
+        homePhone: formData.homePhone,
+        alternatePhone: formData.alternatePhone,
+        email: formData.email,
+        aboutYou: formData.aboutYou,
+        employmentStatus: formData.employmentStatus,
+        desiredPay: formData.desiredPay,
+        startDate: formData.startDate,
+        positionType: formData.positionType,
+        schedulePreference: formData.schedulePreference,
+        howDidYouHear: formData.howDidYouHear,
+      }
+
+      submitData.append('formData', JSON.stringify(textData))
+      submitData.append('jobTitle', jobTitle)
+      submitData.append('department', department)
+      submitData.append('recaptchaToken', recaptchaToken)
+
+      // Add file attachments if any
+      if (formData.attachments) {
+        Array.from(formData.attachments).forEach((file) => {
+          submitData.append('attachments', file)
+        })
+      }
+
+      const response = await fetch('/api/submit-job-application', {
+        method: 'POST',
+        body: submitData, // Send FormData instead of JSON
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        alert('Application submitted successfully! We will review your application and get back to you soon.')
+        // Reset form
+        window.location.reload()
+      } else {
+        alert(`Error: ${result.error || 'Failed to submit application. Please try again.'}`)
+      }
+    } catch (error) {
+      console.error('Submission error:', error)
+      alert('Failed to submit application. Please check your connection and try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -602,7 +672,9 @@ export function JobApplicationForm({ jobTitle, department }: JobApplicationFormP
                 Next
               </Button>
             ) : (
-              <Button type="submit">Send Application</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Send Application'}
+              </Button>
             )}
           </div>
         </div>

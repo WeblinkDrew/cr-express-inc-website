@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/Button'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
 interface DriverApplicationFormProps {
   jobTitle: string
@@ -9,8 +10,10 @@ interface DriverApplicationFormProps {
 }
 
 export function DriverApplicationForm({ jobTitle, department }: DriverApplicationFormProps) {
+  const { executeRecaptcha } = useGoogleReCaptcha()
   const [currentStep, setCurrentStep] = useState(1)
   const totalSteps = 4
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [formData, setFormData] = useState({
     // Step 1: Personal Information
@@ -156,11 +159,48 @@ export function DriverApplicationForm({ jobTitle, department }: DriverApplicatio
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Driver application submitted:', formData)
-    // TODO: Handle form submission
-    alert('Application submitted! (Form submission not yet implemented)')
+
+    if (!executeRecaptcha) {
+      alert('reCAPTCHA not ready. Please try again.')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      // Generate reCAPTCHA token
+      const recaptchaToken = await executeRecaptcha('driver_application_submit')
+
+      const response = await fetch('/api/submit-driver-application', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          formData,
+          jobTitle,
+          department,
+          recaptchaToken,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        alert('Application submitted successfully! We will review your application and get back to you soon.')
+        // Reset form
+        window.location.reload()
+      } else {
+        alert(`Error: ${result.error || 'Failed to submit application. Please try again.'}`)
+      }
+    } catch (error) {
+      console.error('Submission error:', error)
+      alert('Failed to submit application. Please check your connection and try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -714,7 +754,9 @@ export function DriverApplicationForm({ jobTitle, department }: DriverApplicatio
                 Next
               </Button>
             ) : (
-              <Button type="submit">Send Application</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Send Application'}
+              </Button>
             )}
           </div>
         </div>

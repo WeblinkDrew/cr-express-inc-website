@@ -1,11 +1,12 @@
 'use client'
 
-import { useId } from 'react'
+import { useId, useState } from 'react'
 import Link from 'next/link'
 import { Container } from '@/components/Container'
 import { FadeIn } from '@/components/FadeIn'
 import { Button } from '@/components/Button'
 import type { CityData } from '@/lib/location-data'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
 function TextInput({
   label,
@@ -68,6 +69,72 @@ interface LocationQuoteFormProps {
 }
 
 export function LocationQuoteForm({ city }: LocationQuoteFormProps) {
+  const { executeRecaptcha } = useGoogleReCaptcha()
+  const [formData, setFormData] = useState({
+    name: '',
+    company: '',
+    email: '',
+    phone: '',
+    service: '',
+    message: '',
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!executeRecaptcha) {
+      alert('reCAPTCHA not ready. Please try again.')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      // Generate reCAPTCHA token
+      const recaptchaToken = await executeRecaptcha('location_quote_submit')
+
+      const response = await fetch('/api/submit-location-quote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          formData,
+          cityName: city.name,
+          recaptchaToken,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        alert('Quote request submitted successfully! We will get back to you within 24 hours.')
+        // Reset form
+        setFormData({
+          name: '',
+          company: '',
+          email: '',
+          phone: '',
+          service: '',
+          message: '',
+        })
+      } else {
+        alert(`Error: ${result.error || 'Failed to submit quote request. Please try again.'}`)
+      }
+    } catch (error) {
+      console.error('Submission error:', error)
+      alert('Failed to submit quote request. Please check your connection and try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <div className="mt-24 sm:mt-32 bg-neutral-50 py-24">
       <Container>
@@ -82,18 +149,47 @@ export function LocationQuoteForm({ city }: LocationQuoteFormProps) {
               or customs brokerage services. Our team will respond within 24 hours.
             </p>
 
-            <form className="mt-10">
+            <form onSubmit={handleSubmit} className="mt-10">
               <div className="isolate -space-y-px rounded-2xl bg-white/50">
-                <TextInput label="Name" name="name" autoComplete="name" />
-                <TextInput label="Company" name="company" autoComplete="organization" />
+                <TextInput
+                  label="Name"
+                  name="name"
+                  autoComplete="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+                <TextInput
+                  label="Company"
+                  name="company"
+                  autoComplete="organization"
+                  value={formData.company}
+                  onChange={handleChange}
+                />
                 <TextInput
                   label="Email"
                   type="email"
                   name="email"
                   autoComplete="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
                 />
-                <TextInput label="Phone" type="tel" name="phone" autoComplete="tel" />
-                <SelectInput label="Service Needed" name="service">
+                <TextInput
+                  label="Phone"
+                  type="tel"
+                  name="phone"
+                  autoComplete="tel"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                />
+                <SelectInput
+                  label="Service Needed"
+                  name="service"
+                  value={formData.service}
+                  onChange={handleChange}
+                >
                   <option value="">Select a service</option>
                   <option value="bonded-warehouse">Bonded Warehouse Storage</option>
                   <option value="container-transloading">Container Transloading</option>
@@ -102,10 +198,15 @@ export function LocationQuoteForm({ city }: LocationQuoteFormProps) {
                   <option value="air-cargo">Air Cargo Services</option>
                   <option value="general-inquiry">General Inquiry</option>
                 </SelectInput>
-                <TextInput label="Message or special requirements" name="message" />
+                <TextInput
+                  label="Message or special requirements"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                />
               </div>
-              <Button type="submit" className="mt-10">
-                Request Quote
+              <Button type="submit" className="mt-10" disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Request Quote'}
               </Button>
             </form>
           </FadeIn>

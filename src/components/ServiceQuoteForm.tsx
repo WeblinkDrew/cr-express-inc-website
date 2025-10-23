@@ -1,7 +1,8 @@
 'use client'
 
-import { useId } from 'react'
+import { useId, useState } from 'react'
 import { Button } from '@/components/Button'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
 interface ServiceQuoteFormProps {
   serviceName: string
@@ -65,23 +66,117 @@ function SelectInput({
 }
 
 export function ServiceQuoteForm({ serviceName, serviceType }: ServiceQuoteFormProps) {
+  const { executeRecaptcha } = useGoogleReCaptcha()
+  const [formData, setFormData] = useState({
+    name: '',
+    company: '',
+    email: '',
+    phone: '',
+    service: serviceType,
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!executeRecaptcha) {
+      alert('reCAPTCHA not ready. Please try again.')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      // Generate reCAPTCHA token
+      const recaptchaToken = await executeRecaptcha('service_quote_submit')
+
+      const response = await fetch('/api/submit-service-quote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          formData,
+          serviceName,
+          serviceType,
+          recaptchaToken,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        alert('Quote request submitted successfully! We will get back to you within 24 hours.')
+        // Reset form
+        setFormData({
+          name: '',
+          company: '',
+          email: '',
+          phone: '',
+          service: serviceType,
+        })
+      } else {
+        alert(`Error: ${result.error || 'Failed to submit quote request. Please try again.'}`)
+      }
+    } catch (error) {
+      console.error('Submission error:', error)
+      alert('Failed to submit quote request. Please check your connection and try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <div className="rounded-2xl bg-white/80 backdrop-blur-sm p-8 shadow-xl">
       <h3 className="font-display text-2xl font-semibold text-neutral-950 mb-6">
         Get a Free Quote
       </h3>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="isolate -space-y-px rounded-2xl bg-white/50">
-          <TextInput label="Name" name="name" autoComplete="name" />
-          <TextInput label="Company" name="company" autoComplete="organization" />
+          <TextInput
+            label="Name"
+            name="name"
+            autoComplete="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <TextInput
+            label="Company"
+            name="company"
+            autoComplete="organization"
+            value={formData.company}
+            onChange={handleChange}
+          />
           <TextInput
             label="Email"
             type="email"
             name="email"
             autoComplete="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
           />
-          <TextInput label="Phone" type="tel" name="phone" autoComplete="tel" />
-          <SelectInput label="Service Needed" name="service">
+          <TextInput
+            label="Phone"
+            type="tel"
+            name="phone"
+            autoComplete="tel"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+          />
+          <SelectInput
+            label="Service Needed"
+            name="service"
+            value={formData.service}
+            onChange={handleChange}
+          >
             <option value={serviceType}>{serviceName}</option>
             <option value="warehousing">Bonded Warehouse</option>
             <option value="air-cargo">Air Cargo</option>
@@ -91,8 +186,8 @@ export function ServiceQuoteForm({ serviceName, serviceType }: ServiceQuoteFormP
             <option value="other">Other / Not Sure</option>
           </SelectInput>
         </div>
-        <Button type="submit" className="mt-6 w-full">
-          Get My Quote
+        <Button type="submit" className="mt-6 w-full" disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : 'Get My Quote'}
         </Button>
       </form>
       <p className="mt-4 text-sm text-neutral-600 text-center">
