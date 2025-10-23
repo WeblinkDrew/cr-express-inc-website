@@ -57,6 +57,19 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="h-full bg-neutral-950 text-base antialiased">
+      <head>
+        <link
+          rel="preload"
+          href="/fonts/Mona-Sans.var.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link rel="preconnect" href="https://www.youtube.com" />
+        <link rel="preconnect" href="https://www.google.com" />
+        <link rel="dns-prefetch" href="https://www.youtube.com" />
+        <link rel="dns-prefetch" href="https://www.google.com" />
+      </head>
       <body className="flex min-h-full flex-col">
         <ReCaptchaProvider>{children}</ReCaptchaProvider>
       </body>

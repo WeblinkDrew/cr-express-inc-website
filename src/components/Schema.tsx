@@ -23,10 +23,33 @@ export function OrganizationSchema() {
     url: 'https://www.crexpressinc.com',
     logo: 'https://www.crexpressinc.com/logo.png',
     description:
-      'CR Express (Est. 1999) is a trusted name in the trucking and logistics industry, specializing in full-service logistics services including but not limited to: Airport Transfers (TSA/Bonded), Local Pickups & Deliveries, Over the Road Truckloads (OTR), Container Drayage, and Warehousing (Customs Bonded).',
+      'CR Express offers integrated supply chain solutions including warehousing, distribution, freight management, and customs compliance. Our technology platforms enable seamless logistics operations across the United States.',
     foundingDate: '1999',
     telephone: '+1-847-354-7979',
-    email: 'info@crexpressinc.com',
+    email: 'quotes@crexpressinc.com',
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        telephone: '+1-847-354-7979',
+        contactType: 'Operations',
+        areaServed: 'US',
+        availableLanguage: ['English'],
+      },
+      {
+        '@type': 'ContactPoint',
+        telephone: '+1-224-402-9537',
+        contactType: 'Sales',
+        areaServed: 'US',
+        availableLanguage: ['English'],
+      },
+      {
+        '@type': 'ContactPoint',
+        email: 'quotes@crexpressinc.com',
+        contactType: 'Customer Service',
+        areaServed: 'US',
+        availableLanguage: ['English'],
+      },
+    ],
     address: {
       '@type': 'PostalAddress',
       streetAddress: '2400 Arthur Ave',
@@ -473,6 +496,32 @@ export function LocalPDServiceSchema() {
           },
         },
       ],
+    },
+  }
+
+  return <Schema schema={schema} />
+}
+
+// WebSite Schema for enhanced search features and sitelinks
+export function WebSiteSchema() {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'CR Express, Inc.',
+    alternateName: 'CR Express',
+    url: 'https://www.crexpressinc.com',
+    description: 'Full-Service Logistics, Drayage - Bonded Storage',
+    publisher: {
+      '@type': 'Organization',
+      name: 'CR Express, Inc.',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.crexpressinc.com/logo.png',
+      },
+    },
+    mainEntity: {
+      '@type': 'Organization',
+      '@id': 'https://www.crexpressinc.com/#organization',
     },
   }
 

@@ -5,6 +5,8 @@ import { FadeIn } from '@/components/FadeIn'
 import { SectionIntro } from '@/components/SectionIntro'
 import { useEffect, useRef, useState } from 'react'
 import { PlayIcon } from '@heroicons/react/24/solid'
+import Image from 'next/image'
+import videoThumbnail from '@/images/video-thumbnail.webp'
 
 export function VideoSection() {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false)
@@ -83,24 +85,26 @@ export function VideoSection() {
               />
             )}
 
-            {/* Play Button Overlay - shown on mobile when not playing */}
-            {isVideoLoaded && !isPlaying && isMobile && (
-              <button
-                onClick={handlePlayClick}
-                className="absolute inset-0 flex items-center justify-center bg-neutral-950/50 transition-all hover:bg-neutral-950/60"
-                aria-label="Play video"
-              >
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-xl transition-transform hover:scale-110">
-                  <PlayIcon className="h-10 w-10 translate-x-0.5 text-neutral-950" />
-                </div>
-              </button>
-            )}
-
-            {/* Thumbnail/Loading state */}
-            {!isVideoLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center bg-neutral-100">
-                <div className="h-12 w-12 animate-pulse rounded-full bg-neutral-300" />
-              </div>
+            {/* Thumbnail with Play Button - shown when not playing */}
+            {(!isPlaying || (isVideoLoaded && !isPlaying && isMobile)) && (
+              <>
+                <Image
+                  src={videoThumbnail}
+                  alt="CR Express Warehouse Tour"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <button
+                  onClick={handlePlayClick}
+                  className="absolute inset-0 flex items-center justify-center bg-neutral-950/30 transition-all hover:bg-neutral-950/40"
+                  aria-label="Play video"
+                >
+                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-xl transition-transform hover:scale-110">
+                    <PlayIcon className="h-10 w-10 translate-x-0.5 text-neutral-950" />
+                  </div>
+                </button>
+              </>
             )}
           </div>
         </FadeIn>

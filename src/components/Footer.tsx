@@ -165,6 +165,27 @@ export function Footer() {
             <p className="mt-1 text-xs text-neutral-600">
               Serving Chicago and beyond since 1999
             </p>
+            <p className="mt-2 text-xs text-neutral-500">
+              This site is protected by reCAPTCHA and the Google{' '}
+              <a
+                href="https://policies.google.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="hover:text-neutral-700 transition-colors underline"
+              >
+                Privacy Policy
+              </a>
+              {' '}and{' '}
+              <a
+                href="https://policies.google.com/terms"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="hover:text-neutral-700 transition-colors underline"
+              >
+                Terms of Service
+              </a>
+              {' '}apply.
+            </p>
           </div>
         </div>
       </FadeIn>

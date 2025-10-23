@@ -22,7 +22,7 @@ import { VideoSection } from '@/components/VideoSection'
 import { Clients } from '@/components/Clients'
 import imageLaptop from '@/images/IMG 4204 Media Library.jpg'
 import { RootLayout } from '@/components/RootLayout'
-import { OrganizationSchema, LocalBusinessSchema } from '@/components/Schema'
+import { OrganizationSchema, LocalBusinessSchema, WebSiteSchema } from '@/components/Schema'
 
 // CR Express core services for homepage
 const services = [
@@ -240,6 +240,7 @@ export default function Home() {
     <RootLayout>
       <OrganizationSchema />
       <LocalBusinessSchema />
+      <WebSiteSchema />
       {/* Hero section with background video on desktop only */}
       <div className="relative min-h-[600px] lg:min-h-[700px] lg:w-screen lg:left-1/2 lg:right-1/2 lg:-ml-[50vw] lg:-mr-[50vw]">
         {/* Background video - desktop only, full viewport width and height */}
