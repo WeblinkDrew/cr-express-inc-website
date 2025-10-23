@@ -232,9 +232,9 @@ function Certifications() {
 }
 
 export const metadata: Metadata = {
-  title: 'Services - CR Express',
+  title: 'Comprehensive Logistics Services | CR Express Inc',
   description:
-    'Comprehensive logistics services including bonded warehousing, air cargo, intermodal drayage, and nationwide freight. CBW Class 3 certified with 26+ years experience.',
+    'Full-service logistics including FTL freight, LTL shipping, bonded warehouse, cross docking, container freight, and air cargo services. CBW Class 3 certified, TSA approved, 26+ years experience.',
 }
 
 export default function ServicesPage() {

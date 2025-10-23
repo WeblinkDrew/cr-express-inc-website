@@ -28,6 +28,72 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // CRITICAL SERVICE PAGE REDIRECTS - Old URLs to New /services/ structure
+      {
+        source: '/warehousing',
+        destination: '/services/warehousing',
+        permanent: true,
+      },
+      {
+        source: '/air-cargo',
+        destination: '/services/air-cargo',
+        permanent: true,
+      },
+      {
+        source: '/drayage',
+        destination: '/services/drayage',
+        permanent: true,
+      },
+      {
+        source: '/over-the-road',
+        destination: '/services/over-the-road',
+        permanent: true,
+      },
+      {
+        source: '/local-pd',
+        destination: '/services/local-pd',
+        permanent: true,
+      },
+      // SEO-FRIENDLY VANITY REDIRECTS
+      {
+        source: '/bonded-warehouse',
+        destination: '/services/warehousing',
+        permanent: true,
+      },
+      {
+        source: '/trucking',
+        destination: '/services/over-the-road',
+        permanent: true,
+      },
+      {
+        source: '/freight',
+        destination: '/services/over-the-road',
+        permanent: true,
+      },
+      {
+        source: '/shipping',
+        destination: '/services/over-the-road',
+        permanent: true,
+      },
+      {
+        source: '/logistics',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/quote',
+        destination: '/request-a-quote',
+        permanent: true,
+      },
+      {
+        source: '/contact',
+        destination: '/contact-us-page',
+        permanent: true,
+      },
+    ]
+  },
   webpack: (config) => {
     config.module.rules.push({
       test: /\.(mp4|webm|mov)$/,
