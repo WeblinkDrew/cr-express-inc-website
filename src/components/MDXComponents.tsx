@@ -2,7 +2,6 @@ import clsx from 'clsx'
 
 import { Blockquote } from '@/components/Blockquote'
 import { Border } from '@/components/Border'
-import { GrayscaleTransitionImage } from '@/components/GrayscaleTransitionImage'
 import { StatList, StatListItem } from '@/components/StatList'
 import { TagList, TagListItem } from '@/components/TagList'
 
@@ -20,20 +19,41 @@ export const MDXComponents = {
     src,
     alt,
     ...props
-  }: React.ComponentPropsWithoutRef<typeof GrayscaleTransitionImage>) {
+  }: React.ComponentPropsWithoutRef<'img'>) {
     return (
       <div
         className={clsx(
-          'group isolate relative my-10 overflow-hidden rounded-4xl bg-neutral-100 max-sm:-mx-6 aspect-[16/10]',
+          'relative my-10 overflow-hidden rounded-4xl bg-neutral-100 max-sm:-mx-6 aspect-[16/10]',
           className,
         )}
       >
-        <GrayscaleTransitionImage
+        <img
           src={src}
           alt={alt || ''}
-          fill
-          sizes="(min-width: 768px) 42rem, 100vw"
-          className="object-cover"
+          className="absolute inset-0 h-full w-full object-cover"
+          {...props}
+        />
+      </div>
+    )
+  },
+  iframe: function Iframe({
+    className,
+    src,
+    ...props
+  }: React.ComponentPropsWithoutRef<'iframe'>) {
+    return (
+      <div
+        className={clsx(
+          'relative my-10 overflow-hidden rounded-4xl bg-neutral-950 max-sm:-mx-6',
+          className,
+        )}
+        style={{ aspectRatio: '16/9' }}
+      >
+        <iframe
+          src={src}
+          className="absolute inset-0 h-full w-full"
+          loading="lazy"
+          allowFullScreen
           {...props}
         />
       </div>

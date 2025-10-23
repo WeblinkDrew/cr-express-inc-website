@@ -1,0 +1,42 @@
+[
+  {
+    "source": "/test-post-2",
+    "destination": "/blog/cr-express-elevates-safety-efficiency-and-sustainability-with-samsara",
+    "permanent": true
+  },
+  {
+    "source": "/2023/09/test-post-2",
+    "destination": "/blog/cr-express-elevates-safety-efficiency-and-sustainability-with-samsara",
+    "permanent": true
+  },
+  {
+    "source": "/post-3-sss",
+    "destination": "/blog/cr-express-adheres-to-gdp-standards-ensuring-quality-and-compliance-in-pharmaceutical-transportation",
+    "permanent": true
+  },
+  {
+    "source": "/2023/09/post-3-sss",
+    "destination": "/blog/cr-express-adheres-to-gdp-standards-ensuring-quality-and-compliance-in-pharmaceutical-transportation",
+    "permanent": true
+  },
+  {
+    "source": "/cr-express-supports-boys-and-girls-club-of-america-through-sponsorship-and-collaboration",
+    "destination": "/blog/cr-express-supports-boys-and-girls-club-of-america",
+    "permanent": true
+  },
+  {
+    "source": "/2023/09/cr-express-supports-boys-and-girls-club-of-america-through-sponsorship-and-collaboration",
+    "destination": "/blog/cr-express-supports-boys-and-girls-club-of-america",
+    "permanent": true
+  },
+  {
+    "source": "/cdl-driver-employment",
+    "destination": "/blog/over-the-road-cdl-a-driver-2-years-experience",
+    "permanent": true
+  },
+  {
+    "source": "/2025/08/cdl-driver-employment",
+    "destination": "/blog/over-the-road-cdl-a-driver-2-years-experience",
+    "permanent": true
+  }
+]
