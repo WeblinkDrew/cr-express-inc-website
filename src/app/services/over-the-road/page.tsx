@@ -13,6 +13,7 @@ import { ServiceFAQSection, type FAQ } from '@/components/ServiceFAQSection'
 import { RelatedServices } from '@/components/RelatedServices'
 import { Clients } from '@/components/Clients'
 import { RootLayout } from '@/components/RootLayout'
+import { OTRServiceSchema } from '@/components/Schema'
 
 import imageHero from './hero.jpg'
 import imageOTR1 from '@/images/service-photos/IMG 4656 Media Library.webp'
@@ -267,6 +268,7 @@ export const metadata: Metadata = {
 export default function OverTheRoadService() {
   return (
     <RootLayout>
+      <OTRServiceSchema />
       <Hero />
       <Clients />
       <Stats />

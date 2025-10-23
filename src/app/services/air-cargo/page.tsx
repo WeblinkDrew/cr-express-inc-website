@@ -13,6 +13,7 @@ import { ServiceFAQSection, type FAQ } from '@/components/ServiceFAQSection'
 import { RelatedServices } from '@/components/RelatedServices'
 import { Clients } from '@/components/Clients'
 import { RootLayout } from '@/components/RootLayout'
+import { AirCargoServiceSchema } from '@/components/Schema'
 
 import imageHero from './hero.jpg'
 import imageAir1 from '@/images/service-photos/Media Library Image.webp'
@@ -312,6 +313,7 @@ export const metadata: Metadata = {
 export default function AirCargoService() {
   return (
     <RootLayout>
+      <AirCargoServiceSchema />
       <Hero />
       <Clients />
       <Stats />

@@ -28,7 +28,7 @@ const navigation = [
     title: 'Company',
     links: [
       { title: 'About', href: '/about' },
-      { title: 'Why Choose Us', href: '/process' },
+      { title: 'Why Choose Us', href: '/why-choose-us' },
       { title: 'Blog', href: '/blog' },
       { title: 'Careers', href: '/careers' },
       { title: 'Contact', href: '/contact' },

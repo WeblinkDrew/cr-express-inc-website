@@ -13,6 +13,7 @@ import { ServiceFAQSection, type FAQ } from '@/components/ServiceFAQSection'
 import { RelatedServices } from '@/components/RelatedServices'
 import { Clients } from '@/components/Clients'
 import { RootLayout } from '@/components/RootLayout'
+import { IntermodalDrayageServiceSchema } from '@/components/Schema'
 
 import imageHero from './hero.jpg'
 import imageDrayage1 from '@/images/service-photos/Media Library Image from CR Express.webp'
@@ -274,6 +275,7 @@ export const metadata: Metadata = {
 export default function DrayageService() {
   return (
     <RootLayout>
+      <IntermodalDrayageServiceSchema />
       <Hero />
       <Clients />
       <Stats />

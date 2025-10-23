@@ -3,9 +3,53 @@ import { type Metadata } from 'next'
 import '@/styles/tailwind.css'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.crexpressinc.com'),
   title: {
-    template: '%s - Studio',
-    default: 'Studio - Award winning developer studio based in Denmark',
+    template: '%s | CR Express',
+    default: 'CR Express - Chicago Bonded Warehouse & Logistics Services Since 1999',
+  },
+  description: 'Leading Chicago logistics company providing bonded warehouse services, air cargo, intermodal drayage, and nationwide freight. CBW Class 3 certified, 26+ years experience, less than 5 miles from O\'Hare.',
+  keywords: ['bonded warehouse Chicago', 'logistics services', 'air cargo O\'Hare', 'intermodal drayage', 'freight shipping', 'customs bonded warehouse', 'CBW Class 3', 'Elk Grove Village warehouse'],
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://www.crexpressinc.com',
+    siteName: 'CR Express',
+    title: 'CR Express - Chicago Bonded Warehouse & Logistics Services',
+    description: 'Leading Chicago logistics company providing bonded warehouse services, air cargo, intermodal drayage, and nationwide freight. CBW Class 3 certified, 26+ years experience.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'CR Express Logistics Services',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CR Express - Chicago Bonded Warehouse & Logistics Services',
+    description: 'Leading Chicago logistics company providing bonded warehouse services, air cargo, intermodal drayage, and nationwide freight. CBW Class 3 certified.',
+    images: ['/og-image.jpg'],
+  },
+  alternates: {
+    canonical: 'https://www.crexpressinc.com',
   },
 }
 

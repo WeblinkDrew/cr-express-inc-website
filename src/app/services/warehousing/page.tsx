@@ -19,6 +19,7 @@ import { ServiceFAQSection, type FAQ } from '@/components/ServiceFAQSection'
 import { RelatedServices } from '@/components/RelatedServices'
 import { Clients } from '@/components/Clients'
 import { RootLayout } from '@/components/RootLayout'
+import { WarehousingServiceSchema } from '@/components/Schema'
 
 import imageHero from './hero.jpg'
 import imageWarehouse1 from '@/images/service-photos/IMG 4739 scaled.webp'
@@ -327,6 +328,7 @@ export const metadata: Metadata = {
 export default function WarehousingService() {
   return (
     <RootLayout>
+      <WarehousingServiceSchema />
       <Hero />
       <Clients />
       <Stats />

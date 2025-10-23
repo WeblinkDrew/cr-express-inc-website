@@ -95,12 +95,12 @@ const nextConfig = {
       },
       {
         source: '/quote',
-        destination: '/request-a-quote',
+        destination: '/contact',
         permanent: true,
       },
       {
-        source: '/contact',
-        destination: '/contact-us-page',
+        source: '/request-a-quote',
+        destination: '/contact',
         permanent: true,
       },
     ]

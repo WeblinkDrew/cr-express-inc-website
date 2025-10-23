@@ -109,7 +109,7 @@ function Team() {
                       <FadeIn>
                         <div className="group relative overflow-hidden rounded-3xl bg-neutral-100">
                           <Image
-                            alt=""
+                            alt={`${person.name}, ${person.role} at CR Express`}
                             {...person.image}
                             className="h-96 w-full object-cover grayscale transition duration-500 motion-safe:group-hover:scale-105 group-hover:grayscale-0"
                           />
