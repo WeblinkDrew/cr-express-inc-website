@@ -1,7 +1,15 @@
 import { type Metadata } from 'next'
+import localFont from 'next/font/local'
 
 import '@/styles/tailwind.css'
 import { ReCaptchaProvider } from '@/components/ReCaptchaProvider'
+
+const monaSans = localFont({
+  src: '../fonts/Mona-Sans.var.woff2',
+  display: 'swap',
+  variable: '--font-mona-sans',
+  preload: true,
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.crexpressinc.com'),
@@ -56,15 +64,8 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="h-full bg-neutral-950 text-base antialiased">
+    <html lang="en" className={`h-full bg-neutral-950 text-base antialiased ${monaSans.variable}`}>
       <head>
-        <link
-          rel="preload"
-          href="/fonts/Mona-Sans.var.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
         <link rel="preconnect" href="https://www.youtube.com" />
         <link rel="preconnect" href="https://www.google.com" />
         <link rel="dns-prefetch" href="https://www.youtube.com" />

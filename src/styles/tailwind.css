@@ -30,11 +30,11 @@
   --radius-4xl: 2.5rem;
 
   --font-sans:
-    Mona Sans, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    var(--font-mona-sans), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
   --font-display:
-    Mona Sans, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    var(--font-mona-sans), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
   --font-display--font-variation-settings: 'wdth' 125;
