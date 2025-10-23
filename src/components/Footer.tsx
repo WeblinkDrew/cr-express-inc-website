@@ -146,15 +146,7 @@ export function Footer() {
             <p className="text-xs text-neutral-600">
               MC-721384 | DOT-1717205
             </p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-neutral-700">
-              © CR Express Inc. {new Date().getFullYear()}
-            </p>
-            <p className="mt-1 text-xs text-neutral-600">
-              Serving Chicago and beyond since 1999
-            </p>
-            <p className="mt-1 text-xs text-neutral-500">
+            <p className="mt-2 text-xs text-neutral-500">
               Built by{' '}
               <a
                 href="https://www.goweblink.io"
@@ -164,6 +156,14 @@ export function Footer() {
               >
                 Weblink
               </a>
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-neutral-700">
+              © CR Express Inc. {new Date().getFullYear()}
+            </p>
+            <p className="mt-1 text-xs text-neutral-600">
+              Serving Chicago and beyond since 1999
             </p>
           </div>
         </div>
