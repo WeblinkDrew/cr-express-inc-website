@@ -30,6 +30,17 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // CRITICAL PAGE REDIRECTS - Old site URLs to new structure
+      {
+        source: '/about-page',
+        destination: '/about',
+        permanent: true,
+      },
+      {
+        source: '/contact-us-page',
+        destination: '/contact',
+        permanent: true,
+      },
       // CRITICAL SERVICE PAGE REDIRECTS - Old URLs to New /services/ structure
       {
         source: '/warehousing',
