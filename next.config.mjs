@@ -167,6 +167,267 @@ const nextConfig = {
         destination: '/blog/over-the-road-cdl-a-driver-2-years-experience',
         permanent: true,
       },
+      // LOCATION PAGE REDIRECTS - Old bonded warehouse URLs to new /locations/ structure
+      {
+        source: '/bonded-warehouse-chicago-illinois',
+        destination: '/locations/chicago',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-chicago-illinois/',
+        destination: '/locations/chicago',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-schaumburg-illinois',
+        destination: '/locations/schaumburg',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-schaumburg-illinois/',
+        destination: '/locations/schaumburg',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-arlington-heights-illinois',
+        destination: '/locations/arlington-heights',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-arlington-heights-illinois/',
+        destination: '/locations/arlington-heights',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-palatine-illinois',
+        destination: '/locations/palatine',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-palatine-illinois/',
+        destination: '/locations/palatine',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-des-plaines-illinois',
+        destination: '/locations/des-plaines',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-des-plaines-illinois/',
+        destination: '/locations/des-plaines',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-mount-prospect-illinois',
+        destination: '/locations/mount-prospect',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-mount-prospect-illinois/',
+        destination: '/locations/mount-prospect',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-hoffman-estates-illinois',
+        destination: '/locations/hoffman-estates',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-hoffman-estates-illinois/',
+        destination: '/locations/hoffman-estates',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-rosemont-illinois',
+        destination: '/locations/rosemont',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-rosemont-illinois/',
+        destination: '/locations/rosemont',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-wood-dale-illinois',
+        destination: '/locations/wood-dale',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-wood-dale-illinois/',
+        destination: '/locations/wood-dale',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-bensenville-illinois',
+        destination: '/locations/bensenville',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-bensenville-illinois/',
+        destination: '/locations/bensenville',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-addison-illinois',
+        destination: '/locations/addison',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-addison-illinois/',
+        destination: '/locations/addison',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-roselle-illinois',
+        destination: '/locations/roselle',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-roselle-illinois/',
+        destination: '/locations/roselle',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-carol-stream-illinois',
+        destination: '/locations/carol-stream',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-carol-stream-illinois/',
+        destination: '/locations/carol-stream',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-bloomingdale-illinois',
+        destination: '/locations/bloomingdale',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-bloomingdale-illinois/',
+        destination: '/locations/bloomingdale',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-glendale-heights-illinois',
+        destination: '/locations/glendale-heights',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-glendale-heights-illinois/',
+        destination: '/locations/glendale-heights',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-villa-park-illinois',
+        destination: '/locations/villa-park',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-villa-park-illinois/',
+        destination: '/locations/villa-park',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-wheeling-illinois',
+        destination: '/locations/wheeling',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-wheeling-illinois/',
+        destination: '/locations/wheeling',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-buffalo-grove-illinois',
+        destination: '/locations/buffalo-grove',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-buffalo-grove-illinois/',
+        destination: '/locations/buffalo-grove',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-northbrook-illinois',
+        destination: '/locations/northbrook',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-northbrook-illinois/',
+        destination: '/locations/northbrook',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-park-ridge-illinois',
+        destination: '/locations/park-ridge',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-park-ridge-illinois/',
+        destination: '/locations/park-ridge',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-niles-illinois',
+        destination: '/locations/niles',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-niles-illinois/',
+        destination: '/locations/niles',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-franklin-park-illinois',
+        destination: '/locations/franklin-park',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-franklin-park-illinois/',
+        destination: '/locations/franklin-park',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-bartlett-illinois',
+        destination: '/locations/bartlett',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-bartlett-illinois/',
+        destination: '/locations/bartlett',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-hanover-park-illinois',
+        destination: '/locations/hanover-park',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-hanover-park-illinois/',
+        destination: '/locations/hanover-park',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-streamwood-illinois',
+        destination: '/locations/streamwood',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-streamwood-illinois/',
+        destination: '/locations/streamwood',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-rolling-meadows-illinois',
+        destination: '/locations/rolling-meadows',
+        permanent: true,
+      },
+      {
+        source: '/bonded-warehouse-rolling-meadows-illinois/',
+        destination: '/locations/rolling-meadows',
+        permanent: true,
+      },
     ]
   },
   webpack: (config) => {
