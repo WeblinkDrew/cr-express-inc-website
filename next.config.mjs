@@ -40,7 +40,27 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/about-page/',
+        destination: '/about',
+        permanent: true,
+      },
+      {
+        source: '/logistics-careers',
+        destination: '/careers',
+        permanent: true,
+      },
+      {
+        source: '/logistics-careers/',
+        destination: '/careers',
+        permanent: true,
+      },
+      {
         source: '/contact-us-page',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/contact-us-page/',
         destination: '/contact',
         permanent: true,
       },
