@@ -5,6 +5,23 @@ import { ContactEmail } from '@/lib/email-templates'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+// Format phone number to +1 123 456 7890 format for ClickUp
+function formatPhoneForClickUp(phone: string): string {
+  // Remove all non-numeric characters
+  const cleaned = phone.replace(/\D/g, '')
+
+  // Take last 10 digits (in case country code is included)
+  const last10 = cleaned.slice(-10)
+
+  // Format as +1 XXX XXX XXXX
+  if (last10.length === 10) {
+    return `+1 ${last10.slice(0, 3)} ${last10.slice(3, 6)} ${last10.slice(6)}`
+  }
+
+  // Return original if not 10 digits
+  return phone
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
@@ -117,6 +134,7 @@ export async function POST(request: NextRequest) {
           body: JSON.stringify({
             formType: 'contact',
             ...formData,
+            phone: formatPhoneForClickUp(formData.phone), // Format phone for ClickUp
             submittedAt: new Date().toISOString(),
           }),
         })
