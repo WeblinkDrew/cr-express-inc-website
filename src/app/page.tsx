@@ -20,6 +20,7 @@ import { StylizedImage } from '@/components/StylizedImage'
 import { Testimonial } from '@/components/Testimonial'
 import { VideoSection } from '@/components/VideoSection'
 import { Clients } from '@/components/Clients'
+import { Button } from '@/components/Button'
 import imageLaptop from '@/images/IMG 4204 Media Library.jpg'
 import { RootLayout } from '@/components/RootLayout'
 import { OrganizationSchema, LocalBusinessSchema, WebSiteSchema } from '@/components/Schema'
@@ -271,6 +272,14 @@ export default function Home() {
               Chicago and beyond since 1999. Founded by truck drivers who understand
               your business from the ground up.
             </p>
+            <div className="mt-8 flex gap-x-4">
+              <Button href="/contact">
+                Get Started
+              </Button>
+              <Button href="tel:+12244029537">
+                Call +1 (224) 402-9537
+              </Button>
+            </div>
           </FadeIn>
         </Container>
       </div>
