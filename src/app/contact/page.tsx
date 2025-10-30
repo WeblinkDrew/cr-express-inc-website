@@ -95,7 +95,7 @@ function ContactForm() {
     phone: '',
     city: '',
     state: '',
-    category: '',
+    service: '',
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -142,7 +142,7 @@ function ContactForm() {
           phone: '',
           city: '',
           state: '',
-          category: '',
+          service: '',
           message: '',
         })
       } else {
@@ -212,8 +212,8 @@ function ContactForm() {
           />
           <SelectInput
             label="Category for your message"
-            name="category"
-            value={formData.category}
+            name="service"
+            value={formData.service}
             onChange={handleChange}
           >
             <option value="">Select a category for your message</option>
