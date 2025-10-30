@@ -1,7 +1,6 @@
 'use client'
 
 import { useId, useState } from 'react'
-import { type Metadata } from 'next'
 import Link from 'next/link'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 

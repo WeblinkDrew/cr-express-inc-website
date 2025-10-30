@@ -51,8 +51,8 @@ export async function POST(request: NextRequest) {
 
     // Send email using Resend
     const { data, error } = await resend.emails.send({
-      from: 'CR EXPRESS <onboarding@resend.dev>',
-      to: ['andrew@squarewaves.io'],
+      from: 'CR Express <noreply@forms.crexpressinc.com>', // Using verified subdomain
+      to: ['aamro@crexpressinc.com'], // Send to CR Express
       replyTo: formData.email,
       subject: `New Contact Form: ${formData.category || 'General Inquiry'} - ${formData.name}`,
       html: emailHtml,
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error('Resend error:', error)
       return NextResponse.json(
-        { error: 'Failed to send email' },
+        { error: `Failed to send email: ${error.message || 'Unknown error'}` },
         { status: 500 }
       )
     }

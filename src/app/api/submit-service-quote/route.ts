@@ -50,10 +50,9 @@ export async function POST(request: NextRequest) {
     )
 
     // Send email using Resend
-    // Note: Update 'from' email to use your verified domain in Resend dashboard
     const { data, error } = await resend.emails.send({
-      from: 'CR EXPRESS <onboarding@resend.dev>',
-      to: ['andrew@squarewaves.io'], // Resend test mode - Change to aamro@crexpressinc.com after domain verification
+      from: 'CR Express <noreply@forms.crexpressinc.com>', // Using verified subdomain
+      to: ['aamro@crexpressinc.com'], // Send to CR Express
       replyTo: formData.email,
       subject: `New Service Quote Request: ${serviceName || formData.service} - ${formData.name}`,
       html: emailHtml,
