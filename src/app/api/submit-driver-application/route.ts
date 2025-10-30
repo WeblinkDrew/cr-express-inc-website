@@ -67,6 +67,26 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Send data to Zapier webhook
+    try {
+      await fetch('https://hooks.zapier.com/hooks/catch/24939636/uiqxiij/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          formType: 'driver-application',
+          ...formData,
+          jobTitle,
+          department,
+          submittedAt: new Date().toISOString(),
+        }),
+      })
+    } catch (zapierError) {
+      console.error('Zapier webhook error:', zapierError)
+      // Don't fail the request if Zapier fails - email was already sent successfully
+    }
+
     return NextResponse.json(
       { success: true, message: 'Driver application submitted successfully', id: data?.id },
       { status: 200 }
