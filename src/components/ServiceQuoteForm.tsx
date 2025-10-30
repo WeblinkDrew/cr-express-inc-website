@@ -72,7 +72,7 @@ export function ServiceQuoteForm({ serviceName, serviceType }: ServiceQuoteFormP
     company: '',
     email: '',
     phone: '',
-    service: serviceType,
+    service: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -118,7 +118,7 @@ export function ServiceQuoteForm({ serviceName, serviceType }: ServiceQuoteFormP
           company: '',
           email: '',
           phone: '',
-          service: serviceType,
+          service: '',
         })
       } else {
         alert(`Error: ${result.error || 'Failed to submit quote request. Please try again.'}`)
@@ -177,13 +177,19 @@ export function ServiceQuoteForm({ serviceName, serviceType }: ServiceQuoteFormP
             value={formData.service}
             onChange={handleChange}
           >
-            <option value={serviceType}>{serviceName}</option>
-            <option value="warehousing">Bonded Warehouse</option>
-            <option value="air-cargo">Air Cargo</option>
-            <option value="drayage">Drayage</option>
-            <option value="otr">Over the Road</option>
-            <option value="local-pd">Local P&D</option>
-            <option value="other">Other / Not Sure</option>
+            <option value="">Select a service</option>
+            <option value="general-inquiry">General Inquiry</option>
+            <option value="air-import">Air Import</option>
+            <option value="air-export">Air Export</option>
+            <option value="warehousing">Warehousing</option>
+            <option value="local-operations">Local OBD / Chicago Operations</option>
+            <option value="otr-operations">OTR Operations</option>
+            <option value="imdl-operations">IMDL Operations</option>
+            <option value="accounting-billing">Accounting / Billing</option>
+            <option value="freight-tracking">Freight Tracking</option>
+            <option value="claims-disputes">Claims & Disputes</option>
+            <option value="feedback-suggestions">Feedback & Suggestions</option>
+            <option value="careers-hr">Careers & HR</option>
           </SelectInput>
         </div>
         <Button type="submit" className="mt-6 w-full" disabled={isSubmitting}>

@@ -115,27 +115,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Send data to Zapier webhook (if configured)
-    if (process.env.ZAPIER_WEBHOOK_URL) {
-      try {
-        await fetch(process.env.ZAPIER_WEBHOOK_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            formType: 'job-application',
-            ...formDataWithAttachments,
-            jobTitle,
-            department,
-            submittedAt: new Date().toISOString(),
-          }),
-        })
-      } catch (zapierError) {
-        console.error('Zapier webhook error:', zapierError)
-        // Don't fail the request if Zapier fails - email was already sent successfully
-      }
-    }
+    // Zapier webhook removed - job applications handled via email only
 
     return NextResponse.json(
       { success: true, message: 'Application submitted successfully', id: data?.id },

@@ -218,11 +218,12 @@ function ContactForm() {
           >
             <option value="">Select a category for your message</option>
             <option value="general-inquiry">General Inquiry</option>
-            <option value="air-import-export">Air Import / Export</option>
+            <option value="air-import">Air Import</option>
+            <option value="air-export">Air Export</option>
+            <option value="warehousing">Warehousing</option>
             <option value="local-operations">Local OBD / Chicago Operations</option>
             <option value="otr-operations">OTR Operations</option>
             <option value="imdl-operations">IMDL Operations</option>
-            <option value="3pl-operations">3PL Operations</option>
             <option value="accounting-billing">Accounting / Billing</option>
             <option value="freight-tracking">Freight Tracking</option>
             <option value="claims-disputes">Claims & Disputes</option>

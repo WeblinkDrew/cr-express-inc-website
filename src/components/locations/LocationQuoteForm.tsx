@@ -191,12 +191,18 @@ export function LocationQuoteForm({ city }: LocationQuoteFormProps) {
                   onChange={handleChange}
                 >
                   <option value="">Select a service</option>
-                  <option value="bonded-warehouse">Bonded Warehouse Storage</option>
-                  <option value="container-transloading">Container Transloading</option>
-                  <option value="customs-brokerage">Customs Brokerage</option>
-                  <option value="drayage">Intermodal Drayage</option>
-                  <option value="air-cargo">Air Cargo Services</option>
                   <option value="general-inquiry">General Inquiry</option>
+                  <option value="air-import">Air Import</option>
+                  <option value="air-export">Air Export</option>
+                  <option value="warehousing">Warehousing</option>
+                  <option value="local-operations">Local OBD / Chicago Operations</option>
+                  <option value="otr-operations">OTR Operations</option>
+                  <option value="imdl-operations">IMDL Operations</option>
+                  <option value="accounting-billing">Accounting / Billing</option>
+                  <option value="freight-tracking">Freight Tracking</option>
+                  <option value="claims-disputes">Claims & Disputes</option>
+                  <option value="feedback-suggestions">Feedback & Suggestions</option>
+                  <option value="careers-hr">Careers & HR</option>
                 </SelectInput>
                 <TextInput
                   label="Message or special requirements"

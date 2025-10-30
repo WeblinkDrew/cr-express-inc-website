@@ -34,8 +34,8 @@ export function EmailLayout({ children }: { children: React.ReactNode }) {
             <Text style={{ margin: '0 0 10px' }}>CR EXPRESS, Inc.</Text>
             <Text style={{ margin: '0 0 10px' }}>2400 Arthur Ave, Elk Grove Village, IL 60007</Text>
             <Text style={{ margin: '0 0 10px' }}>
-              Sales: <Link href="tel:+12244029537" style={{ color: '#0a0a0a' }}>+1 (224) 402-9537</Link> |{' '}
-              Operations: <Link href="tel:+18473547979" style={{ color: '#0a0a0a' }}>+1 (847) 354-7979</Link>
+              Sales: <span style={{ color: '#0a0a0a' }}>+1 (224) 402-9537</span> |{' '}
+              Operations: <span style={{ color: '#0a0a0a' }}>+1 (847) 354-7979</span>
             </Text>
             <Text style={{ margin: '10px 0 0' }}>
               <Link href="https://crexpressinc.com" style={{ color: '#0a0a0a', textDecoration: 'none' }}>www.crexpressinc.com</Link>
