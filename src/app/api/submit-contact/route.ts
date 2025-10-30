@@ -18,49 +18,70 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Verify reCAPTCHA token
-    if (!recaptchaToken) {
-      return NextResponse.json(
-        { error: 'reCAPTCHA token missing' },
-        { status: 400 }
-      )
-    }
+    // TEMPORARY: Skip reCAPTCHA if bypass is enabled (for testing only)
+    const BYPASS_RECAPTCHA = process.env.NODE_ENV === 'development' || process.env.BYPASS_RECAPTCHA === 'true'
 
-    const recaptchaResponse = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
-    })
+    if (!BYPASS_RECAPTCHA) {
+      // Verify reCAPTCHA token
+      if (!recaptchaToken) {
+        return NextResponse.json(
+          { error: 'reCAPTCHA token missing' },
+          { status: 400 }
+        )
+      }
 
-    const recaptchaResult = await recaptchaResponse.json()
+      // Log what we're sending
+      console.log('Verifying reCAPTCHA with:', {
+        hasSecret: !!process.env.RECAPTCHA_SECRET_KEY,
+        secretPreview: process.env.RECAPTCHA_SECRET_KEY?.substring(0, 10) + '...',
+        tokenLength: recaptchaToken?.length,
+        tokenPreview: recaptchaToken?.substring(0, 20) + '...'
+      })
 
-    // Log detailed reCAPTCHA response for debugging
-    console.log('reCAPTCHA result:', {
-      success: recaptchaResult.success,
-      score: recaptchaResult.score,
-      action: recaptchaResult.action,
-      hostname: recaptchaResult.hostname,
-      'error-codes': recaptchaResult['error-codes']
-    })
+      const recaptchaResponse = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
+      })
 
-    // Lower threshold to 0.3 (was 0.5) and provide better error messages
-    if (!recaptchaResult.success) {
-      console.error('reCAPTCHA verification failed:', recaptchaResult)
-      return NextResponse.json(
-        { error: `reCAPTCHA verification failed: ${recaptchaResult['error-codes']?.join(', ') || 'Unknown error'}` },
-        { status: 400 }
-      )
-    }
+      const recaptchaResult = await recaptchaResponse.json()
 
-    // Check score only if successful (score is only present in v3)
-    if (recaptchaResult.score !== undefined && recaptchaResult.score < 0.3) {
-      console.error('reCAPTCHA score too low:', recaptchaResult.score)
-      return NextResponse.json(
-        { error: 'Security verification failed. Please try again.' },
-        { status: 400 }
-      )
+      // Log detailed reCAPTCHA response for debugging
+      console.log('reCAPTCHA result:', {
+        success: recaptchaResult.success,
+        score: recaptchaResult.score,
+        action: recaptchaResult.action,
+        hostname: recaptchaResult.hostname,
+        'error-codes': recaptchaResult['error-codes']
+      })
+
+      // Lower threshold to 0.3 (was 0.5) and provide better error messages
+      if (!recaptchaResult.success) {
+        console.error('reCAPTCHA verification failed:', recaptchaResult)
+
+        // Provide more helpful error messages
+        const errorMessage = recaptchaResult['error-codes']?.[0] === 'invalid-input-response'
+          ? 'reCAPTCHA token is invalid or expired. Please refresh the page and try again.'
+          : `reCAPTCHA verification failed: ${recaptchaResult['error-codes']?.join(', ') || 'Unknown error'}`
+
+        return NextResponse.json(
+          { error: errorMessage },
+          { status: 400 }
+        )
+      }
+
+      // Check score only if successful (score is only present in v3)
+      if (recaptchaResult.score !== undefined && recaptchaResult.score < 0.3) {
+        console.error('reCAPTCHA score too low:', recaptchaResult.score)
+        return NextResponse.json(
+          { error: 'Security verification failed. Please try again.' },
+          { status: 400 }
+        )
+      }
+    } else {
+      console.log('⚠️ reCAPTCHA bypassed for testing')
     }
 
     // Render the email template to HTML

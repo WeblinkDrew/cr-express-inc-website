@@ -4,10 +4,11 @@ import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 import { ReactNode } from 'react'
 
 export function ReCaptchaProvider({ children }: { children: ReactNode }) {
-  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+  // Hardcode the site key to ensure it's available in client component
+  const siteKey = '6LexvPQrAAAAAMG07K_UMWDjznt6PP88MeEKlK9N'
 
   if (!siteKey) {
-    console.warn('NEXT_PUBLIC_RECAPTCHA_SITE_KEY is not defined')
+    console.warn('ReCAPTCHA site key is not defined')
     return <>{children}</>
   }
 
@@ -20,6 +21,7 @@ export function ReCaptchaProvider({ children }: { children: ReactNode }) {
         appendTo: 'head',
         nonce: undefined,
       }}
+      useEnterprise={false}
     >
       {children}
     </GoogleReCaptchaProvider>
