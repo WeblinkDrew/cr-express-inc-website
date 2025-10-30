@@ -43,10 +43,29 @@ export async function POST(request: NextRequest) {
 
     const recaptchaResult = await recaptchaResponse.json()
 
-    if (!recaptchaResult.success || recaptchaResult.score < 0.5) {
+    // Log detailed reCAPTCHA response for debugging
+    console.log('reCAPTCHA result:', {
+      success: recaptchaResult.success,
+      score: recaptchaResult.score,
+      action: recaptchaResult.action,
+      hostname: recaptchaResult.hostname,
+      'error-codes': recaptchaResult['error-codes']
+    })
+
+    // Lower threshold to 0.3 (was 0.5) and provide better error messages
+    if (!recaptchaResult.success) {
       console.error('reCAPTCHA verification failed:', recaptchaResult)
       return NextResponse.json(
-        { error: 'reCAPTCHA verification failed. Please try again.' },
+        { error: `reCAPTCHA verification failed: ${recaptchaResult['error-codes']?.join(', ') || 'Unknown error'}` },
+        { status: 400 }
+      )
+    }
+
+    // Check score only if successful (score is only present in v3)
+    if (recaptchaResult.score !== undefined && recaptchaResult.score < 0.3) {
+      console.error('reCAPTCHA score too low:', recaptchaResult.score)
+      return NextResponse.json(
+        { error: 'Security verification failed. Please try again.' },
         { status: 400 }
       )
     }
@@ -96,24 +115,26 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Send data to Zapier webhook
-    try {
-      await fetch('https://hooks.zapier.com/hooks/catch/24939636/uiqxiij/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          formType: 'job-application',
-          ...formDataWithAttachments,
-          jobTitle,
-          department,
-          submittedAt: new Date().toISOString(),
-        }),
-      })
-    } catch (zapierError) {
-      console.error('Zapier webhook error:', zapierError)
-      // Don't fail the request if Zapier fails - email was already sent successfully
+    // Send data to Zapier webhook (if configured)
+    if (process.env.ZAPIER_WEBHOOK_URL) {
+      try {
+        await fetch(process.env.ZAPIER_WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            formType: 'job-application',
+            ...formDataWithAttachments,
+            jobTitle,
+            department,
+            submittedAt: new Date().toISOString(),
+          }),
+        })
+      } catch (zapierError) {
+        console.error('Zapier webhook error:', zapierError)
+        // Don't fail the request if Zapier fails - email was already sent successfully
+      }
     }
 
     return NextResponse.json(
