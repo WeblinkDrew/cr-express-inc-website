@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
 
     // Send email using Resend
     const { data, error} = await resend.emails.send({
-      from: 'CR Express <noreply@forms.crexpressinc.com>', // Using verified subdomain
+      from: 'CR Express <contact@forms.crexpressinc.com>', // Using verified subdomain - "contact" is more trustworthy than "noreply"
       to: ['aamro@crexpressinc.com'], // Send to CR Express
       replyTo: formData.email,
       subject: `New Job Application: ${jobTitle} - ${formData.firstName} ${formData.lastName}`,
