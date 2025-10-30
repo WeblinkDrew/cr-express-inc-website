@@ -421,3 +421,58 @@ export function LocationQuoteEmail({ data, cityName }: {
     </EmailLayout>
   )
 }
+
+// Contact Form Email Template
+export function ContactEmail({ data }: { data: any }) {
+  return (
+    <EmailLayout>
+      <h2 style={{ color: '#0a0a0a', marginTop: 0, fontSize: '24px' }}>New Contact Form Submission</h2>
+      <p style={{ color: '#737373', fontSize: '14px', marginBottom: '30px' }}>
+        Category: <strong>{data.category || 'General Inquiry'}</strong>
+      </p>
+
+      <div style={{ backgroundColor: '#f9f9f9', padding: '20px', borderRadius: '8px', marginBottom: '30px' }}>
+        <h3 style={{ color: '#0a0a0a', fontSize: '18px', marginTop: 0 }}>Contact Information</h3>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <tr>
+            <td style={{ padding: '8px 0', width: '30%', color: '#737373' }}>Name:</td>
+            <td style={{ padding: '8px 0', fontWeight: 'bold' }}>{data.name}</td>
+          </tr>
+          {data.company && (
+            <tr>
+              <td style={{ padding: '8px 0', color: '#737373' }}>Company:</td>
+              <td style={{ padding: '8px 0' }}>{data.company}</td>
+            </tr>
+          )}
+          <tr>
+            <td style={{ padding: '8px 0', color: '#737373' }}>Email:</td>
+            <td style={{ padding: '8px 0' }}><a href={`mailto:${data.email}`} style={{ color: '#0a0a0a' }}>{data.email}</a></td>
+          </tr>
+          <tr>
+            <td style={{ padding: '8px 0', color: '#737373' }}>Phone:</td>
+            <td style={{ padding: '8px 0' }}><a href={`tel:${data.phone}`} style={{ color: '#0a0a0a' }}>{data.phone}</a></td>
+          </tr>
+          {data.city && data.state && (
+            <tr>
+              <td style={{ padding: '8px 0', color: '#737373' }}>Location:</td>
+              <td style={{ padding: '8px 0' }}>{data.city}, {data.state}</td>
+            </tr>
+          )}
+        </table>
+      </div>
+
+      {data.message && (
+        <div style={{ marginBottom: '20px' }}>
+          <h3 style={{ color: '#0a0a0a', fontSize: '18px', borderBottom: '2px solid #e5e5e5', paddingBottom: '10px' }}>Message</h3>
+          <p style={{ whiteSpace: 'pre-wrap' }}>{data.message}</p>
+        </div>
+      )}
+
+      <div style={{ padding: '15px', backgroundColor: '#fff3cd', borderLeft: '4px solid #ffc107', marginTop: '30px' }}>
+        <p style={{ margin: 0, fontSize: '14px', color: '#856404' }}>
+          <strong>Action Required:</strong> Please respond to this inquiry within 24 hours.
+        </p>
+      </div>
+    </EmailLayout>
+  )
+}

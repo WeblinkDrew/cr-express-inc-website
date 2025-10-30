@@ -1,6 +1,9 @@
-import { useId } from 'react'
+'use client'
+
+import { useId, useState } from 'react'
 import { type Metadata } from 'next'
 import Link from 'next/link'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
 import { Border } from '@/components/Border'
 import { Button } from '@/components/Button'
@@ -85,25 +88,135 @@ function CheckboxInput({
 }
 
 function ContactForm() {
+  const { executeRecaptcha } = useGoogleReCaptcha()
+  const [formData, setFormData] = useState({
+    name: '',
+    company: '',
+    email: '',
+    phone: '',
+    city: '',
+    state: '',
+    category: '',
+    message: '',
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!executeRecaptcha) {
+      alert('reCAPTCHA not ready. Please try again.')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      // Generate reCAPTCHA token
+      const recaptchaToken = await executeRecaptcha('contact_form_submit')
+
+      const response = await fetch('/api/submit-contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          formData,
+          recaptchaToken,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        alert('Message sent successfully! We will get back to you within 24 hours.')
+        // Reset form
+        setFormData({
+          name: '',
+          company: '',
+          email: '',
+          phone: '',
+          city: '',
+          state: '',
+          category: '',
+          message: '',
+        })
+      } else {
+        alert(`Error: ${result.error || 'Failed to send message. Please try again.'}`)
+      }
+    } catch (error) {
+      console.error('Submission error:', error)
+      alert('Failed to send message. Please check your connection and try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <FadeIn className="lg:order-last">
-      <form>
+      <form onSubmit={handleSubmit}>
         <h2 className="font-display text-base font-semibold text-neutral-950">
           Get in touch
         </h2>
         <div className="isolate mt-6 -space-y-px rounded-2xl bg-white/50">
-          <TextInput label="Name" name="name" autoComplete="name" />
-          <TextInput label="Company" name="company" autoComplete="organization" />
+          <TextInput
+            label="Name"
+            name="name"
+            autoComplete="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <TextInput
+            label="Company"
+            name="company"
+            autoComplete="organization"
+            value={formData.company}
+            onChange={handleChange}
+          />
           <TextInput
             label="Email"
             type="email"
             name="email"
             autoComplete="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
           />
-          <TextInput label="Phone" type="tel" name="phone" autoComplete="tel" />
-          <TextInput label="City" name="city" autoComplete="address-level2" />
-          <TextInput label="State" name="state" autoComplete="address-level1" />
-          <SelectInput label="Category for your message" name="category">
+          <TextInput
+            label="Phone"
+            type="tel"
+            name="phone"
+            autoComplete="tel"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+          />
+          <TextInput
+            label="City"
+            name="city"
+            autoComplete="address-level2"
+            value={formData.city}
+            onChange={handleChange}
+          />
+          <TextInput
+            label="State"
+            name="state"
+            autoComplete="address-level1"
+            value={formData.state}
+            onChange={handleChange}
+          />
+          <SelectInput
+            label="Category for your message"
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+          >
             <option value="">Select a category for your message</option>
             <option value="general-inquiry">General Inquiry</option>
             <option value="air-import-export">Air Import / Export</option>
@@ -117,10 +230,15 @@ function ContactForm() {
             <option value="feedback-suggestions">Feedback & Suggestions</option>
             <option value="careers-hr">Careers & HR</option>
           </SelectInput>
-          <TextInput label="Message" name="message" />
+          <TextInput
+            label="Message"
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+          />
         </div>
-        <Button type="submit" className="mt-10">
-          Send Message
+        <Button type="submit" className="mt-10" disabled={isSubmitting}>
+          {isSubmitting ? 'Sending...' : 'Send Message'}
         </Button>
       </form>
     </FadeIn>
@@ -213,10 +331,11 @@ const contactFAQs: FAQ[] = [
   },
 ]
 
-export const metadata: Metadata = {
-  title: 'Contact CR Express | Get a Logistics Quote',
-  description: 'Contact CR Express for bonded warehouse, air cargo, drayage, and freight services. Located in Elk Grove Village, IL near O\'Hare Airport. Call +1 (224) 402-9537.',
-}
+// Metadata moved to layout since this is a client component
+// export const metadata: Metadata = {
+//   title: 'Contact CR Express | Get a Logistics Quote',
+//   description: 'Contact CR Express for bonded warehouse, air cargo, drayage, and freight services. Located in Elk Grove Village, IL near O\'Hare Airport. Call +1 (224) 402-9537.',
+// }
 
 export default function Contact() {
   return (
