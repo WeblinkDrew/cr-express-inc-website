@@ -262,7 +262,7 @@ export default function Home() {
         {/* White background to cover video after hero section */}
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent hidden lg:block z-10" />
 
-        <Container className="relative pt-24 sm:pt-32 md:pt-56 pb-24">
+        <Container className="relative z-20 pt-24 sm:pt-32 md:pt-56 pb-24">
           <FadeIn className="max-w-3xl">
             <h1 className="font-display text-5xl font-medium tracking-tight text-balance text-neutral-950 sm:text-7xl">
               Your trusted partner in logistics service
