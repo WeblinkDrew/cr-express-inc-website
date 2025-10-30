@@ -335,11 +335,11 @@ export function ServiceQuoteEmail({ data, serviceName, serviceType }: {
           )}
           <tr>
             <td style={{ padding: '8px 0', color: '#737373' }}>Email:</td>
-            <td style={{ padding: '8px 0' }}><a href={`mailto:${data.email}`} style={{ color: '#0a0a0a' }}>{data.email}</a></td>
+            <td style={{ padding: '8px 0', color: '#0a0a0a' }}>{data.email}</td>
           </tr>
           <tr>
             <td style={{ padding: '8px 0', color: '#737373' }}>Phone:</td>
-            <td style={{ padding: '8px 0' }}><a href={`tel:${data.phone}`} style={{ color: '#0a0a0a' }}>{data.phone}</a></td>
+            <td style={{ padding: '8px 0', color: '#0a0a0a' }}>{data.phone}</td>
           </tr>
         </table>
       </div>
@@ -385,11 +385,11 @@ export function LocationQuoteEmail({ data, cityName }: {
           )}
           <tr>
             <td style={{ padding: '8px 0', color: '#737373' }}>Email:</td>
-            <td style={{ padding: '8px 0' }}><a href={`mailto:${data.email}`} style={{ color: '#0a0a0a' }}>{data.email}</a></td>
+            <td style={{ padding: '8px 0', color: '#0a0a0a' }}>{data.email}</td>
           </tr>
           <tr>
             <td style={{ padding: '8px 0', color: '#737373' }}>Phone:</td>
-            <td style={{ padding: '8px 0' }}><a href={`tel:${data.phone}`} style={{ color: '#0a0a0a' }}>{data.phone}</a></td>
+            <td style={{ padding: '8px 0', color: '#0a0a0a' }}>{data.phone}</td>
           </tr>
         </table>
       </div>
@@ -446,11 +446,11 @@ export function ContactEmail({ data }: { data: any }) {
           )}
           <tr>
             <td style={{ padding: '8px 0', color: '#737373' }}>Email:</td>
-            <td style={{ padding: '8px 0' }}><a href={`mailto:${data.email}`} style={{ color: '#0a0a0a' }}>{data.email}</a></td>
+            <td style={{ padding: '8px 0', color: '#0a0a0a' }}>{data.email}</td>
           </tr>
           <tr>
             <td style={{ padding: '8px 0', color: '#737373' }}>Phone:</td>
-            <td style={{ padding: '8px 0' }}><a href={`tel:${data.phone}`} style={{ color: '#0a0a0a' }}>{data.phone}</a></td>
+            <td style={{ padding: '8px 0', color: '#0a0a0a' }}>{data.phone}</td>
           </tr>
           {data.city && data.state && (
             <tr>
