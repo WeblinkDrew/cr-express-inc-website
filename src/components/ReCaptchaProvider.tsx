@@ -5,7 +5,7 @@ import { ReactNode } from 'react'
 
 export function ReCaptchaProvider({ children }: { children: ReactNode }) {
   // Hardcode the site key to ensure it's available in client component
-  const siteKey = '6LexvPQrAAAAAMG07K_UMWDjznt6PP88MeEKlK9N'
+  const siteKey = '6LfoiPwrAAAAAL5qBS1Zbt2YpJSS2ETw6U7OXjC9'
 
   if (!siteKey) {
     console.warn('ReCAPTCHA site key is not defined')
