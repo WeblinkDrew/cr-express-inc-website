@@ -3,12 +3,12 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email } = body
+    const { name, email } = body
 
-    // Validate required field
-    if (!email) {
+    // Validate required fields
+    if (!name || !email) {
       return NextResponse.json(
-        { error: 'Email address is required' },
+        { error: 'Name and email address are required' },
         { status: 400 }
       )
     }
@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            name,
             email,
             subscribedAt: new Date().toISOString(),
             source: 'website-footer',
