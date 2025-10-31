@@ -4,6 +4,7 @@ import { Container } from '@/components/Container'
 import { FadeIn } from '@/components/FadeIn'
 import { Logo } from '@/components/Logo'
 import { socialMediaProfiles } from '@/components/SocialMedia'
+import { NewsletterForm } from '@/components/NewsletterForm'
 
 const navigation = [
   {
@@ -65,51 +66,6 @@ function Navigation() {
         ))}
       </ul>
     </nav>
-  )
-}
-
-function ArrowIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
-  return (
-    <svg viewBox="0 0 16 6" aria-hidden="true" {...props}>
-      <path
-        fill="currentColor"
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M16 3 10 .5v2H0v1h10v2L16 3Z"
-      />
-    </svg>
-  )
-}
-
-function NewsletterForm() {
-  return (
-    <form className="max-w-sm">
-      <h2 className="font-display text-sm font-semibold tracking-wider text-neutral-950">
-        Industry insights newsletter
-      </h2>
-      <p className="mt-4 text-sm text-neutral-700">
-        Subscribe to get logistics updates, industry news, and supply chain
-        best practices delivered to your inbox.
-      </p>
-      <div className="relative mt-6">
-        <input
-          type="email"
-          placeholder="Email address"
-          autoComplete="email"
-          aria-label="Email address"
-          className="block w-full rounded-2xl border border-neutral-300 bg-transparent py-4 pr-20 pl-6 text-base/6 text-neutral-950 ring-4 ring-transparent transition placeholder:text-neutral-500 focus:border-neutral-950 focus:ring-neutral-950/5 focus:outline-hidden"
-        />
-        <div className="absolute inset-y-1 right-1 flex justify-end">
-          <button
-            type="submit"
-            aria-label="Submit"
-            className="flex aspect-square h-full items-center justify-center rounded-xl bg-neutral-950 text-white transition hover:bg-neutral-800"
-          >
-            <ArrowIcon className="w-4" />
-          </button>
-        </div>
-      </div>
-    </form>
   )
 }
 
