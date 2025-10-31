@@ -231,9 +231,9 @@ function WhyChooseUs() {
 }
 
 export const metadata: Metadata = {
-  title: 'CR Express Inc - Professional Logistics & Warehousing Services',
+  title: 'CR Express | Full-Service Logistics, Drayage - Bonded Storage',
   description:
-    'Leading Chicago logistics company providing bonded warehouse services, air cargo, intermodal drayage, and nationwide freight. CBW Class 3 certified, 26+ years experience, <5 miles from O\'Hare.',
+    'CR Express is a full-service logistics provider for airport transfers, container drayage, FTL, LTL, cross-docking, and bonded warehousing and TSA-approved',
 }
 
 export default function Home() {
