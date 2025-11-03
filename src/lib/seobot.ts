@@ -90,16 +90,21 @@ export async function getSeobotArticle(
  * This allows both types to be displayed with the same component
  */
 export function normalizeSeobotArticle(article: SeobotArticleSummary) {
+  // Convert ISO date to YYYY-MM-DD format expected by formatDate
+  const rawDate = article.publishedAt || article.createdAt
+  const dateObj = new Date(rawDate)
+  const formattedDate = dateObj.toISOString().split('T')[0] // YYYY-MM-DD
+
   return {
     href: `/blog/ai/${article.slug}`,
     title: article.headline,
     description: article.metaDescription,
-    date: article.publishedAt || article.createdAt,
+    date: formattedDate,
     author: {
       name: 'CR Express AI',
       role: 'Automated Content',
       image: {
-        src: '/images/team/ai-author.jpg',
+        src: '/images/team/ai-author.svg',
         width: 48,
         height: 48,
       },
