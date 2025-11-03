@@ -125,6 +125,10 @@ export function JobApplicationForm({ jobTitle, department }: JobApplicationFormP
           alert('Please select the position type you are applying for')
           return false
         }
+        if (!formData.attachments || formData.attachments.length === 0) {
+          alert('Please upload at least one file (CV, Resume, or Cover Letter)')
+          return false
+        }
         return true
 
       default:
@@ -572,7 +576,7 @@ export function JobApplicationForm({ jobTitle, department }: JobApplicationFormP
             {/* File Upload */}
             <div>
               <label className="block text-sm font-medium text-neutral-950">
-                Add Attachments (CV, Cover Letter, Certifications, Etc.)
+                Add Attachments (CV, Cover Letter, Certifications, Etc.) *
               </label>
               <div className="mt-4">
                 <div className="flex items-center justify-center rounded-2xl border-2 border-dashed border-neutral-300 bg-neutral-50 px-6 py-16 transition hover:border-neutral-400">
@@ -601,6 +605,7 @@ export function JobApplicationForm({ jobTitle, department }: JobApplicationFormP
                           name="file-upload"
                           type="file"
                           multiple
+                          required
                           onChange={handleFileChange}
                           className="sr-only"
                         />
