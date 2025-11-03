@@ -57,6 +57,8 @@ export default async function SeobotArticlePage({
   }
 
   const publishDate = post.publishedAt || post.createdAt
+  // Convert ISO date to YYYY-MM-DD format for formatDate function
+  const formattedDate = new Date(publishDate).toISOString().split('T')[0]
 
   return (
     <RootLayout>
@@ -85,7 +87,7 @@ export default async function SeobotArticlePage({
               dateTime={publishDate}
               className="order-first text-sm text-neutral-950"
             >
-              {formatDate(publishDate)}
+              {formatDate(formattedDate)}
             </time>
             <p className="mt-6 text-sm font-semibold text-neutral-950">
               by CR Express Team, Logistics Team
