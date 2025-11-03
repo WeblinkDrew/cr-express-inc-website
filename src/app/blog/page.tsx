@@ -12,6 +12,7 @@ import { RootLayout } from '@/components/RootLayout'
 import { formatDate } from '@/lib/formatDate'
 import { loadArticles } from '@/lib/mdx'
 import { ServiceFAQSection, type FAQ } from '@/components/ServiceFAQSection'
+import { getSeobotArticles, normalizeSeobotArticle } from '@/lib/seobot'
 
 const blogFAQs: FAQ[] = [
   {
@@ -48,7 +49,17 @@ export const metadata: Metadata = {
 }
 
 export default async function Blog() {
-  let articles = await loadArticles()
+  // Load both MDX articles and SEObot articles
+  let mdxArticles = await loadArticles()
+  const { articles: seobotArticles } = await getSeobotArticles(0, 100)
+
+  // Normalize SEObot articles to match MDX format
+  const normalizedSeobotArticles = seobotArticles.map(normalizeSeobotArticle)
+
+  // Merge and sort by date (newest first)
+  const allArticles = [...mdxArticles, ...normalizedSeobotArticles].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
 
   return (
     <RootLayout>
@@ -63,7 +74,7 @@ export default async function Blog() {
 
       <Container className="mt-24 sm:mt-32 lg:mt-40">
         <div className="space-y-24 lg:space-y-32">
-          {articles.map((article) => (
+          {allArticles.map((article) => (
             <FadeIn key={article.href}>
               <article>
                 <Border className="pt-16">

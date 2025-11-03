@@ -1,6 +1,7 @@
 import { type MetadataRoute } from 'next'
 import { loadArticles, loadCaseStudies } from '@/lib/mdx'
 import { citiesData } from '@/lib/location-data'
+import { getSeobotArticles } from '@/lib/seobot'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.crexpressinc.com'
@@ -93,7 +94,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  // Dynamic blog posts
+  // Dynamic blog posts (MDX)
   const articles = await loadArticles()
   const blogRoutes: MetadataRoute.Sitemap = articles.map((article) => ({
     url: `${baseUrl}${article.href}`,
@@ -101,6 +102,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }))
+
+  // Dynamic SEObot AI blog posts
+  const { articles: seobotArticles } = await getSeobotArticles(0, 1000)
+  const seobotBlogRoutes: MetadataRoute.Sitemap = seobotArticles.map(
+    (article) => ({
+      url: `${baseUrl}/blog/ai/${article.slug}`,
+      lastModified: new Date(article.publishedAt || article.createdAt),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    })
+  )
 
   // Dynamic location pages
   const locationRoutes: MetadataRoute.Sitemap = citiesData.map((city) => ({
@@ -120,5 +132,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // Combine all routes
-  return [...staticRoutes, ...blogRoutes, ...locationRoutes, ...workRoutes]
+  return [
+    ...staticRoutes,
+    ...blogRoutes,
+    ...seobotBlogRoutes,
+    ...locationRoutes,
+    ...workRoutes,
+  ]
 }
