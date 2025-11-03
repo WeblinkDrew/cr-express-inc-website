@@ -88,7 +88,7 @@ export default async function SeobotArticlePage({
               {formatDate(publishDate)}
             </time>
             <p className="mt-6 text-sm font-semibold text-neutral-950">
-              by CR Express AI, Automated Content
+              by CR Express Team, Logistics Team
               {post.readingTime && ` • ${post.readingTime} min read`}
             </p>
           </header>

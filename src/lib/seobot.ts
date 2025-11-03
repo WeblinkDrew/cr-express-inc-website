@@ -101,8 +101,8 @@ export function normalizeSeobotArticle(article: SeobotArticleSummary) {
     description: article.metaDescription,
     date: formattedDate,
     author: {
-      name: 'CR Express AI',
-      role: 'Automated Content',
+      name: 'CR Express Team',
+      role: 'Logistics Team',
       image: {
         src: '/images/team/ai-author.svg',
         width: 48,
