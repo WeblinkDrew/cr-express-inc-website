@@ -152,6 +152,7 @@ export function ServiceQuoteForm({ serviceName, serviceType }: ServiceQuoteFormP
             autoComplete="organization"
             value={formData.company}
             onChange={handleChange}
+            required
           />
           <TextInput
             label="Email"

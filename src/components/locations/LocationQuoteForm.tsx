@@ -165,6 +165,7 @@ export function LocationQuoteForm({ city }: LocationQuoteFormProps) {
                   autoComplete="organization"
                   value={formData.company}
                   onChange={handleChange}
+                  required
                 />
                 <TextInput
                   label="Email"
