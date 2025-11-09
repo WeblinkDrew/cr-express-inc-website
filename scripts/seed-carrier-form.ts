@@ -27,6 +27,7 @@ async function main() {
     data: {
       name: "Carrier Onboarding",
       slug: "carrier-onboarding-3f8a2e1b",
+      formType: "CARRIER_ONBOARDING",
       description: "Primary carrier onboarding form for new partners",
       isActive: true,
     },
