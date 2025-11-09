@@ -22,6 +22,61 @@ const AxiomInvoicingForm = dynamic(
   { ssr: false }
 );
 
+const AxiomCarrierOnboardingForm = dynamic(
+  () => import("./AxiomCarrierOnboardingForm"),
+  { ssr: false }
+);
+
+const BathroomRequestForm = dynamic(
+  () => import("./BathroomRequestForm"),
+  { ssr: false }
+);
+
+const WarehouseCheckInForm = dynamic(
+  () => import("./WarehouseCheckInForm"),
+  { ssr: false }
+);
+
+const DriverFeedbackForm = dynamic(
+  () => import("./DriverFeedbackForm"),
+  { ssr: false }
+);
+
+const EmployeeAssetCheckInForm = dynamic(
+  () => import("./EmployeeAssetCheckInForm"),
+  { ssr: false }
+);
+
+const WarehouseServicesForm = dynamic(
+  () => import("./WarehouseServicesForm"),
+  { ssr: false }
+);
+
+const LoadCreationRequestForm = dynamic(
+  () => import("./LoadCreationRequestForm"),
+  { ssr: false }
+);
+
+const ForkliftInspectionForm = dynamic(
+  () => import("./ForkliftInspectionForm"),
+  { ssr: false }
+);
+
+const ULDInspectionForm = dynamic(
+  () => import("./ULDInspectionForm"),
+  { ssr: false }
+);
+
+const CargoDamageReportForm = dynamic(
+  () => import("./CargoDamageReportForm"),
+  { ssr: false }
+);
+
+const CargoShortageOverageForm = dynamic(
+  () => import("./CargoShortageOverageForm"),
+  { ssr: false }
+);
+
 // Placeholder component for forms not yet built
 function PlaceholderForm({ formName }: { formName: string }) {
   return (
@@ -52,9 +107,64 @@ export default function FormRenderer({ formType, formId, slug, formName }: FormR
     return <CarrierOnboardingForm slug={slug} formId={formId} />;
   }
 
-  // Axiom Invoicing (new unified format)
+  // Axiom Invoicing
   if (formType === "AXIOM_INVOICING") {
     return <AxiomInvoicingForm formId={formId} formType={formType} formName={formName} />;
+  }
+
+  // Axiom Carrier Onboarding
+  if (formType === "AXIOM_CARRIER_ONBOARDING") {
+    return <AxiomCarrierOnboardingForm formId={formId} formType={formType} formName={formName} />;
+  }
+
+  // Bathroom Request
+  if (formType === "BATHROOM_REQUEST") {
+    return <BathroomRequestForm formId={formId} formType={formType} formName={formName} />;
+  }
+
+  // Warehouse Check-In
+  if (formType === "WAREHOUSE_CHECKIN") {
+    return <WarehouseCheckInForm formId={formId} formType={formType} formName={formName} />;
+  }
+
+  // Driver Feedback
+  if (formType === "DRIVER_FEEDBACK") {
+    return <DriverFeedbackForm formId={formId} formType={formType} formName={formName} />;
+  }
+
+  // Employee Asset Check-In
+  if (formType === "EMPLOYEE_ASSET_CHECKIN") {
+    return <EmployeeAssetCheckInForm formId={formId} formType={formType} formName={formName} />;
+  }
+
+  // Warehouse Services
+  if (formType === "WAREHOUSE_SERVICES") {
+    return <WarehouseServicesForm formId={formId} formType={formType} formName={formName} />;
+  }
+
+  // Load Creation Request
+  if (formType === "LOAD_CREATION_REQUEST") {
+    return <LoadCreationRequestForm formId={formId} formType={formType} formName={formName} />;
+  }
+
+  // Forklift Inspection
+  if (formType === "FORKLIFT_INSPECTION") {
+    return <ForkliftInspectionForm formId={formId} formType={formType} formName={formName} />;
+  }
+
+  // ULD Inspection
+  if (formType === "ULD_INSPECTION") {
+    return <ULDInspectionForm formId={formId} formType={formType} formName={formName} />;
+  }
+
+  // Cargo Damage Report
+  if (formType === "CARGO_DAMAGE_REPORT") {
+    return <CargoDamageReportForm formId={formId} formType={formType} formName={formName} />;
+  }
+
+  // Cargo Shortage/Overage Report
+  if (formType === "CARGO_SHORTAGE_OVERAGE_REPORT") {
+    return <CargoShortageOverageForm formId={formId} formType={formType} formName={formName} />;
   }
 
   // Other forms show placeholder (being built in Phase 4)
