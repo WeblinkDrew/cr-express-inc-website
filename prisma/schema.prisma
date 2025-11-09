@@ -7,11 +7,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Form types enum - all 12 forms
+enum FormType {
+  CARRIER_ONBOARDING                // Axiom Carrier Onboarding (existing)
+  AXIOM_INVOICING                   // Axiom Invoicing
+  BATHROOM_REQUEST                  // Bathroom Request Form
+  CARGO_DAMAGE_REPORT               // Cargo Irregularity Report (Damage)
+  CARGO_SHORTAGE_OVERAGE_REPORT     // Cargo Irregularity Report (Shortage/Overage)
+  DRIVER_FEEDBACK                   // Driver Feedback & Reporting
+  EMPLOYEE_ASSET_CHECKIN            // Employee Asset Check-In
+  FORKLIFT_INSPECTION               // Forklift Inspection
+  LOAD_CREATION_REQUEST             // Load Creation Request
+  ULD_INSPECTION                    // ULD Inspection
+  WAREHOUSE_CHECKIN                 // Warehouse Check-In
+  WAREHOUSE_SERVICES                // Warehouse Services Form
+}
+
 // New Form model - permanent forms with reusable URLs
 model Form {
   id          String       @id @default(cuid())
   name        String       // e.g., "Carrier Onboarding"
   slug        String       @unique // e.g., "carrier-onboarding-a8f3e2b1"
+  formType    FormType     // Type of form
   description String?
   isActive    Boolean      @default(true)
   createdAt   DateTime     @default(now())
@@ -20,6 +37,7 @@ model Form {
 
   @@index([slug])
   @@index([isActive])
+  @@index([formType])
 }
 
 // Legacy FormLink model - kept for backwards compatibility
@@ -45,57 +63,75 @@ model Submission {
   formId                       String?   // New: links to Form
   formLinkId                   String?   // Legacy: links to FormLink
   submittedAt                  DateTime  @default(now())
+
+  // ✅ NEW: Common fields for all forms (for easy querying/filtering)
+  submitterName                String?   // Primary contact name
+  submitterEmail               String?   // Primary contact email
+  submitterPhone               String?   // Primary contact phone
+  companyName                  String?   // Company/organization name (if applicable)
+
+  // ✅ NEW: Flexible JSON storage for all form-specific data
+  formData                     Json?     // All form fields stored as JSON
+
+  // Metadata
   ipAddress                    String?
   userAgent                    String?
   browser                      String?
   location                     String?
-  // Basic Client Information
-  companyLegalName             String
-  division                     String
-  branchAddressLine1           String
-  branchCity                   String
-  branchState                  String
-  branchZipCode                String
+
+  // ✅ NEW: File uploads (stored as JSON array)
+  files                        Json?     // [{fileName, fileUrl, fileType}]
+
+  // ⚠️ LEGACY: Keep existing carrier onboarding fields for backward compatibility
+  // These will be gradually deprecated as we migrate to formData JSON
+  companyLegalName             String?
+  division                     String?
+  branchAddressLine1           String?
+  branchCity                   String?
+  branchState                  String?
+  branchZipCode                String?
   mc                           String?
   dot                          String?
   scacCode                     String?
   // Contact Information
-  primaryContactFirstName      String
-  primaryContactLastName       String
-  primaryContactEmail          String
-  primaryContactPhone          String
-  secondaryContactFirstName    String
-  secondaryContactLastName     String
-  secondaryContactEmail        String
-  secondaryContactPhone        String
-  escalationContactFirstName   String
-  escalationContactLastName    String
-  escalationContactEmail       String
-  escalationContactPhone       String
-  accountsPayableFirstName     String
-  accountsPayableLastName      String
-  accountsPayableEmail         String
-  accountsPayablePhone         String
+  primaryContactFirstName      String?
+  primaryContactLastName       String?
+  primaryContactEmail          String?
+  primaryContactPhone          String?
+  secondaryContactFirstName    String?
+  secondaryContactLastName     String?
+  secondaryContactEmail        String?
+  secondaryContactPhone        String?
+  escalationContactFirstName   String?
+  escalationContactLastName    String?
+  escalationContactEmail       String?
+  escalationContactPhone       String?
+  accountsPayableFirstName     String?
+  accountsPayableLastName      String?
+  accountsPayableEmail         String?
+  accountsPayablePhone         String?
   // Financial Information
-  billingAddressLine1          String
-  billingCity                  String
-  billingState                 String
-  billingZipCode               String
+  billingAddressLine1          String?
+  billingCity                  String?
+  billingState                 String?
+  billingZipCode               String?
   invoicingInstructions        String?
-  paymentMethod                String
+  paymentMethod                String?
   w9Upload                     String?
   // Operations Information
-  shipmentTypes                String
-  equipmentTypes               String
-  shipmentBuild                String
-  additionalRequirements       String
-  monthlyShipments             String
-  exceptionCommunication       String
-  reviewFrequency              String
+  shipmentTypes                String?
+  equipmentTypes               String?
+  shipmentBuild                String?
+  additionalRequirements       String?
+  monthlyShipments             String?
+  exceptionCommunication       String?
+  reviewFrequency              String?
+
   // Zapier Integration
   sentToZapier                 Boolean   @default(false)
   zapierSentAt                 DateTime?
   zapierError                  String?
+
   Form                         Form?     @relation(fields: [formId], references: [id])
   FormLink                     FormLink? @relation(fields: [formLinkId], references: [id])
 
@@ -104,4 +140,7 @@ model Submission {
   @@index([formLinkId])
   @@index([sentToZapier])
   @@index([submittedAt])
+  @@index([submitterEmail])
+  @@index([submitterName])
+  @@index([companyName])
 }
