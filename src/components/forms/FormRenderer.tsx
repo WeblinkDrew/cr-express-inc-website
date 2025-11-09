@@ -16,6 +16,12 @@ const CarrierOnboardingForm = dynamic(
   { ssr: false }
 );
 
+// Import new form components as they're built
+const AxiomInvoicingForm = dynamic(
+  () => import("./AxiomInvoicingForm"),
+  { ssr: false }
+);
+
 // Placeholder component for forms not yet built
 function PlaceholderForm({ formName }: { formName: string }) {
   return (
@@ -41,11 +47,16 @@ interface FormRendererProps {
 }
 
 export default function FormRenderer({ formType, formId, slug, formName }: FormRendererProps) {
-  // Only Carrier Onboarding is built - others show placeholder
+  // Carrier Onboarding uses old props format
   if (formType === "CARRIER_ONBOARDING") {
     return <CarrierOnboardingForm slug={slug} formId={formId} />;
   }
 
-  // All other forms show placeholder (will be built in Phase 4)
+  // Axiom Invoicing (new unified format)
+  if (formType === "AXIOM_INVOICING") {
+    return <AxiomInvoicingForm formId={formId} formType={formType} formName={formName} />;
+  }
+
+  // Other forms show placeholder (being built in Phase 4)
   return <PlaceholderForm formName={formName} />;
 }
