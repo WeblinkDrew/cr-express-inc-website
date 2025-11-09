@@ -12,10 +12,14 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, description } = body;
+    const { name, description, formType } = body;
 
     if (!name) {
       return NextResponse.json({ error: "Form name is required" }, { status: 400 });
+    }
+
+    if (!formType) {
+      return NextResponse.json({ error: "Form type is required" }, { status: 400 });
     }
 
     // Generate slug: convert name to slug format + random string
@@ -32,6 +36,7 @@ export async function POST(request: NextRequest) {
       data: {
         name,
         slug,
+        formType,
         description: description || null,
         isActive: true,
       },

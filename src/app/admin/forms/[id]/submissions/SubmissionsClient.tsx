@@ -55,64 +55,8 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 
-interface Submission {
-  id: string;
-  submittedAt: Date | string;
-  companyLegalName: string;
-  division: string;
-  primaryContactFirstName: string;
-  primaryContactLastName: string;
-  primaryContactEmail: string;
-  primaryContactPhone: string;
-  secondaryContactFirstName: string;
-  secondaryContactLastName: string;
-  secondaryContactEmail: string;
-  secondaryContactPhone: string;
-  escalationContactFirstName: string;
-  escalationContactLastName: string;
-  escalationContactEmail: string;
-  escalationContactPhone: string;
-  accountsPayableFirstName: string;
-  accountsPayableLastName: string;
-  accountsPayableEmail: string;
-  accountsPayablePhone: string;
-  branchAddressLine1: string;
-  branchCity: string;
-  branchState: string;
-  branchZipCode: string;
-  billingAddressLine1: string;
-  billingCity: string;
-  billingState: string;
-  billingZipCode: string;
-  mc: string | null;
-  dot: string | null;
-  scacCode: string | null;
-  invoicingInstructions: string | null;
-  paymentMethod: string;
-  shipmentTypes: string;
-  equipmentTypes: string;
-  shipmentBuild: string;
-  additionalRequirements: string;
-  monthlyShipments: string;
-  exceptionCommunication: string;
-  reviewFrequency: string;
-  sentToZapier: boolean;
-  zapierError: string | null;
-  [key: string]: any;
-}
-
-interface Form {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  isActive: boolean;
-  createdAt: Date | string;
-  Submission: Submission[];
-}
-
 interface SubmissionsClientProps {
-  form: Form;
+  form: any; // Using any for now - will be properly typed in Phase 5
   user?: any;
 }
 
@@ -121,7 +65,7 @@ type SortOrder = "asc" | "desc";
 
 export default function SubmissionsClient({ form, user }: SubmissionsClientProps) {
   const router = useRouter();
-  const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
+  const [selectedSubmission, setSelectedSubmission] = useState<any | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "sent" | "pending">("all");
@@ -150,12 +94,12 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
   };
 
   // Filter and sort submissions
-  const filteredSubmissions = form.Submission.filter((submission) => {
+  const filteredSubmissions = form.Submission.filter((submission: any) => {
     const matchesSearch =
-      submission.companyLegalName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      submission.primaryContactEmail.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      submission.primaryContactFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      submission.primaryContactLastName.toLowerCase().includes(searchTerm.toLowerCase());
+      submission.companyLegalName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      submission.primaryContactEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      submission.primaryContactFirstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      submission.primaryContactLastName?.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesStatus =
       filterStatus === "all" ||
@@ -163,19 +107,19 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
       (filterStatus === "pending" && !submission.sentToZapier);
 
     return matchesSearch && matchesStatus;
-  }).sort((a, b) => {
+  }).sort((a: any, b: any) => {
     const order = sortOrder === "asc" ? 1 : -1;
 
     switch (sortField) {
       case "company":
-        return order * a.companyLegalName.localeCompare(b.companyLegalName);
+        return order * (a.companyLegalName || '').localeCompare(b.companyLegalName || '');
       case "contact":
-        return order * `${a.primaryContactFirstName} ${a.primaryContactLastName}`.localeCompare(
-          `${b.primaryContactFirstName} ${b.primaryContactLastName}`
+        return order * `${a.primaryContactFirstName || ''} ${a.primaryContactLastName || ''}`.localeCompare(
+          `${b.primaryContactFirstName || ''} ${b.primaryContactLastName || ''}`
         );
       case "location":
-        return order * `${a.branchCity}, ${a.branchState}`.localeCompare(
-          `${b.branchCity}, ${b.branchState}`
+        return order * `${a.branchCity || ''}, ${a.branchState || ''}`.localeCompare(
+          `${b.branchCity || ''}, ${b.branchState || ''}`
         );
       case "submitted":
         return order * (new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime());
@@ -188,8 +132,8 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
 
   // Stats
   const totalSubmissions = form.Submission.length;
-  const sentSubmissions = form.Submission.filter(s => s.sentToZapier).length;
-  const pendingSubmissions = form.Submission.filter(s => !s.sentToZapier).length;
+  const sentSubmissions = form.Submission.filter((s: any) => s.sentToZapier).length;
+  const pendingSubmissions = form.Submission.filter((s: any) => !s.sentToZapier).length;
 
   const downloadPDF = async (submissionId: string, companyName: string) => {
     try {
@@ -210,7 +154,7 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
     }
   };
 
-  const viewSubmissionDetails = (submission: Submission) => {
+  const viewSubmissionDetails = (submission: any) => {
     setSelectedSubmission(submission);
     setShowDetailsModal(true);
   };
@@ -464,7 +408,7 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
                       </TableCell>
                     </TableRow>
                   ) : (
-                    filteredSubmissions.map((submission) => (
+                    filteredSubmissions.map((submission: any) => (
                       <TableRow key={submission.id} className="border-gray-200 dark:border-gray-800">
                         <TableCell>
                           <div>
