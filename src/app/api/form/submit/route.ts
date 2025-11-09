@@ -5,6 +5,17 @@ import ClientOnboardingPDF from "@/components/pdf/ClientOnboardingPDF";
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
 
+/**
+ * Form Submission API Route
+ *
+ * DUAL-WRITE STRATEGY (Phase 2):
+ * This route now implements a dual-write strategy for the carrier onboarding form:
+ * 1. Writes to NEW fields: formData (JSON), files (JSON), submitterName, submitterEmail, etc.
+ * 2. Continues writing to LEGACY fields for backward compatibility
+ *
+ * This ensures the existing system continues working while we build the new multi-form infrastructure.
+ * Once all forms are migrated, we can deprecate the legacy fields.
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -27,7 +38,7 @@ export async function POST(request: NextRequest) {
     const ipAddress = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || null;
     const userAgent = request.headers.get("user-agent") || null;
 
-    // 3. Create submission in database
+    // 3. Create submission in database with dual-write (legacy fields + formData)
     const submission = await prisma.submission.create({
       data: {
         formId: form.id,
@@ -36,7 +47,32 @@ export async function POST(request: NextRequest) {
         browser: userAgent?.split(" ")[0] || null,
         location: null, // Could add geolocation later
 
-        // Basic Client Information
+        // NEW: Common fields for universal querying
+        submitterName: `${formData.primaryContactFirstName} ${formData.primaryContactLastName}`,
+        submitterEmail: formData.primaryContactEmail,
+        submitterPhone: formData.primaryContactPhone,
+        companyName: formData.companyLegalName,
+
+        // NEW: Store complete form data as JSON (for future flexibility)
+        formData: {
+          ...formData,
+          // Store arrays as arrays, not joined strings
+          shipmentTypes: formData.shipmentTypes,
+          equipmentTypes: formData.equipmentTypes,
+          shipmentBuild: formData.shipmentBuild,
+          additionalRequirements: formData.additionalRequirements,
+        },
+
+        // NEW: Store files separately for better management
+        files: w9Upload ? {
+          w9: {
+            data: w9Upload,
+            filename: `W9_${formData.companyLegalName.replace(/[^a-zA-Z0-9]/g, "_")}_${Date.now()}.pdf`,
+            mimeType: "application/pdf"
+          }
+        } : undefined,
+
+        // LEGACY: Continue writing to old fields for backward compatibility
         companyLegalName: formData.companyLegalName,
         division: formData.division,
         branchAddressLine1: formData.branchAddressLine1,
@@ -47,7 +83,7 @@ export async function POST(request: NextRequest) {
         dot: formData.dot || null,
         scacCode: formData.scacCode || null,
 
-        // Contact Information
+        // Contact Information (legacy)
         primaryContactFirstName: formData.primaryContactFirstName,
         primaryContactLastName: formData.primaryContactLastName,
         primaryContactEmail: formData.primaryContactEmail,
@@ -65,16 +101,16 @@ export async function POST(request: NextRequest) {
         accountsPayableEmail: formData.accountsPayableEmail,
         accountsPayablePhone: formData.accountsPayablePhone,
 
-        // Financial Information
+        // Financial Information (legacy)
         billingAddressLine1: formData.billingAddressLine1,
         billingCity: formData.billingCity,
         billingState: formData.billingState,
         billingZipCode: formData.billingZipCode,
         invoicingInstructions: formData.invoicingInstructions || null,
         paymentMethod: formData.paymentMethod,
-        w9Upload: w9Upload || null, // Store base64 W-9
+        w9Upload: w9Upload || null, // Store base64 W-9 (legacy)
 
-        // Operations Information
+        // Operations Information (legacy - joined strings)
         shipmentTypes: Array.isArray(formData.shipmentTypes)
           ? formData.shipmentTypes.join(", ")
           : formData.shipmentTypes,

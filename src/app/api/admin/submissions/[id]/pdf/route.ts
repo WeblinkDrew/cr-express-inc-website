@@ -80,7 +80,7 @@ export async function GET(
     );
 
     // Create filename
-    const sanitizedCompanyName = submission.companyLegalName
+    const sanitizedCompanyName = (submission.companyLegalName || "Unknown")
       .replace(/[^a-zA-Z0-9]/g, "_")
       .substring(0, 50);
     const filename = `Onboarding_${sanitizedCompanyName}_${submission.id}.pdf`;
