@@ -45,6 +45,9 @@ import {
   Building,
   Truck,
   CreditCard,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -96,6 +99,9 @@ interface SubmissionsClientProps {
   user?: any;
 }
 
+type SortField = "company" | "contact" | "location" | "submitted" | "status";
+type SortOrder = "asc" | "desc";
+
 export default function SubmissionsClient({ user }: SubmissionsClientProps) {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [filteredSubmissions, setFilteredSubmissions] = useState<Submission[]>([]);
@@ -104,6 +110,8 @@ export default function SubmissionsClient({ user }: SubmissionsClientProps) {
   const [filterStatus, setFilterStatus] = useState<"all" | "sent" | "pending">("all");
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [sortField, setSortField] = useState<SortField>("submitted");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 
   useEffect(() => {
     fetchSubmissions();
@@ -130,8 +138,52 @@ export default function SubmissionsClient({ user }: SubmissionsClientProps) {
       filtered = filtered.filter((s) => !s.sentToZapier);
     }
 
+    // Sort
+    const order = sortOrder === "asc" ? 1 : -1;
+    filtered.sort((a, b) => {
+      switch (sortField) {
+        case "company":
+          return order * a.companyLegalName.localeCompare(b.companyLegalName);
+        case "contact":
+          return order * `${a.primaryContactFirstName} ${a.primaryContactLastName}`.localeCompare(
+            `${b.primaryContactFirstName} ${b.primaryContactLastName}`
+          );
+        case "location":
+          return order * `${a.branchCity}, ${a.branchState}`.localeCompare(
+            `${b.branchCity}, ${b.branchState}`
+          );
+        case "submitted":
+          return order * (new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime());
+        case "status":
+          return order * (Number(a.sentToZapier) - Number(b.sentToZapier));
+        default:
+          return 0;
+      }
+    });
+
     setFilteredSubmissions(filtered);
-  }, [submissions, searchTerm, filterStatus]);
+  }, [submissions, searchTerm, filterStatus, sortField, sortOrder]);
+
+  // Sorting function
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
+  };
+
+  const SortIcon = ({ field }: { field: SortField }) => {
+    if (sortField !== field) {
+      return <ArrowUpDown className="ml-2 h-4 w-4" />;
+    }
+    return sortOrder === "asc" ? (
+      <ArrowUp className="ml-2 h-4 w-4" />
+    ) : (
+      <ArrowDown className="ml-2 h-4 w-4" />
+    );
+  };
 
   const fetchSubmissions = async () => {
     try {
@@ -317,11 +369,51 @@ export default function SubmissionsClient({ user }: SubmissionsClientProps) {
                 <Table>
                   <TableHeader>
                     <TableRow className="border-gray-200 dark:border-gray-800">
-                      <TableHead className="text-gray-700 dark:text-gray-300">Company</TableHead>
-                      <TableHead className="text-gray-700 dark:text-gray-300">Primary Contact</TableHead>
-                      <TableHead className="text-gray-700 dark:text-gray-300">Location</TableHead>
-                      <TableHead className="text-gray-700 dark:text-gray-300">Submitted</TableHead>
-                      <TableHead className="text-gray-700 dark:text-gray-300">Status</TableHead>
+                      <TableHead>
+                        <button
+                          onClick={() => handleSort("company")}
+                          className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        >
+                          Company
+                          <SortIcon field="company" />
+                        </button>
+                      </TableHead>
+                      <TableHead>
+                        <button
+                          onClick={() => handleSort("contact")}
+                          className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        >
+                          Primary Contact
+                          <SortIcon field="contact" />
+                        </button>
+                      </TableHead>
+                      <TableHead>
+                        <button
+                          onClick={() => handleSort("location")}
+                          className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        >
+                          Location
+                          <SortIcon field="location" />
+                        </button>
+                      </TableHead>
+                      <TableHead>
+                        <button
+                          onClick={() => handleSort("submitted")}
+                          className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        >
+                          Submitted
+                          <SortIcon field="submitted" />
+                        </button>
+                      </TableHead>
+                      <TableHead>
+                        <button
+                          onClick={() => handleSort("status")}
+                          className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        >
+                          Status
+                          <SortIcon field="status" />
+                        </button>
+                      </TableHead>
                       <TableHead className="text-right text-gray-700 dark:text-gray-300">Actions</TableHead>
                     </TableRow>
                   </TableHeader>

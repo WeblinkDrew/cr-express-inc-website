@@ -5,6 +5,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
+import logoLight from "@/images/cr-express-logo-light.svg";
+import logoDark from "@/images/cr-express-logo-dark.svg";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,9 +17,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Home,
-  FileText,
-  Users,
   Settings,
   LogOut,
   Menu,
@@ -26,7 +26,6 @@ import {
   Sun,
   ChevronRight,
   LayoutDashboard,
-  FormInput,
   FolderOpen,
 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -92,13 +91,22 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
         <div className="flex h-full flex-col">
           {/* Logo */}
           <div className="flex h-16 items-center justify-between px-6 border-b border-gray-200 dark:border-gray-800">
-            <Link href="/admin/dashboard" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-black dark:bg-white rounded flex items-center justify-center">
-                <span className="text-white dark:text-black font-bold text-lg">C</span>
-              </div>
-              <span className="text-xl font-semibold text-gray-900 dark:text-white">
-                CR Express
-              </span>
+            <Link href="/admin/dashboard" className="flex items-center">
+              {darkMode ? (
+                <Image
+                  src={logoDark}
+                  alt="CR Express"
+                  className="h-8 w-auto"
+                  priority
+                />
+              ) : (
+                <Image
+                  src={logoLight}
+                  alt="CR Express"
+                  className="h-8 w-auto"
+                  priority
+                />
+              )}
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}

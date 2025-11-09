@@ -42,6 +42,9 @@ import {
   Copy,
   Check,
   ExternalLink,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -61,6 +64,9 @@ interface DashboardClientProps {
   initialForms: Form[];
 }
 
+type SortField = "name" | "status" | "submissions" | "created";
+type SortOrder = "asc" | "desc";
+
 export default function DashboardClient({ user, initialForms }: DashboardClientProps) {
   const router = useRouter();
   const [forms, setForms] = useState<Form[]>(initialForms);
@@ -72,11 +78,52 @@ export default function DashboardClient({ user, initialForms }: DashboardClientP
   const [formName, setFormName] = useState("");
   const [formDescription, setFormDescription] = useState("");
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
+  const [sortField, setSortField] = useState<SortField>("created");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 
   // Calculate stats
   const totalSubmissions = forms.reduce((acc, form) => acc + form.submissionCount, 0);
   const activeForms = forms.filter(form => form.isActive).length;
   const recentSubmissions = totalSubmissions; // In a real app, this would be filtered by date
+
+  // Sorting function
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
+  };
+
+  // Sort forms
+  const sortedForms = [...forms].sort((a, b) => {
+    const order = sortOrder === "asc" ? 1 : -1;
+
+    switch (sortField) {
+      case "name":
+        return order * a.name.localeCompare(b.name);
+      case "status":
+        return order * (Number(a.isActive) - Number(b.isActive));
+      case "submissions":
+        return order * (a.submissionCount - b.submissionCount);
+      case "created":
+        return order * (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      default:
+        return 0;
+    }
+  });
+
+  const SortIcon = ({ field }: { field: SortField }) => {
+    if (sortField !== field) {
+      return <ArrowUpDown className="ml-2 h-4 w-4" />;
+    }
+    return sortOrder === "asc" ? (
+      <ArrowUp className="ml-2 h-4 w-4" />
+    ) : (
+      <ArrowDown className="ml-2 h-4 w-4" />
+    );
+  };
 
   const handleCreateForm = async () => {
     setIsCreating(true);
@@ -219,23 +266,55 @@ export default function DashboardClient({ user, initialForms }: DashboardClientP
               <Table>
                 <TableHeader>
                   <TableRow className="border-gray-200 dark:border-gray-800">
-                    <TableHead className="text-gray-700 dark:text-gray-300">Form Name</TableHead>
-                    <TableHead className="text-gray-700 dark:text-gray-300">Status</TableHead>
-                    <TableHead className="text-gray-700 dark:text-gray-300">Submissions</TableHead>
-                    <TableHead className="text-gray-700 dark:text-gray-300">Created</TableHead>
+                    <TableHead>
+                      <button
+                        onClick={() => handleSort("name")}
+                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                      >
+                        Form Name
+                        <SortIcon field="name" />
+                      </button>
+                    </TableHead>
+                    <TableHead>
+                      <button
+                        onClick={() => handleSort("status")}
+                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                      >
+                        Status
+                        <SortIcon field="status" />
+                      </button>
+                    </TableHead>
+                    <TableHead>
+                      <button
+                        onClick={() => handleSort("submissions")}
+                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                      >
+                        Submissions
+                        <SortIcon field="submissions" />
+                      </button>
+                    </TableHead>
+                    <TableHead>
+                      <button
+                        onClick={() => handleSort("created")}
+                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                      >
+                        Created
+                        <SortIcon field="created" />
+                      </button>
+                    </TableHead>
                     <TableHead className="text-gray-700 dark:text-gray-300">Form Link</TableHead>
                     <TableHead className="text-right text-gray-700 dark:text-gray-300">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {forms.length === 0 ? (
+                  {sortedForms.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={6} className="text-center py-8 text-gray-500 dark:text-gray-400">
                         No forms created yet. Click "Create Form" to get started.
                       </TableCell>
                     </TableRow>
                   ) : (
-                    forms.map((form) => (
+                    sortedForms.map((form) => (
                       <TableRow key={form.id} className="border-gray-200 dark:border-gray-800">
                         <TableCell className="font-medium">
                           <button
