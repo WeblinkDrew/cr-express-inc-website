@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 
 import '@/styles/tailwind.css'
 import { ReCaptchaProvider } from '@/components/ReCaptchaProvider'
+import StackProvider from '@/components/providers/StackProvider'
 
 const monaSans = localFont({
   src: '../fonts/Mona-Sans.var.woff2',
@@ -72,7 +73,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <link rel="dns-prefetch" href="https://www.google.com" />
       </head>
       <body className="flex min-h-full flex-col">
-        <ReCaptchaProvider>{children}</ReCaptchaProvider>
+        <StackProvider>
+          <ReCaptchaProvider>{children}</ReCaptchaProvider>
+        </StackProvider>
       </body>
     </html>
   )

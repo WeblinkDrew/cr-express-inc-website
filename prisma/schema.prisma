@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// New Form model - permanent forms with reusable URLs
+model Form {
+  id          String       @id @default(cuid())
+  name        String       // e.g., "Carrier Onboarding"
+  slug        String       @unique // e.g., "carrier-onboarding-a8f3e2b1"
+  description String?
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  Submission  Submission[]
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+// Legacy FormLink model - kept for backwards compatibility
+model FormLink {
+  id              String       @id @default(cuid())
+  token           String       @unique
+  createdByUserId String
+  expiresAt       DateTime?
+  maxUses         Int          @default(1)
+  usedCount       Int          @default(0)
+  isActive        Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  Submission      Submission[]
+
+  @@index([createdByUserId])
+  @@index([isActive])
+  @@index([token])
+}
+
+model Submission {
+  id                           String    @id @default(cuid())
+  formId                       String?   // New: links to Form
+  formLinkId                   String?   // Legacy: links to FormLink
+  submittedAt                  DateTime  @default(now())
+  ipAddress                    String?
+  userAgent                    String?
+  browser                      String?
+  location                     String?
+  // Basic Client Information
+  companyLegalName             String
+  division                     String
+  branchAddressLine1           String
+  branchCity                   String
+  branchState                  String
+  branchZipCode                String
+  mc                           String?
+  dot                          String?
+  scacCode                     String?
+  // Contact Information
+  primaryContactFirstName      String
+  primaryContactLastName       String
+  primaryContactEmail          String
+  primaryContactPhone          String
+  secondaryContactFirstName    String
+  secondaryContactLastName     String
+  secondaryContactEmail        String
+  secondaryContactPhone        String
+  escalationContactFirstName   String
+  escalationContactLastName    String
+  escalationContactEmail       String
+  escalationContactPhone       String
+  accountsPayableFirstName     String
+  accountsPayableLastName      String
+  accountsPayableEmail         String
+  accountsPayablePhone         String
+  // Financial Information
+  billingAddressLine1          String
+  billingCity                  String
+  billingState                 String
+  billingZipCode               String
+  invoicingInstructions        String?
+  paymentMethod                String
+  w9Upload                     String?
+  // Operations Information
+  shipmentTypes                String
+  equipmentTypes               String
+  shipmentBuild                String
+  additionalRequirements       String
+  monthlyShipments             String
+  exceptionCommunication       String
+  reviewFrequency              String
+  // Zapier Integration
+  sentToZapier                 Boolean   @default(false)
+  zapierSentAt                 DateTime?
+  zapierError                  String?
+  Form                         Form?     @relation(fields: [formId], references: [id])
+  FormLink                     FormLink? @relation(fields: [formLinkId], references: [id])
+
+  @@index([companyLegalName])
+  @@index([formId])
+  @@index([formLinkId])
+  @@index([sentToZapier])
+  @@index([submittedAt])
+}

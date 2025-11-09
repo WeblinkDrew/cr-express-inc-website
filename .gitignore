@@ -36,3 +36,8 @@ next-env.d.ts
 
 # seobot analysis folder
 /seobot-analysis
+
+/src/generated/prisma
+
+# temporary PDF storage
+/temp
