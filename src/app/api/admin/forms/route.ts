@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Serialize dates for JSON
-    const serializedForms = forms.map((form) => ({
+    const serializedForms = forms.map((form: any) => ({
       ...form,
       createdAt: form.createdAt.toISOString(),
       updatedAt: form.updatedAt.toISOString(),
