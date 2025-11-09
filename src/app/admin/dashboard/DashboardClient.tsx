@@ -237,8 +237,13 @@ export default function DashboardClient({ user, initialForms }: DashboardClientP
                   ) : (
                     forms.map((form) => (
                       <TableRow key={form.id} className="border-gray-200 dark:border-gray-800">
-                        <TableCell className="font-medium text-gray-900 dark:text-white">
-                          {form.name}
+                        <TableCell className="font-medium">
+                          <button
+                            onClick={() => router.push(`/admin/forms/${form.id}/submissions`)}
+                            className="text-left hover:underline text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                          >
+                            {form.name}
+                          </button>
                           {form.description && (
                             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                               {form.description}

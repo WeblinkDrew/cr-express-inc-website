@@ -62,13 +62,7 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
       name: "Dashboard",
       href: "/admin/dashboard",
       icon: LayoutDashboard,
-      current: pathname === "/admin/dashboard",
-    },
-    {
-      name: "Forms",
-      href: "/admin/dashboard",
-      icon: FormInput,
-      current: pathname.includes("/admin/forms"),
+      current: pathname === "/admin/dashboard" || pathname.includes("/admin/forms"),
     },
     {
       name: "Submissions",
