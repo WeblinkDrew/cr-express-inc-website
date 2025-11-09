@@ -5,15 +5,15 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting database seed...');
 
-  // Create the Carrier Onboarding form
+  // Create the original Carrier Onboarding form (the complex 50+ field form)
   const carrierForm = await prisma.form.upsert({
     where: { slug: 'carrier-onboarding' },
     update: {},
     create: {
-      name: 'Axiom Carrier Onboarding',
+      name: 'Carrier Onboarding',
       slug: 'carrier-onboarding',
       formType: 'CARRIER_ONBOARDING',
-      description: 'Complete carrier onboarding form for new partnerships',
+      description: 'Complete carrier onboarding form for new partnerships (50+ fields)',
       isActive: true,
     },
   });

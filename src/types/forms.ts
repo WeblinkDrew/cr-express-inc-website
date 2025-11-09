@@ -1,4 +1,4 @@
-// Form Types for all 12 CR Express forms
+// Form Types for all 13 CR Express forms (originally 12, but Carrier Onboarding and Axiom Carrier Onboarding are separate)
 
 // ============================================================================
 // 1. CARRIER ONBOARDING (existing)
@@ -59,7 +59,48 @@ export interface CarrierOnboardingData {
 }
 
 // ============================================================================
-// 2. AXIOM INVOICING
+// 2. AXIOM CARRIER ONBOARDING (simple company info form)
+// ============================================================================
+export interface AxiomCarrierOnboardingData {
+  // Company Information
+  companyLegalName: string;
+  companyDbaName: string | null;
+
+  // Company Type
+  companyType: 'Corporation' | 'Limited Liability Company (LLC)' | 'Sole Proprietorship' | 'Partnership' | 'Other';
+  companyTypeOther: string | null;
+
+  // Year Founded
+  yearFounded: string;
+
+  // SCAC(s) - Separate using commas
+  scacCodes: string;
+
+  // Diversity Classifications
+  diversityClassifications: {
+    womanOwned: boolean;
+    veteranOwned: boolean;
+    minorityOwned: boolean;
+    other: boolean;
+    otherText: string | null;
+  };
+
+  // Company Physical Address
+  physicalAddressLine1: string;
+  physicalAddressLine2: string | null;
+  physicalCity: string;
+  physicalState: string;
+  physicalZipCode: string;
+
+  // Is the company's mailing address the same as its physical address?
+  mailingAddressSameAsPhysical: boolean;
+
+  // Do you use a factoring company?
+  useFactoringCompany: boolean;
+}
+
+// ============================================================================
+// 3. AXIOM INVOICING
 // ============================================================================
 export interface AxiomInvoicingData {
   loadNumber: string;
@@ -67,7 +108,7 @@ export interface AxiomInvoicingData {
 }
 
 // ============================================================================
-// 3. BATHROOM REQUEST FORM
+// 4. BATHROOM REQUEST FORM
 // ============================================================================
 export interface BathroomRequestData {
   bathroomLocation:
@@ -84,7 +125,7 @@ export interface BathroomRequestData {
 }
 
 // ============================================================================
-// 4. CARGO IRREGULARITY REPORT (DAMAGE)
+// 5. CARGO IRREGULARITY REPORT (DAMAGE)
 // ============================================================================
 export interface CargoDamageReportData {
   // Warehouse Details
@@ -111,7 +152,7 @@ export interface CargoDamageReportData {
 }
 
 // ============================================================================
-// 5. CARGO IRREGULARITY REPORT (SHORTAGE/OVERAGE)
+// 6. CARGO IRREGULARITY REPORT (SHORTAGE/OVERAGE)
 // ============================================================================
 export interface CargoShortageOverageReportData {
   // Warehouse Details
@@ -147,7 +188,7 @@ export interface CargoShortageOverageReportData {
 }
 
 // ============================================================================
-// 6. DRIVER FEEDBACK & REPORTING
+// 7. DRIVER FEEDBACK & REPORTING
 // ============================================================================
 export interface DriverFeedbackData {
   driverName: string;
@@ -158,7 +199,7 @@ export interface DriverFeedbackData {
 }
 
 // ============================================================================
-// 7. EMPLOYEE ASSET CHECK-IN
+// 8. EMPLOYEE ASSET CHECK-IN
 // ============================================================================
 export interface EmployeeAssetCheckInData {
   firstName: string;
@@ -176,7 +217,7 @@ export interface EmployeeAssetCheckInData {
 }
 
 // ============================================================================
-// 8. FORKLIFT INSPECTION
+// 9. FORKLIFT INSPECTION
 // ============================================================================
 export interface ForkliftInspectionData {
   // General
@@ -227,7 +268,7 @@ export interface ForkliftInspectionData {
 }
 
 // ============================================================================
-// 9. LOAD CREATION REQUEST
+// 10. LOAD CREATION REQUEST
 // ============================================================================
 export interface LoadCreationRequestData {
   customer: string;
@@ -240,7 +281,7 @@ export interface LoadCreationRequestData {
 }
 
 // ============================================================================
-// 10. ULD INSPECTION
+// 11. ULD INSPECTION
 // ============================================================================
 export interface ULDInspectionData {
   // General Details
@@ -263,7 +304,7 @@ export interface ULDInspectionData {
 }
 
 // ============================================================================
-// 11. WAREHOUSE CHECK-IN
+// 12. WAREHOUSE CHECK-IN
 // ============================================================================
 export interface WarehouseCheckInData {
   driverFirstName: string;
@@ -274,7 +315,7 @@ export interface WarehouseCheckInData {
 }
 
 // ============================================================================
-// 12. WAREHOUSE SERVICES FORM
+// 13. WAREHOUSE SERVICES FORM
 // ============================================================================
 export interface WarehouseServicesData {
   firstName: string;
@@ -290,6 +331,7 @@ export interface WarehouseServicesData {
 // ============================================================================
 export type FormData =
   | CarrierOnboardingData
+  | AxiomCarrierOnboardingData
   | AxiomInvoicingData
   | BathroomRequestData
   | CargoDamageReportData
@@ -314,9 +356,15 @@ export interface FormMetadata {
 
 export const FORM_METADATA: Record<string, FormMetadata> = {
   CARRIER_ONBOARDING: {
-    name: 'Axiom Carrier Onboarding',
-    description: 'Complete carrier onboarding form for new partnerships',
+    name: 'Carrier Onboarding',
+    description: 'Complete carrier onboarding form for new partnerships (50+ fields)',
     icon: '🚛',
+    category: 'external',
+  },
+  AXIOM_CARRIER_ONBOARDING: {
+    name: 'Axiom Carrier Onboarding',
+    description: 'Simple company information form for Axiom carriers',
+    icon: '📋',
     category: 'external',
   },
   AXIOM_INVOICING: {
