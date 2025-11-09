@@ -1,6 +1,36 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import AdminLayout from "@/components/admin/AdminLayout";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Search,
+  Download,
+  Eye,
+  MoreHorizontal,
+  CheckCircle,
+  Clock,
+  Filter,
+  FileText,
+} from "lucide-react";
+import { format } from "date-fns";
 
 interface Submission {
   id: string;
@@ -46,35 +76,51 @@ interface Submission {
   sentToZapier: boolean;
 }
 
-export default function SubmissionsClient() {
+interface SubmissionsClientProps {
+  user?: any;
+}
+
+export default function SubmissionsClient({ user }: SubmissionsClientProps) {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [filteredSubmissions, setFilteredSubmissions] = useState<Submission[]>([]);
-  const [search, setSearch] = useState("");
-  const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState<"all" | "sent" | "pending">("all");
 
   useEffect(() => {
     fetchSubmissions();
   }, []);
 
   useEffect(() => {
-    if (search) {
-      const filtered = submissions.filter((sub) =>
-        sub.companyLegalName.toLowerCase().includes(search.toLowerCase())
+    let filtered = [...submissions];
+
+    // Filter by search term
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (submission) =>
+          submission.companyLegalName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          submission.primaryContactEmail.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          submission.primaryContactFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          submission.primaryContactLastName.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setFilteredSubmissions(filtered);
-    } else {
-      setFilteredSubmissions(submissions);
     }
-  }, [search, submissions]);
+
+    // Filter by status
+    if (filterStatus === "sent") {
+      filtered = filtered.filter((s) => s.sentToZapier);
+    } else if (filterStatus === "pending") {
+      filtered = filtered.filter((s) => !s.sentToZapier);
+    }
+
+    setFilteredSubmissions(filtered);
+  }, [submissions, searchTerm, filterStatus]);
 
   const fetchSubmissions = async () => {
     try {
-      setLoading(true);
       const response = await fetch("/api/admin/submissions");
+      if (!response.ok) throw new Error("Failed to fetch submissions");
       const data = await response.json();
-      setSubmissions(data.submissions);
-      setFilteredSubmissions(data.submissions);
+      setSubmissions(data.submissions || []);
     } catch (error) {
       console.error("Error fetching submissions:", error);
     } finally {
@@ -82,338 +128,271 @@ export default function SubmissionsClient() {
     }
   };
 
-  const handleDownloadPDF = async (submissionId: string, companyName: string) => {
+
+  const downloadPDF = async (submissionId: string) => {
     try {
       const response = await fetch(`/api/admin/submissions/${submissionId}/pdf`);
+      if (!response.ok) throw new Error("Failed to generate PDF");
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Onboarding_${companyName.replace(/[^a-zA-Z0-9]/g, "_")}_${submissionId}.pdf`;
+      a.download = `submission-${submissionId}.pdf`;
       document.body.appendChild(a);
       a.click();
-      window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error downloading PDF:", error);
-      alert("Failed to download PDF");
     }
   };
 
+  const viewSubmissionDetails = (submission: Submission) => {
+    // Could open a modal or navigate to a detail page
+    console.log("View submission:", submission);
+  };
+
+  // Calculate stats
+  const totalSubmissions = submissions.length;
+  const sentSubmissions = submissions.filter(s => s.sentToZapier).length;
+  const pendingSubmissions = submissions.filter(s => !s.sentToZapier).length;
+
   return (
-    <div className="min-h-screen bg-neutral-50 py-12 px-4">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-neutral-900">Form Submissions</h1>
-          <p className="mt-2 text-neutral-600">View and download client onboarding submissions</p>
+    <AdminLayout user={user}>
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+              Submissions
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">
+              View and manage all form submissions
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => window.location.reload()}
+              className="border-gray-200 dark:border-gray-700"
+            >
+              Refresh
+            </Button>
+          </div>
         </div>
 
-        {/* Search Bar */}
-        <div className="mb-6">
-          <input
-            type="text"
-            placeholder="Search by company name..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full max-w-md rounded-md border border-neutral-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          />
+        {/* Stats Cards */}
+        <div className="grid gap-4 md:grid-cols-3">
+          <Card className="border-gray-200 dark:border-gray-800">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Total Submissions
+              </CardTitle>
+              <FileText className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {totalSubmissions}
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                All time submissions
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-gray-200 dark:border-gray-800">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Sent to Zapier
+              </CardTitle>
+              <CheckCircle className="h-4 w-4 text-green-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {sentSubmissions}
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Successfully processed
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-gray-200 dark:border-gray-800">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Pending
+              </CardTitle>
+              <Clock className="h-4 w-4 text-yellow-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {pendingSubmissions}
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Awaiting processing
+              </p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Submissions Table */}
-        {loading ? (
-          <div className="rounded-lg bg-white p-8 text-center shadow">
-            <p className="text-neutral-600">Loading submissions...</p>
-          </div>
-        ) : filteredSubmissions.length === 0 ? (
-          <div className="rounded-lg bg-white p-8 text-center shadow">
-            <p className="text-neutral-600">
-              {search ? "No submissions found matching your search" : "No submissions yet"}
-            </p>
-          </div>
-        ) : (
-          <div className="overflow-hidden rounded-lg bg-white shadow">
-            <table className="min-w-full divide-y divide-neutral-200">
-              <thead className="bg-neutral-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                    Company Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                    Division
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                    Primary Contact
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                    Submitted
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                    Zapier
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-neutral-200 bg-white">
-                {filteredSubmissions.map((submission) => (
-                  <tr
-                    key={submission.id}
-                    className="cursor-pointer hover:bg-neutral-50"
-                    onClick={() => setSelectedSubmission(submission)}
-                  >
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-neutral-900">
-                      {submission.companyLegalName}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-neutral-500">
-                      {submission.division}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-neutral-500">
-                      {submission.primaryContactFirstName} {submission.primaryContactLastName}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-neutral-500">
-                      {new Date(submission.submittedAt).toLocaleDateString()}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm">
-                      {submission.sentToZapier ? (
-                        <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
-                          Sent
-                        </span>
-                      ) : (
-                        <span className="inline-flex rounded-full bg-yellow-100 px-2 text-xs font-semibold leading-5 text-yellow-800">
-                          Pending
-                        </span>
-                      )}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-neutral-500">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDownloadPDF(submission.id, submission.companyLegalName);
-                        }}
-                        className="text-blue-600 hover:text-blue-900"
-                      >
-                        Download PDF
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {/* Modal */}
-        {selectedSubmission && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
-            onClick={() => setSelectedSubmission(null)}
-          >
-            <div
-              className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-lg bg-white p-8 shadow-xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Header */}
-              <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-neutral-900">Submission Details</h2>
-                <button
-                  onClick={() => setSelectedSubmission(null)}
-                  className="text-neutral-400 hover:text-neutral-600"
-                >
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
+        <Card className="border-gray-200 dark:border-gray-800">
+          <CardHeader>
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <CardTitle className="text-gray-900 dark:text-white">All Submissions</CardTitle>
+                <CardDescription className="text-gray-500 dark:text-gray-400">
+                  View and manage carrier onboarding submissions
+                </CardDescription>
               </div>
-
-              {/* Download Button */}
-              <div className="mb-6">
-                <button
-                  onClick={() =>
-                    handleDownloadPDF(selectedSubmission.id, selectedSubmission.companyLegalName)
-                  }
-                  className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-                >
-                  Download PDF
-                </button>
-              </div>
-
-              {/* Submission Info */}
-              <div className="space-y-6">
-                {/* Basic Client Information */}
-                <section>
-                  <h3 className="mb-4 text-lg font-semibold text-neutral-900">
-                    Basic Client Information
-                  </h3>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Company Legal Name</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.companyLegalName}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Division</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.division}</p>
-                    </div>
-                    <div className="sm:col-span-2">
-                      <label className="block text-sm font-medium text-neutral-700">Branch Location</label>
-                      <p className="mt-1 text-sm text-neutral-900">
-                        {selectedSubmission.branchAddressLine1}, {selectedSubmission.branchCity},{" "}
-                        {selectedSubmission.branchState} {selectedSubmission.branchZipCode}
-                      </p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">MC</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.mc || "N/A"}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">DOT</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.dot || "N/A"}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">SCAC Code</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.scacCode || "N/A"}</p>
-                    </div>
-                  </div>
-                </section>
-
-                {/* Contact Information */}
-                <section>
-                  <h3 className="mb-4 text-lg font-semibold text-neutral-900">Contact Information</h3>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Primary Contact</label>
-                      <p className="mt-1 text-sm text-neutral-900">
-                        {selectedSubmission.primaryContactFirstName} {selectedSubmission.primaryContactLastName}
-                      </p>
-                      <p className="text-sm text-neutral-600">{selectedSubmission.primaryContactEmail}</p>
-                      <p className="text-sm text-neutral-600">{selectedSubmission.primaryContactPhone}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Secondary Contact</label>
-                      <p className="mt-1 text-sm text-neutral-900">
-                        {selectedSubmission.secondaryContactFirstName} {selectedSubmission.secondaryContactLastName}
-                      </p>
-                      <p className="text-sm text-neutral-600">{selectedSubmission.secondaryContactEmail}</p>
-                      <p className="text-sm text-neutral-600">{selectedSubmission.secondaryContactPhone}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Escalation Contact</label>
-                      <p className="mt-1 text-sm text-neutral-900">
-                        {selectedSubmission.escalationContactFirstName} {selectedSubmission.escalationContactLastName}
-                      </p>
-                      <p className="text-sm text-neutral-600">{selectedSubmission.escalationContactEmail}</p>
-                      <p className="text-sm text-neutral-600">{selectedSubmission.escalationContactPhone}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Accounts Payable Contact</label>
-                      <p className="mt-1 text-sm text-neutral-900">
-                        {selectedSubmission.accountsPayableFirstName} {selectedSubmission.accountsPayableLastName}
-                      </p>
-                      <p className="text-sm text-neutral-600">{selectedSubmission.accountsPayableEmail}</p>
-                      <p className="text-sm text-neutral-600">{selectedSubmission.accountsPayablePhone}</p>
-                    </div>
-                  </div>
-                </section>
-
-                {/* Financial Information */}
-                <section>
-                  <h3 className="mb-4 text-lg font-semibold text-neutral-900">Financial Information</h3>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div className="sm:col-span-2">
-                      <label className="block text-sm font-medium text-neutral-700">Billing Address</label>
-                      <p className="mt-1 text-sm text-neutral-900">
-                        {selectedSubmission.billingAddressLine1}, {selectedSubmission.billingCity},{" "}
-                        {selectedSubmission.billingState} {selectedSubmission.billingZipCode}
-                      </p>
-                    </div>
-                    <div className="sm:col-span-2">
-                      <label className="block text-sm font-medium text-neutral-700">Invoicing Instructions</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.invoicingInstructions || "N/A"}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Payment Method</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.paymentMethod}</p>
-                    </div>
-                  </div>
-                </section>
-
-                {/* Operations Information */}
-                <section>
-                  <h3 className="mb-4 text-lg font-semibold text-neutral-900">Operations Information</h3>
-                  <div className="grid gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Shipment Types</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.shipmentTypes}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Equipment Types</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.equipmentTypes}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Shipment Build</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.shipmentBuild}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Additional Requirements</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.additionalRequirements}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Monthly Shipments</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.monthlyShipments}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Exception Communication</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.exceptionCommunication}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Review Frequency</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.reviewFrequency}</p>
-                    </div>
-                  </div>
-                </section>
-
-                {/* Submission Metadata */}
-                <section>
-                  <h3 className="mb-4 text-lg font-semibold text-neutral-900">Submission Details</h3>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Submission ID</label>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.id}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Submitted At</label>
-                      <p className="mt-1 text-sm text-neutral-900">
-                        {new Date(selectedSubmission.submittedAt).toLocaleString()}
-                      </p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700">Zapier Status</label>
-                      <p className="mt-1 text-sm text-neutral-900">
-                        {selectedSubmission.sentToZapier ? "Sent to Zapier" : "Pending"}
-                      </p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-
-              {/* Close Button */}
-              <div className="mt-8">
-                <button
-                  onClick={() => setSelectedSubmission(null)}
-                  className="rounded-md bg-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-900 hover:bg-neutral-300"
-                >
-                  Close
-                </button>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <Input
+                    placeholder="Search submissions..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-9 w-full sm:w-[250px]"
+                  />
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="border-gray-200 dark:border-gray-700">
+                      <Filter className="mr-2 h-4 w-4" />
+                      {filterStatus === "all" && "All Status"}
+                      {filterStatus === "sent" && "Sent"}
+                      {filterStatus === "pending" && "Pending"}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => setFilterStatus("all")}>
+                      All Status
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setFilterStatus("sent")}>
+                      Sent to Zapier
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setFilterStatus("pending")}>
+                      Pending
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
-          </div>
-        )}
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                Loading submissions...
+              </div>
+            ) : (
+              <div className="rounded-lg border border-gray-200 dark:border-gray-800 overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-gray-200 dark:border-gray-800">
+                      <TableHead className="text-gray-700 dark:text-gray-300">Company</TableHead>
+                      <TableHead className="text-gray-700 dark:text-gray-300">Primary Contact</TableHead>
+                      <TableHead className="text-gray-700 dark:text-gray-300">Location</TableHead>
+                      <TableHead className="text-gray-700 dark:text-gray-300">Submitted</TableHead>
+                      <TableHead className="text-gray-700 dark:text-gray-300">Status</TableHead>
+                      <TableHead className="text-right text-gray-700 dark:text-gray-300">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredSubmissions.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-8 text-gray-500 dark:text-gray-400">
+                          {searchTerm || filterStatus !== "all"
+                            ? "No submissions found matching your filters."
+                            : "No submissions yet."}
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredSubmissions.map((submission) => (
+                        <TableRow key={submission.id} className="border-gray-200 dark:border-gray-800">
+                          <TableCell>
+                            <div>
+                              <div className="font-medium text-gray-900 dark:text-white">
+                                {submission.companyLegalName}
+                              </div>
+                              <div className="text-sm text-gray-500 dark:text-gray-400">
+                                {submission.division}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div>
+                              <div className="text-gray-900 dark:text-white">
+                                {submission.primaryContactFirstName} {submission.primaryContactLastName}
+                              </div>
+                              <div className="text-sm text-gray-500 dark:text-gray-400">
+                                {submission.primaryContactEmail}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-gray-900 dark:text-white">
+                              {submission.branchCity}, {submission.branchState}
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-gray-500 dark:text-gray-400">
+                            {format(new Date(submission.submittedAt), "MMM d, yyyy")}
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              variant={submission.sentToZapier ? "default" : "secondary"}
+                              className={
+                                submission.sentToZapier
+                                  ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400"
+                                  : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400"
+                              }
+                            >
+                              {submission.sentToZapier ? (
+                                <>
+                                  <CheckCircle className="mr-1 h-3 w-3" />
+                                  Sent
+                                </>
+                              ) : (
+                                <>
+                                  <Clock className="mr-1 h-3 w-3" />
+                                  Pending
+                                </>
+                              )}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => viewSubmissionDetails(submission)}>
+                                  <Eye className="mr-2 h-4 w-4" />
+                                  View Details
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => downloadPDF(submission.id)}>
+                                  <Download className="mr-2 h-4 w-4" />
+                                  Download PDF
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
-    </div>
+    </AdminLayout>
   );
 }

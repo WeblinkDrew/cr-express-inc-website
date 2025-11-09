@@ -9,5 +9,14 @@ export default async function SubmissionsPage() {
     redirect("/admin/login");
   }
 
-  return <SubmissionsClient />;
+  // Convert user to plain object for client component
+  const userData = {
+    id: user.id,
+    displayName: user.displayName,
+    primaryEmail: user.primaryEmail,
+    primaryEmailVerified: user.primaryEmailVerified,
+    profileImageUrl: user.profileImageUrl,
+  };
+
+  return <SubmissionsClient user={userData} />;
 }

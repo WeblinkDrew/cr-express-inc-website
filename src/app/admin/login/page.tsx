@@ -3,6 +3,12 @@
 import { useUser, useStackApp } from "@stackframe/stack";
 import { useRouter } from "next/navigation";
 import { useEffect, Suspense, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Lock, Mail, Loader2 } from "lucide-react";
 
 function LoginContent() {
   const router = useRouter();
@@ -34,63 +40,95 @@ function LoginContent() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-neutral-950 px-4">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-white">CR Express Admin</h1>
-          <p className="mt-2 text-neutral-400">Client Onboarding Portal</p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-950 to-black">
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
 
-        <div className="rounded-lg bg-white p-8 shadow-xl">
-          <form onSubmit={handleSignIn} className="space-y-4">
-            <h2 className="text-xl font-semibold text-neutral-900">Sign In</h2>
+      <Card className="w-full max-w-md mx-4 relative bg-white/95 dark:bg-gray-900/95 backdrop-blur border-gray-200 dark:border-gray-800">
+        <CardHeader className="space-y-1 text-center">
+          <div className="flex justify-center mb-4">
+            <div className="w-16 h-16 bg-black dark:bg-white rounded-lg flex items-center justify-center">
+              <span className="text-white dark:text-black font-bold text-3xl">C</span>
+            </div>
+          </div>
+          <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+            Welcome back
+          </CardTitle>
+          <CardDescription className="text-gray-500 dark:text-gray-400">
+            Sign in to CR Express Admin Portal
+          </CardDescription>
+        </CardHeader>
 
+        <form onSubmit={handleSignIn}>
+          <CardContent className="space-y-4">
             {error && (
-              <div className="rounded-md bg-red-50 p-3">
-                <p className="text-sm text-red-800">{error}</p>
-              </div>
+              <Alert className="border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950/50">
+                <AlertDescription className="text-red-800 dark:text-red-400">
+                  {error}
+                </AlertDescription>
+              </Alert>
             )}
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-1">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">
                 Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-neutral-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                placeholder="admin@crexpress.com"
-              />
+              </Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="admin@crexpress.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={loading}
+                  className="pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                />
+              </div>
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-neutral-700 mb-1">
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-gray-700 dark:text-gray-300">
                 Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-neutral-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                placeholder="••••••••"
-              />
+              </Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  className="pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                />
+              </div>
             </div>
+          </CardContent>
 
-            <button
+          <CardFooter className="flex flex-col space-y-4">
+            <Button
               type="submit"
-              disabled={loading}
-              className="w-full rounded-md bg-blue-600 px-4 py-3 font-medium text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={loading || !email || !password}
+              className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200"
             >
-              {loading ? "Signing in..." : "Sign In"}
-            </button>
-          </form>
-        </div>
-      </div>
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                "Sign In"
+              )}
+            </Button>
+
+            <div className="text-center text-sm text-gray-500 dark:text-gray-400">
+              Protected area. Authorized personnel only.
+            </div>
+          </CardFooter>
+        </form>
+      </Card>
     </div>
   );
 }
@@ -99,8 +137,11 @@ export default function AdminLoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-neutral-950">
-          <div className="text-white">Loading...</div>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-950 to-black">
+          <div className="text-white flex items-center">
+            <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+            Loading...
+          </div>
         </div>
       }
     >
