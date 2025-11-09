@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
@@ -8,7 +8,11 @@ async function main() {
   // Create the original Carrier Onboarding form (the complex 50+ field form)
   const carrierForm = await prisma.form.upsert({
     where: { slug: 'carrier-onboarding' },
-    update: {},
+    update: {
+      name: 'Carrier Onboarding',
+      formType: 'CARRIER_ONBOARDING',
+      description: 'Complete carrier onboarding form for new partnerships (50+ fields)',
+    },
     create: {
       name: 'Carrier Onboarding',
       slug: 'carrier-onboarding',
