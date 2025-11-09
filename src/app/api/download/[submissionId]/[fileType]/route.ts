@@ -19,7 +19,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     // Construct file path
-    const tempDir = join(process.cwd(), "temp", "submissions", submissionId);
+    // Use /tmp for serverless environments (Vercel), otherwise use local temp
+    const tempBase = process.env.VERCEL ? "/tmp" : join(process.cwd(), "temp");
+    const tempDir = join(tempBase, "submissions", submissionId);
     const filePath = join(tempDir, `${fileType}.pdf`);
 
     // Read the file

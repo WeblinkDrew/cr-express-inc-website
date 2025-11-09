@@ -148,7 +148,9 @@ export async function POST(request: NextRequest) {
     console.log("✅ Onboarding PDF generated");
 
     // 5. Save PDFs to temporary directory
-    const tempDir = join(process.cwd(), "temp", "submissions", submission.id);
+    // Use /tmp for serverless environments (Vercel), otherwise use local temp
+    const tempBase = process.env.VERCEL ? "/tmp" : join(process.cwd(), "temp");
+    const tempDir = join(tempBase, "submissions", submission.id);
     await mkdir(tempDir, { recursive: true });
 
     // Save onboarding PDF
