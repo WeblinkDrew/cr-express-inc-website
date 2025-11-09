@@ -2,18 +2,97 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import AdminLayout from "@/components/admin/AdminLayout";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
+import {
+  Search,
+  Download,
+  Eye,
+  MoreHorizontal,
+  CheckCircle,
+  Clock,
+  Filter,
+  FileText,
+  ArrowLeft,
+  Copy,
+  ExternalLink,
+  Phone,
+  Mail,
+  MapPin,
+  Building,
+  Truck,
+  CreditCard,
+} from "lucide-react";
+import { format } from "date-fns";
 
 interface Submission {
   id: string;
-  submittedAt: Date;
+  submittedAt: Date | string;
   companyLegalName: string;
   division: string;
   primaryContactFirstName: string;
   primaryContactLastName: string;
   primaryContactEmail: string;
   primaryContactPhone: string;
+  secondaryContactFirstName: string;
+  secondaryContactLastName: string;
+  secondaryContactEmail: string;
+  secondaryContactPhone: string;
+  escalationContactFirstName: string;
+  escalationContactLastName: string;
+  escalationContactEmail: string;
+  escalationContactPhone: string;
+  accountsPayableFirstName: string;
+  accountsPayableLastName: string;
+  accountsPayableEmail: string;
+  accountsPayablePhone: string;
+  branchAddressLine1: string;
   branchCity: string;
   branchState: string;
+  branchZipCode: string;
+  billingAddressLine1: string;
+  billingCity: string;
+  billingState: string;
+  billingZipCode: string;
+  mc: string | null;
+  dot: string | null;
+  scacCode: string | null;
+  invoicingInstructions: string | null;
+  paymentMethod: string;
+  shipmentTypes: string;
+  equipmentTypes: string;
+  shipmentBuild: string;
+  additionalRequirements: string;
+  monthlyShipments: string;
+  exceptionCommunication: string;
+  reviewFrequency: string;
   sentToZapier: boolean;
   zapierError: string | null;
   [key: string]: any;
@@ -25,448 +104,669 @@ interface Form {
   slug: string;
   description: string | null;
   isActive: boolean;
-  createdAt: Date;
+  createdAt: Date | string;
   Submission: Submission[];
 }
 
 interface SubmissionsClientProps {
   form: Form;
+  user?: any;
 }
 
-export default function SubmissionsClient({ form }: SubmissionsClientProps) {
+export default function SubmissionsClient({ form, user }: SubmissionsClientProps) {
   const router = useRouter();
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
-  const [exporting, setExporting] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState<"all" | "sent" | "pending">("all");
+  const [copiedFormLink, setCopiedFormLink] = useState(false);
+
+  // Filter submissions
+  const filteredSubmissions = form.Submission.filter((submission) => {
+    const matchesSearch =
+      submission.companyLegalName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      submission.primaryContactEmail.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      submission.primaryContactFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      submission.primaryContactLastName.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesStatus =
+      filterStatus === "all" ||
+      (filterStatus === "sent" && submission.sentToZapier) ||
+      (filterStatus === "pending" && !submission.sentToZapier);
+
+    return matchesSearch && matchesStatus;
+  });
+
+  // Stats
+  const totalSubmissions = form.Submission.length;
+  const sentSubmissions = form.Submission.filter(s => s.sentToZapier).length;
+  const pendingSubmissions = form.Submission.filter(s => !s.sentToZapier).length;
 
   const downloadPDF = async (submissionId: string, companyName: string) => {
     try {
       const response = await fetch(`/api/admin/submissions/${submissionId}/pdf`);
-
-      if (!response.ok) {
-        throw new Error("Failed to download PDF");
-      }
+      if (!response.ok) throw new Error("Failed to download PDF");
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Onboarding_${companyName.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`;
+      a.download = `${companyName.replace(/[^a-z0-9]/gi, "_")}_submission.pdf`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error downloading PDF:", error);
-      alert("Failed to download PDF");
     }
   };
 
-  const exportToCSV = () => {
-    setExporting(true);
+  const viewSubmissionDetails = (submission: Submission) => {
+    setSelectedSubmission(submission);
+    setShowDetailsModal(true);
+  };
 
-    try {
-      // Define CSV headers
-      const headers = [
-        "Submission ID",
-        "Submitted At",
-        "Company Name",
-        "Division",
-        "Primary Contact",
-        "Email",
-        "Phone",
-        "Location",
-        "MC",
-        "DOT",
-        "SCAC",
-        "Payment Method",
-        "Monthly Shipments",
-        "Sent to Zapier",
-        "Zapier Error",
-      ];
+  const copyFormLink = () => {
+    const url = `${window.location.origin}/form/${form.slug}`;
+    navigator.clipboard.writeText(url);
+    setCopiedFormLink(true);
+    setTimeout(() => setCopiedFormLink(false), 2000);
+  };
 
-      // Create CSV rows
-      const rows = form.Submission.map((sub) => [
-        sub.id,
-        new Date(sub.submittedAt).toLocaleString(),
-        sub.companyLegalName,
-        sub.division,
-        `${sub.primaryContactFirstName} ${sub.primaryContactLastName}`,
-        sub.primaryContactEmail,
-        sub.primaryContactPhone,
-        `${sub.branchCity}, ${sub.branchState}`,
-        sub.mc || "N/A",
-        sub.dot || "N/A",
-        sub.scacCode || "N/A",
-        sub.paymentMethod,
-        sub.monthlyShipments,
-        sub.sentToZapier ? "Yes" : "No",
-        sub.zapierError || "N/A",
-      ]);
-
-      // Combine headers and rows
-      const csv = [
-        headers.join(","),
-        ...rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")),
-      ].join("\n");
-
-      // Create download
-      const blob = new Blob([csv], { type: "text/csv" });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${form.name.replace(/\s+/g, "_")}_submissions_${Date.now()}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error exporting CSV:", error);
-      alert("Failed to export CSV");
-    } finally {
-      setExporting(false);
+  const formatPhoneNumber = (phone: string) => {
+    const cleaned = phone.replace(/\D/g, "");
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+      return `(${match[1]}) ${match[2]}-${match[3]}`;
     }
+    return phone;
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      {/* Header */}
-      <header className="border-b border-neutral-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => router.push("/admin/dashboard")}
-                className="rounded-md bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-200"
+    <AdminLayout user={user}>
+      <div className="space-y-8">
+        {/* Header with back button */}
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.push("/admin/dashboard")}
+            className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Dashboard
+          </Button>
+        </div>
+
+        {/* Form Info Section */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+              {form.name}
+            </h1>
+            {form.description && (
+              <p className="text-gray-500 dark:text-gray-400 mt-1">{form.description}</p>
+            )}
+            <div className="flex items-center gap-3 mt-3">
+              <Badge
+                variant={form.isActive ? "default" : "secondary"}
+                className={
+                  form.isActive
+                    ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400"
+                    : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400"
+                }
               >
-                ← Back
-              </button>
-              <div>
-                <h1 className="text-2xl font-bold text-neutral-900">{form.name}</h1>
-                <p className="text-sm text-neutral-600">Form Submissions</p>
-              </div>
+                {form.isActive ? "Active" : "Inactive"}
+              </Badge>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Created {format(new Date(form.createdAt), "MMM d, yyyy")}
+              </span>
             </div>
-            <button
-              onClick={exportToCSV}
-              disabled={exporting || form.Submission.length === 0}
-              className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50"
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={copyFormLink}
+              className="border-gray-200 dark:border-gray-700"
             >
-              {exporting ? "Exporting..." : "Export to CSV"}
-            </button>
+              {copiedFormLink ? (
+                <>
+                  <CheckCircle className="mr-2 h-4 w-4 text-green-500" />
+                  Copied!
+                </>
+              ) : (
+                <>
+                  <Copy className="mr-2 h-4 w-4" />
+                  Copy Form Link
+                </>
+              )}
+            </Button>
+            <a
+              href={`/form/${form.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" className="border-gray-200 dark:border-gray-700">
+                <ExternalLink className="mr-2 h-4 w-4" />
+                View Form
+              </Button>
+            </a>
           </div>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Stats */}
-        <div className="mb-8 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-lg bg-white p-6 shadow">
-            <p className="text-sm font-medium text-neutral-600">Total Submissions</p>
-            <p className="mt-2 text-3xl font-bold text-neutral-900">{form.Submission.length}</p>
-          </div>
-          <div className="rounded-lg bg-white p-6 shadow">
-            <p className="text-sm font-medium text-neutral-600">Sent to Zapier</p>
-            <p className="mt-2 text-3xl font-bold text-green-600">
-              {form.Submission.filter((s) => s.sentToZapier).length}
-            </p>
-          </div>
-          <div className="rounded-lg bg-white p-6 shadow">
-            <p className="text-sm font-medium text-neutral-600">Failed Zapier</p>
-            <p className="mt-2 text-3xl font-bold text-red-600">
-              {form.Submission.filter((s) => s.zapierError).length}
-            </p>
-          </div>
+        {/* Stats Cards */}
+        <div className="grid gap-4 md:grid-cols-3">
+          <Card className="border-gray-200 dark:border-gray-800">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Total Submissions
+              </CardTitle>
+              <FileText className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {totalSubmissions}
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                For this form
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-gray-200 dark:border-gray-800">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Processed
+              </CardTitle>
+              <CheckCircle className="h-4 w-4 text-green-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {sentSubmissions}
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Sent to Zapier
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-gray-200 dark:border-gray-800">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Pending
+              </CardTitle>
+              <Clock className="h-4 w-4 text-yellow-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {pendingSubmissions}
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Awaiting processing
+              </p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Submissions Table */}
-        <div className="rounded-lg bg-white shadow">
-          <div className="border-b border-neutral-200 px-6 py-4">
-            <h2 className="text-lg font-semibold text-neutral-900">All Submissions</h2>
-          </div>
-
-          {form.Submission.length === 0 ? (
-            <div className="p-12 text-center">
-              <p className="text-neutral-500">No submissions yet</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-neutral-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                      Date
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                      Company
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                      Primary Contact
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                      Location
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-neutral-200 bg-white">
-                  {form.Submission.map((submission) => (
-                    <tr key={submission.id} className="hover:bg-neutral-50">
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-neutral-900">
-                        {new Date(submission.submittedAt).toLocaleDateString()}
-                        <br />
-                        <span className="text-xs text-neutral-500">
-                          {new Date(submission.submittedAt).toLocaleTimeString()}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        <div className="font-medium text-neutral-900">{submission.companyLegalName}</div>
-                        <div className="text-neutral-500">{submission.division}</div>
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        <div className="text-neutral-900">
-                          {submission.primaryContactFirstName} {submission.primaryContactLastName}
-                        </div>
-                        <div className="text-neutral-500">{submission.primaryContactEmail}</div>
-                        <div className="text-neutral-500">{submission.primaryContactPhone}</div>
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-neutral-500">
-                        {submission.branchCity}, {submission.branchState}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm">
-                        {submission.sentToZapier ? (
-                          <span className="inline-flex rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800">
-                            Sent
-                          </span>
-                        ) : submission.zapierError ? (
-                          <span className="inline-flex rounded-full bg-red-100 px-2 py-1 text-xs font-semibold text-red-800">
-                            Failed
-                          </span>
-                        ) : (
-                          <span className="inline-flex rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800">
-                            Pending
-                          </span>
-                        )}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => setSelectedSubmission(submission)}
-                            className="text-blue-600 hover:text-blue-900"
-                          >
-                            View Details
-                          </button>
-                          <span className="text-neutral-300">|</span>
-                          <button
-                            onClick={() => downloadPDF(submission.id, submission.companyLegalName)}
-                            className="text-green-600 hover:text-green-900"
-                          >
-                            Download PDF
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      </main>
-
-      {/* Detail Modal */}
-      {selectedSubmission && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-lg bg-white p-8 shadow-2xl">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-neutral-900">Submission Details</h2>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => downloadPDF(selectedSubmission.id, selectedSubmission.companyLegalName)}
-                  className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
-                >
-                  Download PDF
-                </button>
-                <button
-                  onClick={() => setSelectedSubmission(null)}
-                  className="rounded-md bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-200"
-                >
-                  Close
-                </button>
+        <Card className="border-gray-200 dark:border-gray-800">
+          <CardHeader>
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <CardTitle className="text-gray-900 dark:text-white">Submissions</CardTitle>
+                <CardDescription className="text-gray-500 dark:text-gray-400">
+                  All submissions for this form
+                </CardDescription>
+              </div>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <Input
+                    placeholder="Search submissions..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-9 w-full sm:w-[250px]"
+                  />
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="border-gray-200 dark:border-gray-700">
+                      <Filter className="mr-2 h-4 w-4" />
+                      {filterStatus === "all" && "All Status"}
+                      {filterStatus === "sent" && "Sent"}
+                      {filterStatus === "pending" && "Pending"}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => setFilterStatus("all")}>
+                      All Status
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setFilterStatus("sent")}>
+                      Sent to Zapier
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setFilterStatus("pending")}>
+                      Pending
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
+          </CardHeader>
+          <CardContent>
+            <div className="rounded-lg border border-gray-200 dark:border-gray-800 overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-gray-200 dark:border-gray-800">
+                    <TableHead className="text-gray-700 dark:text-gray-300">Company</TableHead>
+                    <TableHead className="text-gray-700 dark:text-gray-300">Primary Contact</TableHead>
+                    <TableHead className="text-gray-700 dark:text-gray-300">Location</TableHead>
+                    <TableHead className="text-gray-700 dark:text-gray-300">Submitted</TableHead>
+                    <TableHead className="text-gray-700 dark:text-gray-300">Status</TableHead>
+                    <TableHead className="text-right text-gray-700 dark:text-gray-300">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredSubmissions.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-8 text-gray-500 dark:text-gray-400">
+                        {searchTerm || filterStatus !== "all"
+                          ? "No submissions found matching your filters."
+                          : "No submissions yet for this form."}
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    filteredSubmissions.map((submission) => (
+                      <TableRow key={submission.id} className="border-gray-200 dark:border-gray-800">
+                        <TableCell>
+                          <div>
+                            <div className="font-medium text-gray-900 dark:text-white">
+                              {submission.companyLegalName}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              {submission.division}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div>
+                            <div className="text-gray-900 dark:text-white">
+                              {submission.primaryContactFirstName} {submission.primaryContactLastName}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              {submission.primaryContactEmail}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="text-gray-900 dark:text-white">
+                            {submission.branchCity}, {submission.branchState}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-gray-500 dark:text-gray-400">
+                          {format(new Date(submission.submittedAt), "MMM d, yyyy")}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            variant={submission.sentToZapier ? "default" : "secondary"}
+                            className={
+                              submission.sentToZapier
+                                ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400"
+                                : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400"
+                            }
+                          >
+                            {submission.sentToZapier ? (
+                              <>
+                                <CheckCircle className="mr-1 h-3 w-3" />
+                                Sent
+                              </>
+                            ) : (
+                              <>
+                                <Clock className="mr-1 h-3 w-3" />
+                                Pending
+                              </>
+                            )}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem onClick={() => viewSubmissionDetails(submission)}>
+                                <Eye className="mr-2 h-4 w-4" />
+                                View Details
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => downloadPDF(submission.id, submission.companyLegalName)}
+                              >
+                                <Download className="mr-2 h-4 w-4" />
+                                Download PDF
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
-            <div className="space-y-6">
-              {/* Basic Info */}
-              <div>
-                <h3 className="mb-3 text-lg font-semibold text-neutral-900">Basic Information</h3>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Company Legal Name</p>
-                    <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.companyLegalName}</p>
+      {/* Submission Details Modal */}
+      <Dialog open={showDetailsModal} onOpenChange={setShowDetailsModal}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center justify-between">
+              <span>Submission Details</span>
+              {selectedSubmission && (
+                <Badge
+                  variant={selectedSubmission.sentToZapier ? "default" : "secondary"}
+                  className={
+                    selectedSubmission.sentToZapier
+                      ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400"
+                      : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400"
+                  }
+                >
+                  {selectedSubmission.sentToZapier ? "Sent to Zapier" : "Pending"}
+                </Badge>
+              )}
+            </DialogTitle>
+            <DialogDescription>
+              Submitted on {selectedSubmission && format(new Date(selectedSubmission.submittedAt), "MMMM d, yyyy 'at' h:mm a")}
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedSubmission && (
+            <Tabs defaultValue="company" className="w-full">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="company">Company</TabsTrigger>
+                <TabsTrigger value="contacts">Contacts</TabsTrigger>
+                <TabsTrigger value="financial">Financial</TabsTrigger>
+                <TabsTrigger value="operations">Operations</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="company" className="space-y-6 mt-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
+                    <Building className="mr-2 h-5 w-5" />
+                    Company Information
+                  </h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Legal Name</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.companyLegalName}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Division</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.division}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">MC Number</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.mc || "N/A"}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">DOT Number</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.dot || "N/A"}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">SCAC Code</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.scacCode || "N/A"}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Division</p>
-                    <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.division}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Branch Address</p>
-                    <p className="mt-1 text-sm text-neutral-900">
-                      {selectedSubmission.branchAddressLine1}<br />
+                </div>
+
+                <Separator />
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
+                    <MapPin className="mr-2 h-5 w-5" />
+                    Branch Address
+                  </h3>
+                  <div className="space-y-2">
+                    <p className="text-gray-900 dark:text-white">
+                      {selectedSubmission.branchAddressLine1}
+                    </p>
+                    <p className="text-gray-900 dark:text-white">
                       {selectedSubmission.branchCity}, {selectedSubmission.branchState} {selectedSubmission.branchZipCode}
                     </p>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">MC / DOT / SCAC</p>
-                    <p className="mt-1 text-sm text-neutral-900">
-                      MC: {selectedSubmission.mc || "N/A"}<br />
-                      DOT: {selectedSubmission.dot || "N/A"}<br />
-                      SCAC: {selectedSubmission.scacCode || "N/A"}
-                    </p>
-                  </div>
                 </div>
-              </div>
+              </TabsContent>
 
-              {/* Contact Information */}
-              <div>
-                <h3 className="mb-3 text-lg font-semibold text-neutral-900">Contact Information</h3>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Primary Contact</p>
-                    <p className="mt-1 text-sm text-neutral-900">
-                      {selectedSubmission.primaryContactFirstName} {selectedSubmission.primaryContactLastName}<br />
-                      {selectedSubmission.primaryContactEmail}<br />
-                      {selectedSubmission.primaryContactPhone}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Secondary Contact</p>
-                    <p className="mt-1 text-sm text-neutral-900">
-                      {selectedSubmission.secondaryContactFirstName} {selectedSubmission.secondaryContactLastName}<br />
-                      {selectedSubmission.secondaryContactEmail}<br />
-                      {selectedSubmission.secondaryContactPhone}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Escalation Contact</p>
-                    <p className="mt-1 text-sm text-neutral-900">
-                      {selectedSubmission.escalationContactFirstName} {selectedSubmission.escalationContactLastName}<br />
-                      {selectedSubmission.escalationContactEmail}<br />
-                      {selectedSubmission.escalationContactPhone}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Accounts Payable</p>
-                    <p className="mt-1 text-sm text-neutral-900">
-                      {selectedSubmission.accountsPayableFirstName} {selectedSubmission.accountsPayableLastName}<br />
-                      {selectedSubmission.accountsPayableEmail}<br />
-                      {selectedSubmission.accountsPayablePhone}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Financial Information */}
-              <div>
-                <h3 className="mb-3 text-lg font-semibold text-neutral-900">Financial Information</h3>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Billing Address</p>
-                    <p className="mt-1 text-sm text-neutral-900">
-                      {selectedSubmission.billingAddressLine1}<br />
-                      {selectedSubmission.billingCity}, {selectedSubmission.billingState} {selectedSubmission.billingZipCode}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Payment Method</p>
-                    <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.paymentMethod}</p>
-                  </div>
-                  {selectedSubmission.invoicingInstructions && (
-                    <div className="sm:col-span-2">
-                      <p className="text-sm font-medium text-neutral-500">Invoicing Instructions</p>
-                      <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.invoicingInstructions}</p>
+              <TabsContent value="contacts" className="space-y-6 mt-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Primary Contact</h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Name</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.primaryContactFirstName} {selectedSubmission.primaryContactLastName}
+                      </p>
                     </div>
-                  )}
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">W9 Upload</p>
-                    <p className="mt-1 text-sm text-neutral-900">
-                      {selectedSubmission.w9Upload ? "✓ Uploaded" : "Not uploaded"}
-                    </p>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400 flex items-center">
+                        <Mail className="mr-1 h-3 w-3" /> Email
+                      </Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.primaryContactEmail}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400 flex items-center">
+                        <Phone className="mr-1 h-3 w-3" /> Phone
+                      </Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {formatPhoneNumber(selectedSubmission.primaryContactPhone)}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Operations Information */}
-              <div>
-                <h3 className="mb-3 text-lg font-semibold text-neutral-900">Operations Information</h3>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Shipment Types</p>
-                    <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.shipmentTypes}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Equipment Types</p>
-                    <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.equipmentTypes}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Shipment Build</p>
-                    <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.shipmentBuild}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Additional Requirements</p>
-                    <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.additionalRequirements}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Monthly Shipments</p>
-                    <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.monthlyShipments}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Exception Communication</p>
-                    <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.exceptionCommunication}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Review Frequency</p>
-                    <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.reviewFrequency}</p>
-                  </div>
-                </div>
-              </div>
+                <Separator />
 
-              {/* Submission Metadata */}
-              <div>
-                <h3 className="mb-3 text-lg font-semibold text-neutral-900">Submission Metadata</h3>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Submitted At</p>
-                    <p className="mt-1 text-sm text-neutral-900">
-                      {new Date(selectedSubmission.submittedAt).toLocaleString()}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">IP Address</p>
-                    <p className="mt-1 text-sm text-neutral-900">{selectedSubmission.ipAddress || "N/A"}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-neutral-500">Zapier Status</p>
-                    <p className="mt-1 text-sm text-neutral-900">
-                      {selectedSubmission.sentToZapier ? (
-                        <>✓ Sent at {selectedSubmission.zapierSentAt ? new Date(selectedSubmission.zapierSentAt).toLocaleString() : "N/A"}</>
-                      ) : selectedSubmission.zapierError ? (
-                        <>✗ Failed: {selectedSubmission.zapierError}</>
-                      ) : (
-                        "Pending"
-                      )}
-                    </p>
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Secondary Contact</h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Name</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.secondaryContactFirstName} {selectedSubmission.secondaryContactLastName}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Email</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.secondaryContactEmail}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Phone</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {formatPhoneNumber(selectedSubmission.secondaryContactPhone)}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+
+                <Separator />
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Escalation Contact</h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Name</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.escalationContactFirstName} {selectedSubmission.escalationContactLastName}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Email</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.escalationContactEmail}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Phone</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {formatPhoneNumber(selectedSubmission.escalationContactPhone)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Accounts Payable</h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Name</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.accountsPayableFirstName} {selectedSubmission.accountsPayableLastName}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Email</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.accountsPayableEmail}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Phone</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {formatPhoneNumber(selectedSubmission.accountsPayablePhone)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="financial" className="space-y-6 mt-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
+                    <CreditCard className="mr-2 h-5 w-5" />
+                    Billing Information
+                  </h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="md:col-span-2">
+                      <Label className="text-gray-600 dark:text-gray-400">Billing Address</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.billingAddressLine1}
+                      </p>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.billingCity}, {selectedSubmission.billingState} {selectedSubmission.billingZipCode}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Payment Method</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.paymentMethod}
+                      </p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <Label className="text-gray-600 dark:text-gray-400">Invoicing Instructions</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.invoicingInstructions || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="operations" className="space-y-6 mt-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
+                    <Truck className="mr-2 h-5 w-5" />
+                    Operations Details
+                  </h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Shipment Types</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.shipmentTypes}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Equipment Types</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.equipmentTypes}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Shipment Build</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.shipmentBuild}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Additional Requirements</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.additionalRequirements}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Monthly Shipments</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.monthlyShipments}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Review Frequency</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.reviewFrequency}
+                      </p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <Label className="text-gray-600 dark:text-gray-400">Exception Communication</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.exceptionCommunication}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
+          )}
+
+          <div className="flex justify-end gap-2 mt-6">
+            <Button
+              variant="outline"
+              onClick={() => setShowDetailsModal(false)}
+            >
+              Close
+            </Button>
+            {selectedSubmission && (
+              <Button
+                onClick={() => downloadPDF(selectedSubmission.id, selectedSubmission.companyLegalName)}
+                className="bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Download PDF
+              </Button>
+            )}
           </div>
-        </div>
-      )}
-    </div>
+        </DialogContent>
+      </Dialog>
+    </AdminLayout>
   );
 }

@@ -11,7 +11,7 @@ export default async function SubmissionsPage({ params }: PageProps) {
   // Check if user is authenticated
   const user = await stackServerApp.getUser();
   if (!user) {
-    redirect("/handler/signin");
+    redirect("/admin/login");
   }
 
   const { id } = await params;
@@ -32,5 +32,14 @@ export default async function SubmissionsPage({ params }: PageProps) {
     notFound();
   }
 
-  return <SubmissionsClient form={form} />;
+  // Convert user to plain object for client component
+  const userData = {
+    id: user.id,
+    displayName: user.displayName,
+    primaryEmail: user.primaryEmail,
+    primaryEmailVerified: user.primaryEmailVerified,
+    profileImageUrl: user.profileImageUrl,
+  };
+
+  return <SubmissionsClient form={form} user={userData} />;
 }

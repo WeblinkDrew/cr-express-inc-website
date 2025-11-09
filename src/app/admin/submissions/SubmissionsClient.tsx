@@ -21,6 +21,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
+import {
   Search,
   Download,
   Eye,
@@ -29,6 +39,12 @@ import {
   Clock,
   Filter,
   FileText,
+  Phone,
+  Mail,
+  MapPin,
+  Building,
+  Truck,
+  CreditCard,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -86,6 +102,8 @@ export default function SubmissionsClient({ user }: SubmissionsClientProps) {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "sent" | "pending">("all");
+  const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   useEffect(() => {
     fetchSubmissions();
@@ -129,7 +147,7 @@ export default function SubmissionsClient({ user }: SubmissionsClientProps) {
   };
 
 
-  const downloadPDF = async (submissionId: string) => {
+  const downloadPDF = async (submissionId: string, companyName: string) => {
     try {
       const response = await fetch(`/api/admin/submissions/${submissionId}/pdf`);
       if (!response.ok) throw new Error("Failed to generate PDF");
@@ -138,7 +156,7 @@ export default function SubmissionsClient({ user }: SubmissionsClientProps) {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `submission-${submissionId}.pdf`;
+      a.download = `${companyName.replace(/[^a-z0-9]/gi, "_")}_submission.pdf`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -149,8 +167,17 @@ export default function SubmissionsClient({ user }: SubmissionsClientProps) {
   };
 
   const viewSubmissionDetails = (submission: Submission) => {
-    // Could open a modal or navigate to a detail page
-    console.log("View submission:", submission);
+    setSelectedSubmission(submission);
+    setShowDetailsModal(true);
+  };
+
+  const formatPhoneNumber = (phone: string) => {
+    const cleaned = phone.replace(/\D/g, "");
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+      return `(${match[1]}) ${match[2]}-${match[3]}`;
+    }
+    return phone;
   };
 
   // Calculate stats
@@ -376,7 +403,7 @@ export default function SubmissionsClient({ user }: SubmissionsClientProps) {
                                   <Eye className="mr-2 h-4 w-4" />
                                   View Details
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => downloadPDF(submission.id)}>
+                                <DropdownMenuItem onClick={() => downloadPDF(submission.id, submission.companyLegalName)}>
                                   <Download className="mr-2 h-4 w-4" />
                                   Download PDF
                                 </DropdownMenuItem>
@@ -393,6 +420,312 @@ export default function SubmissionsClient({ user }: SubmissionsClientProps) {
           </CardContent>
         </Card>
       </div>
+
+      {/* Submission Details Modal */}
+      <Dialog open={showDetailsModal} onOpenChange={setShowDetailsModal}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center justify-between">
+              <span>Submission Details</span>
+              {selectedSubmission && (
+                <Badge
+                  variant={selectedSubmission.sentToZapier ? "default" : "secondary"}
+                  className={
+                    selectedSubmission.sentToZapier
+                      ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400"
+                      : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400"
+                  }
+                >
+                  {selectedSubmission.sentToZapier ? "Sent to Zapier" : "Pending"}
+                </Badge>
+              )}
+            </DialogTitle>
+            <DialogDescription>
+              Submitted on {selectedSubmission && format(new Date(selectedSubmission.submittedAt), "MMMM d, yyyy 'at' h:mm a")}
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedSubmission && (
+            <Tabs defaultValue="company" className="w-full">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="company">Company</TabsTrigger>
+                <TabsTrigger value="contacts">Contacts</TabsTrigger>
+                <TabsTrigger value="financial">Financial</TabsTrigger>
+                <TabsTrigger value="operations">Operations</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="company" className="space-y-6 mt-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
+                    <Building className="mr-2 h-5 w-5" />
+                    Company Information
+                  </h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Legal Name</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.companyLegalName}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Division</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.division}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">MC Number</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.mc || "N/A"}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">DOT Number</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.dot || "N/A"}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">SCAC Code</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.scacCode || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
+                    <MapPin className="mr-2 h-5 w-5" />
+                    Branch Address
+                  </h3>
+                  <div className="space-y-2">
+                    <p className="text-gray-900 dark:text-white">
+                      {selectedSubmission.branchAddressLine1}
+                    </p>
+                    <p className="text-gray-900 dark:text-white">
+                      {selectedSubmission.branchCity}, {selectedSubmission.branchState} {selectedSubmission.branchZipCode}
+                    </p>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="contacts" className="space-y-6 mt-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Primary Contact</h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Name</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.primaryContactFirstName} {selectedSubmission.primaryContactLastName}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400 flex items-center">
+                        <Mail className="mr-1 h-3 w-3" /> Email
+                      </Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.primaryContactEmail}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400 flex items-center">
+                        <Phone className="mr-1 h-3 w-3" /> Phone
+                      </Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {formatPhoneNumber(selectedSubmission.primaryContactPhone)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Secondary Contact</h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Name</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.secondaryContactFirstName} {selectedSubmission.secondaryContactLastName}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Email</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.secondaryContactEmail}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Phone</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {formatPhoneNumber(selectedSubmission.secondaryContactPhone)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Escalation Contact</h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Name</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.escalationContactFirstName} {selectedSubmission.escalationContactLastName}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Email</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.escalationContactEmail}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Phone</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {formatPhoneNumber(selectedSubmission.escalationContactPhone)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Accounts Payable</h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Name</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.accountsPayableFirstName} {selectedSubmission.accountsPayableLastName}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Email</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.accountsPayableEmail}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Phone</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {formatPhoneNumber(selectedSubmission.accountsPayablePhone)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="financial" className="space-y-6 mt-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
+                    <CreditCard className="mr-2 h-5 w-5" />
+                    Billing Information
+                  </h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="md:col-span-2">
+                      <Label className="text-gray-600 dark:text-gray-400">Billing Address</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.billingAddressLine1}
+                      </p>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.billingCity}, {selectedSubmission.billingState} {selectedSubmission.billingZipCode}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Payment Method</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.paymentMethod}
+                      </p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <Label className="text-gray-600 dark:text-gray-400">Invoicing Instructions</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.invoicingInstructions || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="operations" className="space-y-6 mt-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center text-gray-900 dark:text-white">
+                    <Truck className="mr-2 h-5 w-5" />
+                    Operations Details
+                  </h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Shipment Types</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.shipmentTypes}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Equipment Types</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.equipmentTypes}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Shipment Build</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.shipmentBuild}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Additional Requirements</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.additionalRequirements}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Monthly Shipments</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.monthlyShipments}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 dark:text-gray-400">Review Frequency</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.reviewFrequency}
+                      </p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <Label className="text-gray-600 dark:text-gray-400">Exception Communication</Label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {selectedSubmission.exceptionCommunication}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
+          )}
+
+          <div className="flex justify-end gap-2 mt-6">
+            <Button
+              variant="outline"
+              onClick={() => setShowDetailsModal(false)}
+            >
+              Close
+            </Button>
+            {selectedSubmission && (
+              <Button
+                onClick={() => downloadPDF(selectedSubmission.id, selectedSubmission.companyLegalName)}
+                className="bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Download PDF
+              </Button>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </AdminLayout>
   );
 }
