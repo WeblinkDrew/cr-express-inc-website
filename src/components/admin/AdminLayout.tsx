@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -17,11 +17,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Settings,
   LogOut,
   Menu,
   X,
-  Bell,
   Moon,
   Sun,
   ChevronRight,
@@ -38,7 +36,6 @@ interface AdminLayoutProps {
 
 export default function AdminLayout({ children, user }: AdminLayoutProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const currentUser = useUser() || user;
@@ -94,14 +91,14 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
             <Link href="/admin/dashboard" className="flex items-center">
               {darkMode ? (
                 <Image
-                  src={logoDark}
+                  src={logoLight}
                   alt="CR Express"
                   className="h-8 w-auto"
                   priority
                 />
               ) : (
                 <Image
-                  src={logoLight}
+                  src={logoDark}
                   alt="CR Express"
                   className="h-8 w-auto"
                   priority
@@ -200,10 +197,6 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
               )}
             </button>
 
-            <button className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-              <Bell className="h-5 w-5" />
-            </button>
-
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -220,11 +213,6 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => router.push("/admin/profile")}>
-                  <Settings className="mr-2 h-4 w-4" />
-                  Profile Settings
-                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut}>
                   <LogOut className="mr-2 h-4 w-4" />
