@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
-import OnboardingFormClient from "./OnboardingFormClient";
+import FormRenderer from "@/components/forms/FormRenderer";
 
 export const metadata = {
   robots: {
@@ -40,6 +40,13 @@ export default async function FormPage({ params }: PageProps) {
     );
   }
 
-  // Form is valid, show the form
-  return <OnboardingFormClient slug={slug} formId={form.id} />;
+  // Dynamically render the correct form based on formType
+  return (
+    <FormRenderer
+      formType={form.formType}
+      formId={form.id}
+      slug={slug}
+      formName={form.name}
+    />
+  );
 }
