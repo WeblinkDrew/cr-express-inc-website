@@ -66,7 +66,8 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
   }, [darkMode, mounted]);
 
   const handleSignOut = async () => {
-    window.location.href = "/handler/signout";
+    await currentUser?.signOut();
+    window.location.href = "/";
   };
 
   const navigation = [
