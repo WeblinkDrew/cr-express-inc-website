@@ -24,7 +24,6 @@ import {
   Sun,
   ChevronRight,
   LayoutDashboard,
-  FolderOpen,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useUser } from "@stackframe/stack";
@@ -76,12 +75,6 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
       href: "/admin/dashboard",
       icon: LayoutDashboard,
       current: pathname === "/admin/dashboard" || pathname.includes("/admin/forms"),
-    },
-    {
-      name: "Submissions",
-      href: "/admin/submissions",
-      icon: FolderOpen,
-      current: pathname === "/admin/submissions",
     },
   ];
 
@@ -196,7 +189,6 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
             <ChevronRight className="h-4 w-4" />
             <span className="text-gray-900 dark:text-white font-medium">
               {pathname === "/admin/dashboard" && "Dashboard"}
-              {pathname === "/admin/submissions" && "Submissions"}
               {pathname.includes("/admin/forms") && "Forms"}
             </span>
           </div>
