@@ -555,7 +555,7 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
                     <TableHead>
                       <button
                         onClick={() => handleSort("company")}
-                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium cursor-pointer"
                       >
                         Company
                         <SortIcon field="company" />
@@ -564,7 +564,7 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
                     <TableHead>
                       <button
                         onClick={() => handleSort("contact")}
-                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium cursor-pointer"
                       >
                         Primary Contact
                         <SortIcon field="contact" />
@@ -573,7 +573,7 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
                     <TableHead>
                       <button
                         onClick={() => handleSort("location")}
-                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium cursor-pointer"
                       >
                         Location
                         <SortIcon field="location" />
@@ -582,7 +582,7 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
                     <TableHead>
                       <button
                         onClick={() => handleSort("submitted")}
-                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium cursor-pointer"
                       >
                         Submitted
                         <SortIcon field="submitted" />
@@ -591,7 +591,7 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
                     <TableHead>
                       <button
                         onClick={() => handleSort("status")}
-                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium cursor-pointer"
                       >
                         Status
                         <SortIcon field="status" />

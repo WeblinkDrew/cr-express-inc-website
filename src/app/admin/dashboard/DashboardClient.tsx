@@ -278,7 +278,7 @@ export default function DashboardClient({ user, initialForms }: DashboardClientP
                       <div className="flex-1">
                         <button
                           onClick={() => router.push(`/admin/forms/${form.id}/submissions`)}
-                          className="text-left font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                          className="text-left font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
                         >
                           {form.name}
                         </button>
@@ -376,7 +376,7 @@ export default function DashboardClient({ user, initialForms }: DashboardClientP
                     <TableHead>
                       <button
                         onClick={() => handleSort("name")}
-                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium cursor-pointer"
                       >
                         Form Name
                         <SortIcon field="name" />
@@ -385,7 +385,7 @@ export default function DashboardClient({ user, initialForms }: DashboardClientP
                     <TableHead>
                       <button
                         onClick={() => handleSort("status")}
-                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium cursor-pointer"
                       >
                         Status
                         <SortIcon field="status" />
@@ -394,7 +394,7 @@ export default function DashboardClient({ user, initialForms }: DashboardClientP
                     <TableHead>
                       <button
                         onClick={() => handleSort("submissions")}
-                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium cursor-pointer"
                       >
                         Submissions
                         <SortIcon field="submissions" />
@@ -403,7 +403,7 @@ export default function DashboardClient({ user, initialForms }: DashboardClientP
                     <TableHead>
                       <button
                         onClick={() => handleSort("created")}
-                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                        className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium cursor-pointer"
                       >
                         Created
                         <SortIcon field="created" />
@@ -426,7 +426,7 @@ export default function DashboardClient({ user, initialForms }: DashboardClientP
                         <TableCell className="font-medium">
                           <button
                             onClick={() => router.push(`/admin/forms/${form.id}/submissions`)}
-                            className="text-left hover:underline text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                            className="text-left hover:underline text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
                           >
                             {form.name}
                           </button>
