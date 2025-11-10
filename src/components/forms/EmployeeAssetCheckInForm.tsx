@@ -19,13 +19,23 @@ export default function EmployeeAssetCheckInForm({ formId, formName }: EmployeeA
     lastName: "",
     hasHeadset: "",
     hasCompanyCellPhone: "",
+    companyCellPhoneIMEI: "",
     hasWorkDeskPhone: "",
+    workDeskPhoneDeviceID: "",
     hasLaptop: "",
+    laptopMakeAndDeviceName: "",
     hasMonitor: "",
+    monitorMakeAndSerialNumber: "",
+    hasSecondMonitor: "",
     hasCompanyCreditCard: "",
+    companyCreditCardLast4: "",
+    hasSecondCompanyCreditCard: "",
     hasScanner: "",
+    scannerSerialNumber: "",
     hasDesktop: "",
+    desktopMakeAndDeviceName: "",
     hasTablet: "",
+    tabletIMEI: "",
     additionalNotes: "",
   });
 
@@ -133,7 +143,7 @@ export default function EmployeeAssetCheckInForm({ formId, formName }: EmployeeA
                 onChange={(e) => setFormData({ ...formData, hasHeadset: e.target.value })}
                 className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">Please Select</option>
+                <option value="">No</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
@@ -151,11 +161,32 @@ export default function EmployeeAssetCheckInForm({ formId, formName }: EmployeeA
                 onChange={(e) => setFormData({ ...formData, hasCompanyCellPhone: e.target.value })}
                 className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">Please Select</option>
+                <option value="">No</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+
+            {/* CONDITIONAL: What is the IMEI? */}
+            {formData.hasCompanyCellPhone === "Yes" && (
+              <div>
+                <label htmlFor="companyCellPhoneIMEI" className="block text-sm font-medium text-neutral-700 mb-2">
+                  What is the IMEI?<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="companyCellPhoneIMEI"
+                  required
+                  placeholder="Example: 35 277225 089212 0"
+                  value={formData.companyCellPhoneIMEI}
+                  onChange={(e) => setFormData({ ...formData, companyCellPhoneIMEI: e.target.value })}
+                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <p className="text-xs text-neutral-500 mt-1">
+                  You can find the IMEI by going to Settings &gt; General &gt; About on iPhone.
+                </p>
+              </div>
+            )}
 
             {/* Do you have a work desk phone? */}
             <div>
@@ -169,11 +200,31 @@ export default function EmployeeAssetCheckInForm({ formId, formName }: EmployeeA
                 onChange={(e) => setFormData({ ...formData, hasWorkDeskPhone: e.target.value })}
                 className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">Please Select</option>
+                <option value="">No</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+
+            {/* CONDITIONAL: What is the Device ID? */}
+            {formData.hasWorkDeskPhone === "Yes" && (
+              <div>
+                <label htmlFor="workDeskPhoneDeviceID" className="block text-sm font-medium text-neutral-700 mb-2">
+                  What is the Device ID?<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="workDeskPhoneDeviceID"
+                  required
+                  value={formData.workDeskPhoneDeviceID}
+                  onChange={(e) => setFormData({ ...formData, workDeskPhoneDeviceID: e.target.value })}
+                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <p className="text-xs text-neutral-500 mt-1">
+                  Located on the back of the desk phone. Should start with "MAC".
+                </p>
+              </div>
+            )}
 
             {/* Do you have a laptop? */}
             <div>
@@ -187,11 +238,32 @@ export default function EmployeeAssetCheckInForm({ formId, formName }: EmployeeA
                 onChange={(e) => setFormData({ ...formData, hasLaptop: e.target.value })}
                 className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">Please Select</option>
+                <option value="">No</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+
+            {/* CONDITIONAL: What is the make and device name? */}
+            {formData.hasLaptop === "Yes" && (
+              <div>
+                <label htmlFor="laptopMakeAndDeviceName" className="block text-sm font-medium text-neutral-700 mb-2">
+                  What is the make and device name?<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="laptopMakeAndDeviceName"
+                  required
+                  placeholder="Example: Lenovo Ideapad 5, CRLG-J1GC8"
+                  value={formData.laptopMakeAndDeviceName}
+                  onChange={(e) => setFormData({ ...formData, laptopMakeAndDeviceName: e.target.value })}
+                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <p className="text-xs text-neutral-500 mt-1">
+                  This information can be found in the settings under the "System" menu item, and at the top of the page.
+                </p>
+              </div>
+            )}
 
             {/* Do you have a monitor? */}
             <div>
@@ -205,11 +277,52 @@ export default function EmployeeAssetCheckInForm({ formId, formName }: EmployeeA
                 onChange={(e) => setFormData({ ...formData, hasMonitor: e.target.value })}
                 className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">Please Select</option>
+                <option value="">No</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+
+            {/* CONDITIONAL: What is the make and serial number of your monitor? */}
+            {formData.hasMonitor === "Yes" && (
+              <>
+                <div>
+                  <label htmlFor="monitorMakeAndSerialNumber" className="block text-sm font-medium text-neutral-700 mb-2">
+                    What is the make and serial number of your monitor?<span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="monitorMakeAndSerialNumber"
+                    required
+                    placeholder="Example: Dell, P2217"
+                    value={formData.monitorMakeAndSerialNumber}
+                    onChange={(e) => setFormData({ ...formData, monitorMakeAndSerialNumber: e.target.value })}
+                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <p className="text-xs text-neutral-500 mt-1">
+                    You can find the make and serial number on the settings under the Bluetooth & Devices menu item, and by selecting Devices.
+                  </p>
+                </div>
+
+                {/* CONDITIONAL: Do you have a second monitor? */}
+                <div>
+                  <label htmlFor="hasSecondMonitor" className="block text-sm font-medium text-neutral-700 mb-2">
+                    Do you have a second monitor?<span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="hasSecondMonitor"
+                    required
+                    value={formData.hasSecondMonitor}
+                    onChange={(e) => setFormData({ ...formData, hasSecondMonitor: e.target.value })}
+                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+              </>
+            )}
 
             {/* Do you have a company credit card? */}
             <div>
@@ -223,11 +336,49 @@ export default function EmployeeAssetCheckInForm({ formId, formName }: EmployeeA
                 onChange={(e) => setFormData({ ...formData, hasCompanyCreditCard: e.target.value })}
                 className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">Please Select</option>
+                <option value="">No</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+
+            {/* CONDITIONAL: Please enter the last 4 digits of the card */}
+            {formData.hasCompanyCreditCard === "Yes" && (
+              <>
+                <div>
+                  <label htmlFor="companyCreditCardLast4" className="block text-sm font-medium text-neutral-700 mb-2">
+                    Please enter the last 4 digits of the card<span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="companyCreditCardLast4"
+                    required
+                    maxLength={4}
+                    value={formData.companyCreditCardLast4}
+                    onChange={(e) => setFormData({ ...formData, companyCreditCardLast4: e.target.value })}
+                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                {/* CONDITIONAL: Do you have a second company credit card? */}
+                <div>
+                  <label htmlFor="hasSecondCompanyCreditCard" className="block text-sm font-medium text-neutral-700 mb-2">
+                    Do you have a second company credit card?<span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="hasSecondCompanyCreditCard"
+                    required
+                    value={formData.hasSecondCompanyCreditCard}
+                    onChange={(e) => setFormData({ ...formData, hasSecondCompanyCreditCard: e.target.value })}
+                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+              </>
+            )}
 
             {/* Do you have a scanner? */}
             <div>
@@ -241,11 +392,31 @@ export default function EmployeeAssetCheckInForm({ formId, formName }: EmployeeA
                 onChange={(e) => setFormData({ ...formData, hasScanner: e.target.value })}
                 className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">Please Select</option>
+                <option value="">No</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+
+            {/* CONDITIONAL: Please enter the scanner's serial number */}
+            {formData.hasScanner === "Yes" && (
+              <div>
+                <label htmlFor="scannerSerialNumber" className="block text-sm font-medium text-neutral-700 mb-2">
+                  Please enter the scanner's serial number.<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="scannerSerialNumber"
+                  required
+                  value={formData.scannerSerialNumber}
+                  onChange={(e) => setFormData({ ...formData, scannerSerialNumber: e.target.value })}
+                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <p className="text-xs text-neutral-500 mt-1">
+                  The serial number is usually located on the back, bottom, or under the battery cover of the scanner. It may be labeled as "S/N".
+                </p>
+              </div>
+            )}
 
             {/* Do you have a desktop? */}
             <div>
@@ -259,11 +430,32 @@ export default function EmployeeAssetCheckInForm({ formId, formName }: EmployeeA
                 onChange={(e) => setFormData({ ...formData, hasDesktop: e.target.value })}
                 className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">Please Select</option>
+                <option value="">No</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+
+            {/* CONDITIONAL: What is the make and device name? (Desktop) */}
+            {formData.hasDesktop === "Yes" && (
+              <div>
+                <label htmlFor="desktopMakeAndDeviceName" className="block text-sm font-medium text-neutral-700 mb-2">
+                  What is the make and device name?<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="desktopMakeAndDeviceName"
+                  required
+                  placeholder="Example: Lenovo Ideapad 5, CRLG-J1GC8"
+                  value={formData.desktopMakeAndDeviceName}
+                  onChange={(e) => setFormData({ ...formData, desktopMakeAndDeviceName: e.target.value })}
+                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <p className="text-xs text-neutral-500 mt-1">
+                  This information can be found in the settings under the "System" menu item, and at the top of the page.
+                </p>
+              </div>
+            )}
 
             {/* Do you have a tablet? */}
             <div>
@@ -277,11 +469,32 @@ export default function EmployeeAssetCheckInForm({ formId, formName }: EmployeeA
                 onChange={(e) => setFormData({ ...formData, hasTablet: e.target.value })}
                 className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">Please Select</option>
+                <option value="">No</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+
+            {/* CONDITIONAL: What is the tablet's IMEI? */}
+            {formData.hasTablet === "Yes" && (
+              <div>
+                <label htmlFor="tabletIMEI" className="block text-sm font-medium text-neutral-700 mb-2">
+                  What is the tablet's IMEI?<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="tabletIMEI"
+                  required
+                  placeholder="Example: DMPXR00QHLF9"
+                  value={formData.tabletIMEI}
+                  onChange={(e) => setFormData({ ...formData, tabletIMEI: e.target.value })}
+                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <p className="text-xs text-neutral-500 mt-1">
+                  You can find the serial number by going to Settings &gt; General &gt; About or printed on the back of the iPad near the bottom.
+                </p>
+              </div>
+            )}
 
             {/* Additional Notes */}
             <div>
