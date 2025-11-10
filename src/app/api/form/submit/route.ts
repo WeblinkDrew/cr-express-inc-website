@@ -4,6 +4,7 @@ import { renderToBuffer } from "@react-pdf/renderer";
 import ClientOnboardingPDF from "@/components/pdf/ClientOnboardingPDF";
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
+import { generateSignedUrl } from "@/lib/signedUrls";
 
 /**
  * Form Submission API Route
@@ -173,10 +174,10 @@ export async function POST(request: NextRequest) {
     const onboardingFilename = `Onboarding_${sanitizedCompanyName}_${timestamp}.pdf`;
     const w9Filename = w9Upload ? `W9_${sanitizedCompanyName}_${timestamp}.pdf` : null;
 
-    // 7. Generate download URLs
+    // 7. Generate signed download URLs (expires in 7 days)
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || request.headers.get("origin") || "http://localhost:3000";
-    const onboardingUrl = `${baseUrl}/api/download/${submission.id}/onboarding`;
-    const w9Url = w9Upload ? `${baseUrl}/api/download/${submission.id}/w9` : null;
+    const onboardingUrl = `${baseUrl}${generateSignedUrl(submission.id, "onboarding", 7 * 24 * 60 * 60)}`;
+    const w9Url = w9Upload ? `${baseUrl}${generateSignedUrl(submission.id, "w9", 7 * 24 * 60 * 60)}` : null;
 
     // 8. Send to Zapier webhook
     const zapierPayload = {

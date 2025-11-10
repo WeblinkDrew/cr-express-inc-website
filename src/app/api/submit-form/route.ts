@@ -4,6 +4,7 @@ import { renderToBuffer } from "@react-pdf/renderer";
 import ClientOnboardingPDF from "@/components/pdf/ClientOnboardingPDF";
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
+import { generateSignedUrl } from "@/lib/signedUrls";
 
 /**
  * Unified Form Submission API
@@ -141,7 +142,7 @@ export async function POST(request: NextRequest) {
     // 7. Send to Zapier ONLY for CARRIER_ONBOARDING (original form)
     if (form.formType === "CARRIER_ONBOARDING" && process.env.ONBOARDING_ZAPIER_WEBHOOK_URL) {
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || request.headers.get("origin") || "http://localhost:3000";
-      const onboardingUrl = `${baseUrl}/api/download/${submission.id}/onboarding`;
+      const onboardingUrl = `${baseUrl}${generateSignedUrl(submission.id, "onboarding", 7 * 24 * 60 * 60)}`;
 
       const zapierPayload = {
         submission_id: submission.id,

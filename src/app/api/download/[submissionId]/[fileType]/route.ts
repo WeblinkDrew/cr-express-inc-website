@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readFile } from "fs/promises";
 import { join } from "path";
+import { verifySignedUrl } from "@/lib/signedUrls";
 
 interface RouteParams {
   params: Promise<{
@@ -16,6 +17,25 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     // Validate fileType
     if (fileType !== "onboarding" && fileType !== "w9") {
       return NextResponse.json({ error: "Invalid file type" }, { status: 400 });
+    }
+
+    // Verify signed URL
+    const searchParams = request.nextUrl.searchParams;
+    const expires = searchParams.get('expires');
+    const signature = searchParams.get('signature');
+
+    if (!expires || !signature) {
+      return NextResponse.json(
+        { error: "Missing signature or expiration" },
+        { status: 401 }
+      );
+    }
+
+    if (!verifySignedUrl(submissionId, fileType, expires, signature)) {
+      return NextResponse.json(
+        { error: "Invalid or expired download link" },
+        { status: 403 }
+      );
     }
 
     // Construct file path
