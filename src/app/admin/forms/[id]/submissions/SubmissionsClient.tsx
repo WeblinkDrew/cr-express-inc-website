@@ -52,6 +52,7 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  Trash2,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -72,6 +73,53 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
   const [copiedFormLink, setCopiedFormLink] = useState(false);
   const [sortField, setSortField] = useState<SortField>("submitted");
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  // Helper function to get data from either legacy fields or formData JSON
+  const getSubmissionData = (submission: any, field: string) => {
+    // Try legacy fields first (for Client Onboarding)
+    if (submission[field] !== null && submission[field] !== undefined) {
+      return submission[field];
+    }
+    // Fall back to formData JSON (for all other forms)
+    if (submission.formData && typeof submission.formData === 'object') {
+      return submission.formData[field];
+    }
+    return null;
+  };
+
+  // Get display name from submission
+  const getSubmissionName = (submission: any) => {
+    const companyName = getSubmissionData(submission, 'companyName') ||
+                       getSubmissionData(submission, 'companyLegalName') ||
+                       getSubmissionData(submission, 'customer');
+
+    const firstName = getSubmissionData(submission, 'firstName') ||
+                     getSubmissionData(submission, 'driverFirstName') ||
+                     getSubmissionData(submission, 'operatorFirstName') ||
+                     getSubmissionData(submission, 'inspectorFirstName') ||
+                     getSubmissionData(submission, 'primaryContactFirstName');
+
+    const lastName = getSubmissionData(submission, 'lastName') ||
+                    getSubmissionData(submission, 'driverLastName') ||
+                    getSubmissionData(submission, 'operatorLastName') ||
+                    getSubmissionData(submission, 'inspectorLastName') ||
+                    getSubmissionData(submission, 'primaryContactLastName');
+
+    if (companyName) return companyName;
+    if (firstName && lastName) return `${firstName} ${lastName}`;
+    if (firstName) return firstName;
+
+    return submission.submitterName || 'Unknown';
+  };
+
+  // Get email from submission
+  const getSubmissionEmail = (submission: any) => {
+    return submission.submitterEmail ||
+           getSubmissionData(submission, 'email') ||
+           getSubmissionData(submission, 'primaryContactEmail') ||
+           '';
+  };
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -95,11 +143,13 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
 
   // Filter and sort submissions
   const filteredSubmissions = form.Submission.filter((submission: any) => {
+    const name = getSubmissionName(submission);
+    const email = getSubmissionEmail(submission);
+
     const matchesSearch =
-      submission.companyLegalName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      submission.primaryContactEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      submission.primaryContactFirstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      submission.primaryContactLastName?.toLowerCase().includes(searchTerm.toLowerCase());
+      name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      submission.id?.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesStatus =
       filterStatus === "all" ||
@@ -112,15 +162,13 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
 
     switch (sortField) {
       case "company":
-        return order * (a.companyLegalName || '').localeCompare(b.companyLegalName || '');
+        return order * getSubmissionName(a).localeCompare(getSubmissionName(b));
       case "contact":
-        return order * `${a.primaryContactFirstName || ''} ${a.primaryContactLastName || ''}`.localeCompare(
-          `${b.primaryContactFirstName || ''} ${b.primaryContactLastName || ''}`
-        );
+        return order * getSubmissionEmail(a).localeCompare(getSubmissionEmail(b));
       case "location":
-        return order * `${a.branchCity || ''}, ${a.branchState || ''}`.localeCompare(
-          `${b.branchCity || ''}, ${b.branchState || ''}`
-        );
+        const locationA = `${getSubmissionData(a, 'branchCity') || ''}, ${getSubmissionData(a, 'branchState') || ''}`;
+        const locationB = `${getSubmissionData(b, 'branchCity') || ''}, ${getSubmissionData(b, 'branchState') || ''}`;
+        return order * locationA.localeCompare(locationB);
       case "submitted":
         return order * (new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime());
       case "status":
@@ -173,6 +221,32 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
       return `(${match[1]}) ${match[2]}-${match[3]}`;
     }
     return phone;
+  };
+
+  const handleDelete = async (submissionId: string) => {
+    if (!confirm("Are you sure you want to delete this submission? This action cannot be undone.")) {
+      return;
+    }
+
+    setDeletingId(submissionId);
+
+    try {
+      const response = await fetch(`/api/admin/submissions/${submissionId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete submission");
+      }
+
+      // Refresh the page to show updated list
+      router.refresh();
+    } catch (error) {
+      console.error("Error deleting submission:", error);
+      alert("Failed to delete submission. Please try again.");
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   return (
@@ -413,26 +487,39 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
                         <TableCell>
                           <div>
                             <div className="font-medium text-gray-900 dark:text-white">
-                              {submission.companyLegalName}
+                              {getSubmissionData(submission, 'companyLegalName') ||
+                               getSubmissionData(submission, 'companyName') ||
+                               'N/A'}
                             </div>
                             <div className="text-sm text-gray-500 dark:text-gray-400">
-                              {submission.division}
+                              {getSubmissionData(submission, 'division') ||
+                               getSubmissionData(submission, 'department') ||
+                               '-'}
                             </div>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div>
                             <div className="text-gray-900 dark:text-white">
-                              {submission.primaryContactFirstName} {submission.primaryContactLastName}
+                              {getSubmissionName(submission)}
                             </div>
                             <div className="text-sm text-gray-500 dark:text-gray-400">
-                              {submission.primaryContactEmail}
+                              {getSubmissionEmail(submission)}
                             </div>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className="text-gray-900 dark:text-white">
-                            {submission.branchCity}, {submission.branchState}
+                            {(() => {
+                              const city = getSubmissionData(submission, 'branchCity') ||
+                                          getSubmissionData(submission, 'city');
+                              const state = getSubmissionData(submission, 'branchState') ||
+                                           getSubmissionData(submission, 'state');
+                              if (city && state) return `${city}, ${state}`;
+                              if (city) return city;
+                              if (state) return state;
+                              return 'N/A';
+                            })()}
                           </div>
                         </TableCell>
                         <TableCell className="text-gray-500 dark:text-gray-400">
@@ -477,10 +564,23 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
                                 View Details
                               </DropdownMenuItem>
                               <DropdownMenuItem
-                                onClick={() => downloadPDF(submission.id, submission.companyLegalName)}
+                                onClick={() => downloadPDF(
+                                  submission.id,
+                                  getSubmissionData(submission, 'companyLegalName') ||
+                                  getSubmissionData(submission, 'companyName') ||
+                                  'submission'
+                                )}
                               >
                                 <Download className="mr-2 h-4 w-4" />
                                 Download PDF
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleDelete(submission.id)}
+                                disabled={deletingId === submission.id}
+                                className="text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400"
+                              >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                {deletingId === submission.id ? "Deleting..." : "Delete"}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -520,13 +620,16 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
           </DialogHeader>
 
           {selectedSubmission && (
-            <Tabs defaultValue="company" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="company">Company</TabsTrigger>
-                <TabsTrigger value="contacts">Contacts</TabsTrigger>
-                <TabsTrigger value="financial">Financial</TabsTrigger>
-                <TabsTrigger value="operations">Operations</TabsTrigger>
-              </TabsList>
+            <>
+              {/* Client Onboarding Form: Show detailed tabs */}
+              {form.formType === 'CARRIER_ONBOARDING' && selectedSubmission.companyLegalName ? (
+                <Tabs defaultValue="company" className="w-full">
+                  <TabsList className="grid w-full grid-cols-4">
+                    <TabsTrigger value="company">Company</TabsTrigger>
+                    <TabsTrigger value="contacts">Contacts</TabsTrigger>
+                    <TabsTrigger value="financial">Financial</TabsTrigger>
+                    <TabsTrigger value="operations">Operations</TabsTrigger>
+                  </TabsList>
 
               <TabsContent value="company" className="space-y-6 mt-6">
                 <div>
@@ -778,7 +881,54 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
                   </div>
                 </div>
               </TabsContent>
-            </Tabs>
+                </Tabs>
+              ) : (
+                /* All Other Forms: Show generic formData view */
+                <div className="space-y-4 mt-6">
+                  {selectedSubmission.formData && typeof selectedSubmission.formData === 'object' ? (
+                    <div className="space-y-4">
+                      {Object.entries(selectedSubmission.formData).map(([key, value]) => {
+                        // Skip internal fields and null values
+                        if (key === 'formId' || key === 'slug' || value === null || value === undefined) {
+                          return null;
+                        }
+
+                        // Format the key into a readable label
+                        const label = key
+                          .replace(/([A-Z])/g, ' $1')
+                          .replace(/^./, (str) => str.toUpperCase())
+                          .trim();
+
+                        // Format the value
+                        let displayValue: string;
+                        if (Array.isArray(value)) {
+                          displayValue = value.join(', ');
+                        } else if (typeof value === 'object') {
+                          displayValue = JSON.stringify(value, null, 2);
+                        } else if (typeof value === 'boolean') {
+                          displayValue = value ? 'Yes' : 'No';
+                        } else {
+                          displayValue = String(value);
+                        }
+
+                        return (
+                          <div key={key} className="border-b border-gray-200 dark:border-gray-800 pb-3">
+                            <Label className="text-gray-600 dark:text-gray-400 text-sm">{label}</Label>
+                            <p className="text-gray-900 dark:text-white font-medium mt-1 whitespace-pre-wrap break-words">
+                              {displayValue}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                      No form data available
+                    </div>
+                  )}
+                </div>
+              )}
+            </>
           )}
 
           <div className="flex justify-end gap-2 mt-6">
@@ -790,7 +940,12 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
             </Button>
             {selectedSubmission && (
               <Button
-                onClick={() => downloadPDF(selectedSubmission.id, selectedSubmission.companyLegalName)}
+                onClick={() => downloadPDF(
+                  selectedSubmission.id,
+                  getSubmissionData(selectedSubmission, 'companyLegalName') ||
+                  getSubmissionData(selectedSubmission, 'companyName') ||
+                  'submission'
+                )}
                 className="bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200"
               >
                 <Download className="mr-2 h-4 w-4" />
