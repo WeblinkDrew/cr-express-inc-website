@@ -19,4 +19,7 @@ const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
 
 export default prisma
 
-if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma
+// Store in globalThis in all environments to prevent connection exhaustion
+if (!globalThis.prismaGlobal) {
+  globalThis.prismaGlobal = prisma
+}
