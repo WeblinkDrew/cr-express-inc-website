@@ -38,16 +38,33 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const currentUser = useUser() || user;
 
+  // Initialize theme from localStorage on mount
   useEffect(() => {
-    // Apply dark mode class to html element
+    setMounted(true);
+    const savedTheme = localStorage.getItem('admin-theme');
+    if (savedTheme === 'light') {
+      setDarkMode(false);
+    } else {
+      // Default to dark mode if no preference saved
+      setDarkMode(true);
+    }
+  }, []);
+
+  // Apply dark mode class to html element and save to localStorage
+  useEffect(() => {
+    if (!mounted) return; // Don't run on initial render
+
     if (darkMode) {
       document.documentElement.classList.add("dark");
+      localStorage.setItem('admin-theme', 'dark');
     } else {
       document.documentElement.classList.remove("dark");
+      localStorage.setItem('admin-theme', 'light');
     }
-  }, [darkMode]);
+  }, [darkMode, mounted]);
 
   const handleSignOut = async () => {
     window.location.href = "/handler/signout";
