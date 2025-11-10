@@ -26,7 +26,6 @@ import {
   LayoutDashboard,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useUser } from "@stackframe/stack";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -38,7 +37,7 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const [mounted, setMounted] = useState(false);
-  const currentUser = useUser() || user;
+  const currentUser = user;
 
   // Initialize theme from localStorage on mount
   useEffect(() => {
@@ -66,8 +65,8 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
   }, [darkMode, mounted]);
 
   const handleSignOut = async () => {
-    await currentUser?.signOut();
-    window.location.href = "/";
+    // Redirect to Stack Auth signout endpoint
+    window.location.href = "/api/auth/signout";
   };
 
   const navigation = [
