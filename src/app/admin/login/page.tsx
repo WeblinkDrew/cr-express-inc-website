@@ -31,11 +31,30 @@ function LoginContent() {
     setError("");
 
     try {
-      await app.signInWithCredential({ email, password });
+      const result = await app.signInWithCredential({ email, password });
+      if (!result) {
+        setError("Invalid email or password. Please try again.");
+        setLoading(false);
+      }
       // Router push will happen automatically via the useEffect above
     } catch (err: any) {
-      setError(err.message || "Failed to sign in. Please check your credentials.");
+      console.error("Login error:", err);
+      // Handle specific error messages from Stack Auth
+      if (err.message?.includes("password") || err.message?.includes("credentials") || err.message?.includes("Invalid")) {
+        setError("Invalid email or password. Please try again.");
+      } else if (err.message?.includes("not found") || err.message?.includes("No user")) {
+        setError("No account found with this email address.");
+      } else if (err.message?.includes("network") || err.message?.includes("fetch")) {
+        setError("Network error. Please check your connection and try again.");
+      } else {
+        setError(err.message || "Failed to sign in. Please try again.");
+      }
       setLoading(false);
+    } finally {
+      // Ensure loading is stopped after 5 seconds as a failsafe
+      setTimeout(() => {
+        setLoading(false);
+      }, 5000);
     }
   };
 

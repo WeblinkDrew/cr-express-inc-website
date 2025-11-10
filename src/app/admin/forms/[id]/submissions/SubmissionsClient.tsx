@@ -420,7 +420,135 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
             </div>
           </CardHeader>
           <CardContent>
-            <div className="rounded-lg border border-gray-200 dark:border-gray-800 overflow-x-auto">
+            {/* Mobile Card View */}
+            <div className="block md:hidden space-y-4">
+              {filteredSubmissions.length === 0 ? (
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  {searchTerm || filterStatus !== "all"
+                    ? "No submissions found matching your filters."
+                    : "No submissions yet for this form."}
+                </div>
+              ) : (
+                filteredSubmissions.map((submission: any) => (
+                  <div
+                    key={submission.id}
+                    className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 space-y-3"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900 dark:text-white">
+                          {getSubmissionData(submission, 'companyLegalName') ||
+                           getSubmissionData(submission, 'companyName') ||
+                           'N/A'}
+                        </div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                          {getSubmissionData(submission, 'division') ||
+                           getSubmissionData(submission, 'department') ||
+                           '-'}
+                        </div>
+                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => viewSubmissionDetails(submission)}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => downloadPDF(
+                              submission.id,
+                              getSubmissionData(submission, 'companyLegalName') ||
+                              getSubmissionData(submission, 'companyName') ||
+                              'submission'
+                            )}
+                          >
+                            <Download className="mr-2 h-4 w-4" />
+                            Download PDF
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleDelete(submission.id)}
+                            disabled={deletingId === submission.id}
+                            className="text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400"
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            {deletingId === submission.id ? "Deleting..." : "Delete"}
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+
+                    <div className="space-y-2 text-sm">
+                      <div className="flex flex-wrap gap-2">
+                        <span className="text-gray-500 dark:text-gray-400">Contact:</span>
+                        <span className="text-gray-900 dark:text-white">
+                          {getSubmissionName(submission)}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="text-gray-500 dark:text-gray-400">Email:</span>
+                        <span className="text-gray-700 dark:text-gray-300">
+                          {getSubmissionEmail(submission)}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="text-gray-500 dark:text-gray-400">Location:</span>
+                        <span className="text-gray-700 dark:text-gray-300">
+                          {(() => {
+                            const city = getSubmissionData(submission, 'branchCity') ||
+                                        getSubmissionData(submission, 'city');
+                            const state = getSubmissionData(submission, 'branchState') ||
+                                         getSubmissionData(submission, 'state');
+                            if (city && state) return `${city}, ${state}`;
+                            if (city) return city;
+                            if (state) return state;
+                            return 'N/A';
+                          })()}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-4 pt-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-500 dark:text-gray-400">Submitted:</span>
+                          <span className="text-gray-700 dark:text-gray-300">
+                            {format(new Date(submission.submittedAt), "MMM d, yyyy")}
+                          </span>
+                        </div>
+                        <Badge
+                          variant={submission.sentToZapier ? "default" : "secondary"}
+                          className={
+                            submission.sentToZapier
+                              ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400"
+                              : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400"
+                          }
+                        >
+                          {submission.sentToZapier ? (
+                            <>
+                              <CheckCircle className="mr-1 h-3 w-3" />
+                              Sent
+                            </>
+                          ) : (
+                            <>
+                              <Clock className="mr-1 h-3 w-3" />
+                              Pending
+                            </>
+                          )}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Desktop Table View */}
+            <div className="hidden md:block rounded-lg border border-gray-200 dark:border-gray-800 overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow className="border-gray-200 dark:border-gray-800">

@@ -65,8 +65,20 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
   }, [darkMode, mounted]);
 
   const handleSignOut = async () => {
-    // Redirect to Stack Auth signout endpoint
-    window.location.href = "/api/auth/signout";
+    try {
+      // Clear auth cookies via API
+      await fetch("/api/auth/signout", {
+        method: "POST",
+        credentials: "same-origin"
+      });
+
+      // Redirect to home page after clearing cookies
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Sign out error:", error);
+      // Even if there's an error, still redirect
+      window.location.href = "/";
+    }
   };
 
   const navigation = [

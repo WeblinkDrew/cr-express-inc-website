@@ -262,7 +262,114 @@ export default function DashboardClient({ user, initialForms }: DashboardClientP
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="rounded-lg border border-gray-200 dark:border-gray-800">
+            {/* Mobile Card View */}
+            <div className="block md:hidden space-y-4">
+              {sortedForms.length === 0 ? (
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  No forms created yet. Click "Create Form" to get started.
+                </div>
+              ) : (
+                sortedForms.map((form) => (
+                  <div
+                    key={form.id}
+                    className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 space-y-3"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <button
+                          onClick={() => router.push(`/admin/forms/${form.id}/submissions`)}
+                          className="text-left font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                        >
+                          {form.name}
+                        </button>
+                        {form.description && (
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            {form.description}
+                          </p>
+                        )}
+                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => router.push(`/admin/forms/${form.id}/submissions`)}
+                          >
+                            <Eye className="mr-2 h-4 w-4" />
+                            View Submissions
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => copyFormLink(form.slug)}
+                          >
+                            <Copy className="mr-2 h-4 w-4" />
+                            Copy Form Link
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <a
+                              href={`/form/${form.slug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center"
+                            >
+                              <ExternalLink className="mr-2 h-4 w-4" />
+                              Open Form
+                            </a>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setSelectedForm(form);
+                              setShowDeleteDialog(true);
+                            }}
+                            className="text-red-600 dark:text-red-400"
+                          >
+                            <Trash className="mr-2 h-4 w-4" />
+                            Delete Form
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+
+                    <div className="flex flex-wrap gap-4 text-sm">
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-500 dark:text-gray-400">Status:</span>
+                        <Badge
+                          variant={form.isActive ? "default" : "secondary"}
+                          className={
+                            form.isActive
+                              ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400"
+                              : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400"
+                          }
+                        >
+                          {form.isActive ? "Active" : "Inactive"}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-500 dark:text-gray-400">Submissions:</span>
+                        <span className="font-medium text-gray-900 dark:text-white">
+                          {form.submissionCount}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-500 dark:text-gray-400">Created:</span>
+                        <span className="text-gray-700 dark:text-gray-300">
+                          {format(new Date(form.createdAt), "MMM d, yyyy")}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Desktop Table View */}
+            <div className="hidden md:block rounded-lg border border-gray-200 dark:border-gray-800">
               <Table>
                 <TableHeader>
                   <TableRow className="border-gray-200 dark:border-gray-800">
