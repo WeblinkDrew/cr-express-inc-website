@@ -80,8 +80,13 @@ model Submission {
   browser                      String?
   location                     String?
 
-  // ✅ NEW: File uploads (stored as JSON array)
-  files                        Json?     // [{fileName, fileUrl, fileType}]
+  // ✅ NEW: File uploads (stored as JSON array with URLs, not base64)
+  files                        Json?     // [{fileName, fileUrl, fileType, size}]
+
+  // ✅ NEW: Storage tracking for performance monitoring
+  formDataSize                 Int?      // Size of formData in bytes
+  filesSize                    Int?      // Total size of all files in bytes
+  totalSize                    Int?      // Combined size for quotas/billing
 
   // ⚠️ LEGACY: Keep existing carrier onboarding fields for backward compatibility
   // These will be gradually deprecated as we migrate to formData JSON
@@ -136,6 +141,7 @@ model Submission {
   Form                         Form?     @relation(fields: [formId], references: [id])
   FormLink                     FormLink? @relation(fields: [formLinkId], references: [id])
 
+  // Original indexes
   @@index([companyLegalName])
   @@index([formId])
   @@index([formLinkId])
@@ -144,4 +150,12 @@ model Submission {
   @@index([submitterEmail])
   @@index([submitterName])
   @@index([companyName])
+
+  // ✅ NEW: Composite indexes for performance at scale
+  @@index([formId, submittedAt(sort: Desc)])  // List submissions by date
+  @@index([submitterEmail, submittedAt])      // Search by email with date
+  @@index([companyName, submittedAt])         // Search by company with date
+  @@index([sentToZapier, zapierSentAt])       // Zapier status queries
+  @@index([ipAddress])                        // Rate limiting & fraud detection
+  @@index([totalSize])                        // Storage analytics
 }

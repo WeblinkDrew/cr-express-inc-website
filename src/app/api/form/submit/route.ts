@@ -8,6 +8,7 @@ import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
 import { generateSignedUrl } from "@/lib/signedUrls";
 import { Resend } from "resend";
+import { uploadFile, validateFile } from "@/lib/fileStorage";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -40,11 +41,56 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Form is no longer active" }, { status: 400 });
     }
 
-    // 2. Get client metadata
+    // 2. Validate and upload W9 file to cloud storage
+    let w9FileData = null;
+    let w9Buffer = null;
+    if (w9Upload) {
+      // Validate file
+      const validation = validateFile(w9Upload, 10 * 1024 * 1024); // 10MB max
+      if (!validation.valid) {
+        return NextResponse.json(
+          { error: validation.error },
+          { status: 400 }
+        );
+      }
+
+      // Convert base64 to buffer for upload
+      w9Buffer = Buffer.from(w9Upload, 'base64');
+
+      // Upload to Vercel Blob
+      try {
+        const uploadedFile = await uploadFile(
+          w9Buffer,
+          `W9_${formData.companyLegalName.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`,
+          'submissions/w9'
+        );
+
+        w9FileData = {
+          url: uploadedFile.url,
+          pathname: uploadedFile.pathname,
+          filename: `W9_${formData.companyLegalName.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`,
+          size: uploadedFile.size,
+          contentType: uploadedFile.contentType,
+          uploadedAt: uploadedFile.uploadedAt.toISOString(),
+        };
+      } catch (uploadError: any) {
+        console.error("❌ Error uploading W9 to Vercel Blob:", uploadError);
+        return NextResponse.json(
+          { error: "Failed to upload W9 file" },
+          { status: 500 }
+        );
+      }
+    }
+
+    // 3. Get client metadata
     const ipAddress = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || null;
     const userAgent = request.headers.get("user-agent") || null;
 
-    // 3. Create submission in database with dual-write (legacy fields + formData)
+    // 4. Calculate sizes for storage tracking
+    const formDataSize = JSON.stringify(formData).length;
+    const filesSize = w9FileData ? w9FileData.size : 0;
+
+    // 5. Create submission in database with dual-write (legacy fields + formData)
     const submission = await prisma.submission.create({
       data: {
         formId: form.id,
@@ -69,14 +115,13 @@ export async function POST(request: NextRequest) {
           additionalRequirements: formData.additionalRequirements,
         },
 
-        // NEW: Store files separately for better management
-        files: w9Upload ? {
-          w9: {
-            data: w9Upload,
-            filename: `W9_${formData.companyLegalName.replace(/[^a-zA-Z0-9]/g, "_")}_${Date.now()}.pdf`,
-            mimeType: "application/pdf"
-          }
-        } : undefined,
+        // ✅ NEW: Store file metadata with cloud URLs (NOT base64)
+        files: w9FileData ? [w9FileData] : [],
+
+        // ✅ NEW: Storage tracking
+        formDataSize,
+        filesSize,
+        totalSize: formDataSize + filesSize,
 
         // LEGACY: Continue writing to old fields for backward compatibility
         companyLegalName: formData.companyLegalName,
@@ -256,10 +301,8 @@ export async function POST(request: NextRequest) {
         })
       );
 
-      // Prepare W9 attachment (convert base64 to buffer)
-      const w9Buffer = w9Upload ? Buffer.from(w9Upload, "base64") : null;
-
-      // Send email to recipients with attachments
+      // Send email to recipients with attachments (w9Buffer already prepared above)
+      // Note: w9Buffer is created during file upload validation
       const emailResult = await resend.emails.send({
         from: "CR Express <contact@forms.crexpressinc.com>",
         to: ["cr@crexpressinc.com", "CLIENTONBOARDING@CREXPRESSINC.COM", "Aamro@crexpressinc.com"],
