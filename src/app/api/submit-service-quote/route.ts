@@ -1,139 +1,115 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
-import { render } from '@react-email/render'
-import { ServiceQuoteEmail } from '@/lib/email-templates'
+import { NextRequest, NextResponse } from 'next/server';
+import { Resend } from 'resend';
+import { render } from '@react-email/render';
+import { ServiceQuoteEmail } from '@/lib/email-templates';
+import { serviceQuoteSchema } from '@/lib/validation/schemas';
+import { sanitizeFormData } from '@/lib/sanitize';
+import { rateLimitFormSubmission } from '@/lib/rateLimit';
+import { formatPhoneForClickUp, verifyRecaptcha } from '@/lib/formHelpers';
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
-// Format phone number to +1 123 456 7890 format for ClickUp
-function formatPhoneForClickUp(phone: string): string {
-  // Remove all non-numeric characters
-  const cleaned = phone.replace(/\D/g, '')
-
-  // Take last 10 digits (in case country code is included)
-  const last10 = cleaned.slice(-10)
-
-  // Format as +1 XXX XXX XXXX
-  if (last10.length === 10) {
-    return `+1 ${last10.slice(0, 3)} ${last10.slice(3, 6)} ${last10.slice(6)}`
-  }
-
-  // Return original if not 10 digits
-  return phone
-}
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { formData, serviceName, serviceType, recaptchaToken } = body
+    // 1. Rate limiting check
+    const ipAddress = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+                     request.headers.get("x-real-ip") ||
+                     "unknown";
 
-    // Validate required fields
-    if (!formData.name || !formData.email) {
+    const rateLimitResult = await rateLimitFormSubmission(ipAddress);
+
+    if (!rateLimitResult.success) {
+      const minutesUntilReset = Math.ceil((rateLimitResult.reset - Date.now()) / 60000);
       return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      )
+        { error: `Too many requests. Please try again in ${minutesUntilReset} minutes.` },
+        { status: 429 }
+      );
     }
 
-    // Verify reCAPTCHA token
-    if (!recaptchaToken) {
+    const body = await request.json();
+    const { formData, serviceName, serviceType, recaptchaToken } = body;
+
+    // 2. Validate with Zod
+    const validation = serviceQuoteSchema.safeParse({
+      ...formData,
+      serviceName,
+      serviceType,
+      recaptchaToken,
+    });
+
+    if (!validation.success) {
       return NextResponse.json(
-        { error: 'reCAPTCHA token missing' },
+        { error: 'Invalid form data', details: validation.error.flatten().fieldErrors },
         { status: 400 }
-      )
+      );
     }
 
-    const recaptchaResponse = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
-    })
+    const validatedData = validation.data;
 
-    const recaptchaResult = await recaptchaResponse.json()
-
-    // Log detailed reCAPTCHA response for debugging
-    console.log('reCAPTCHA result:', {
-      success: recaptchaResult.success,
-      score: recaptchaResult.score,
-      action: recaptchaResult.action,
-      hostname: recaptchaResult.hostname,
-      'error-codes': recaptchaResult['error-codes']
-    })
-
-    // Lower threshold to 0.3 (was 0.5) and provide better error messages
+    // 3. Verify reCAPTCHA
+    const recaptchaResult = await verifyRecaptcha(validatedData.recaptchaToken);
     if (!recaptchaResult.success) {
-      console.error('reCAPTCHA verification failed:', recaptchaResult)
-      return NextResponse.json(
-        { error: `reCAPTCHA verification failed: ${recaptchaResult['error-codes']?.join(', ') || 'Unknown error'}` },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: recaptchaResult.error }, { status: 400 });
     }
 
-    // Check score only if successful (score is only present in v3)
-    if (recaptchaResult.score !== undefined && recaptchaResult.score < 0.3) {
-      console.error('reCAPTCHA score too low:', recaptchaResult.score)
-      return NextResponse.json(
-        { error: 'Security verification failed. Please try again.' },
-        { status: 400 }
-      )
-    }
+    // 4. Sanitize inputs
+    const sanitizedData = sanitizeFormData({
+      name: validatedData.name,
+      email: validatedData.email,
+      phone: validatedData.phone || '',
+      company: validatedData.company || '',
+      message: validatedData.message,
+      serviceName: validatedData.serviceName || '',
+      serviceType: validatedData.serviceType || '',
+    });
 
-    // Render the email template to HTML
+    // 5. Render and send email
     const emailHtml = await render(
-      ServiceQuoteEmail({ data: formData, serviceName, serviceType })
-    )
+      ServiceQuoteEmail({
+        data: sanitizedData,
+        serviceName: sanitizedData.serviceName,
+        serviceType: sanitizedData.serviceType
+      })
+    );
 
-    // Send email using Resend
     const { data, error } = await resend.emails.send({
-      from: 'CR Express <contact@forms.crexpressinc.com>', // Using verified subdomain - "contact" is more trustworthy than "noreply"
-      to: ['aamro@crexpressinc.com'], // Send to CR Express
-      replyTo: formData.email,
-      subject: `New Service Quote Request: ${serviceName || formData.service} - ${formData.name}`,
+      from: 'CR Express <contact@forms.crexpressinc.com>',
+      to: ['aamro@crexpressinc.com'],
+      replyTo: sanitizedData.email,
+      subject: `New Service Quote Request: ${sanitizedData.serviceName || 'Service'} - ${sanitizedData.name}`,
       html: emailHtml,
-    })
+    });
 
     if (error) {
-      console.error('Resend error:', error)
-      return NextResponse.json(
-        { error: 'Failed to send email' },
-        { status: 500 }
-      )
+      console.error('❌ Resend error:', error);
+      return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
     }
 
-    // Send data to Zapier webhook (if configured)
+    // 6. Send to Zapier
     if (process.env.ZAPIER_WEBHOOK_URL) {
       try {
         await fetch(process.env.ZAPIER_WEBHOOK_URL, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             formType: 'service-quote',
-            ...formData,
-            phone: formatPhoneForClickUp(formData.phone), // Format phone for ClickUp
-            serviceName,
-            serviceType,
+            ...sanitizedData,
+            phone: sanitizedData.phone ? formatPhoneForClickUp(sanitizedData.phone) : '',
             submittedAt: new Date().toISOString(),
+            ipAddress: ipAddress === 'unknown' ? null : ipAddress,
           }),
-        })
+        });
       } catch (zapierError) {
-        console.error('Zapier webhook error:', zapierError)
-        // Don't fail the request if Zapier fails - email was already sent successfully
+        console.error('❌ Zapier error:', zapierError);
       }
     }
 
     return NextResponse.json(
-      { success: true, message: 'Quote request submitted successfully', id: data?.id },
+      { success: true, message: 'Service quote request submitted successfully', id: data?.id },
       { status: 200 }
-    )
+    );
   } catch (error) {
-    console.error('API error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    console.error('❌ Service quote API error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
