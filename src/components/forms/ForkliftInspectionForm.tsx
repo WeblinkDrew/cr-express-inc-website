@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import SignatureCanvasComponent from "./SignatureCanvas";
 
 interface ForkliftInspectionFormProps {
   formId: string;
@@ -230,20 +231,11 @@ export default function ForkliftInspectionForm({ formId, formName }: ForkliftIns
             </div>
 
             {/* Signature */}
-            <div>
-              <label htmlFor="signature" className="block text-sm font-medium text-neutral-700 mb-2">
-                Signature
-              </label>
-              <textarea
-                id="signature"
-                rows={3}
-                value={formData.signature}
-                onChange={(e) => setFormData({ ...formData, signature: e.target.value })}
-                className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Use your mouse or finger to draw your signature above"
-              />
-              <label className="block text-xs text-neutral-500 mt-1">Use your mouse or finger to draw your signature above</label>
-            </div>
+            <SignatureCanvasComponent
+              value={formData.signature}
+              onChange={(signature) => setFormData({ ...formData, signature })}
+              label="Signature"
+            />
 
             {/* Shift Number */}
             <div>
@@ -410,20 +402,11 @@ export default function ForkliftInspectionForm({ formId, formName }: ForkliftIns
             </div>
 
             {/* Double Check Signature */}
-            <div>
-              <label htmlFor="doubleCheckSignature" className="block text-sm font-medium text-neutral-700 mb-2">
-                Double Check Signature
-              </label>
-              <textarea
-                id="doubleCheckSignature"
-                rows={3}
-                value={formData.doubleCheckSignature}
-                onChange={(e) => setFormData({ ...formData, doubleCheckSignature: e.target.value })}
-                className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Use your mouse or finger to draw your signature above"
-              />
-              <label className="block text-xs text-neutral-500 mt-1">Use your mouse or finger to draw your signature above</label>
-            </div>
+            <SignatureCanvasComponent
+              value={formData.doubleCheckSignature}
+              onChange={(doubleCheckSignature) => setFormData({ ...formData, doubleCheckSignature })}
+              label="Double Check Signature"
+            />
 
             {/* Submit Button */}
             <div className="pt-4">

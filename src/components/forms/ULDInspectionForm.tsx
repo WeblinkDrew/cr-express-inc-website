@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import SignatureCanvasComponent from "./SignatureCanvas";
 
 interface ULDInspectionFormProps {
   formId: string;
@@ -23,6 +24,8 @@ export default function ULDInspectionForm({ formId, formName }: ULDInspectionFor
     mawb: "",
     uldNumber: "",
     visibleDamage: "",
+    damageType: [] as string[],
+    damageContinued: "",
     comments: "",
     signature: "",
   });
@@ -331,6 +334,7 @@ export default function ULDInspectionForm({ formId, formName }: ULDInspectionFor
                       type="checkbox"
                       name="visibleDamage"
                       value="Yes"
+                      checked={formData.visibleDamage === "Yes"}
                       onChange={(e) => setFormData({ ...formData, visibleDamage: e.target.checked ? "Yes" : "" })}
                       className="mr-2 text-blue-600 focus:ring-blue-500 rounded"
                     />
@@ -341,6 +345,7 @@ export default function ULDInspectionForm({ formId, formName }: ULDInspectionFor
                       type="checkbox"
                       name="visibleDamage"
                       value="No"
+                      checked={formData.visibleDamage === "No"}
                       onChange={(e) => setFormData({ ...formData, visibleDamage: e.target.checked ? "No" : "" })}
                       className="mr-2 text-blue-600 focus:ring-blue-500 rounded"
                     />
@@ -348,6 +353,84 @@ export default function ULDInspectionForm({ formId, formName }: ULDInspectionFor
                   </label>
                 </div>
               </div>
+
+              {/* Conditional: Show damage details when "Yes" is selected */}
+              {formData.visibleDamage === "Yes" && (
+                <>
+                  {/* Describe the Damage */}
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      Describe the Damage<span className="text-red-500">*</span>
+                    </label>
+                    <div className="space-y-2">
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          value="Minor"
+                          checked={formData.damageType.includes("Minor")}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFormData({ ...formData, damageType: [...formData.damageType, "Minor"] });
+                            } else {
+                              setFormData({ ...formData, damageType: formData.damageType.filter(t => t !== "Minor") });
+                            }
+                          }}
+                          className="mr-2 text-blue-600 focus:ring-blue-500 rounded"
+                        />
+                        <span className="text-sm">Minor</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          value="Moderate"
+                          checked={formData.damageType.includes("Moderate")}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFormData({ ...formData, damageType: [...formData.damageType, "Moderate"] });
+                            } else {
+                              setFormData({ ...formData, damageType: formData.damageType.filter(t => t !== "Moderate") });
+                            }
+                          }}
+                          className="mr-2 text-blue-600 focus:ring-blue-500 rounded"
+                        />
+                        <span className="text-sm">Moderate</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          value="Cosmetic"
+                          checked={formData.damageType.includes("Cosmetic")}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFormData({ ...formData, damageType: [...formData.damageType, "Cosmetic"] });
+                            } else {
+                              setFormData({ ...formData, damageType: formData.damageType.filter(t => t !== "Cosmetic") });
+                            }
+                          }}
+                          className="mr-2 text-blue-600 focus:ring-blue-500 rounded"
+                        />
+                        <span className="text-sm">Cosmetic</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Describe the Damage (Continued) */}
+                  <div className="mt-4">
+                    <label htmlFor="damageContinued" className="block text-sm font-medium text-neutral-700 mb-2">
+                      Describe the Damage (Continued)<span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      id="damageContinued"
+                      rows={4}
+                      required
+                      value={formData.damageContinued}
+                      onChange={(e) => setFormData({ ...formData, damageContinued: e.target.value })}
+                      className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Provide a detailed description of the damage..."
+                    />
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Additional Information Section */}
@@ -370,21 +453,12 @@ export default function ULDInspectionForm({ formId, formName }: ULDInspectionFor
               </div>
 
               {/* Signature */}
-              <div>
-                <label htmlFor="signature" className="block text-sm font-medium text-neutral-700 mb-2">
-                  Signature<span className="text-red-500">*</span>
-                </label>
-                <textarea
-                  id="signature"
-                  rows={3}
-                  required
-                  value={formData.signature}
-                  onChange={(e) => setFormData({ ...formData, signature: e.target.value })}
-                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Use your mouse or finger to draw your signature above"
-                />
-                <label className="block text-xs text-neutral-500 mt-1">Use your mouse or finger to draw your signature above</label>
-              </div>
+              <SignatureCanvasComponent
+                value={formData.signature}
+                onChange={(signature) => setFormData({ ...formData, signature })}
+                label="Signature"
+                required
+              />
             </div>
 
             {/* Submit Button */}

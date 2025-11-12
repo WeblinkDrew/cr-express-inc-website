@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import SignatureCanvasComponent from "./SignatureCanvas";
 
 interface CargoShortageOverageFormProps {
   formId: string;
@@ -315,20 +316,11 @@ export default function CargoShortageOverageForm({ formId, formName }: CargoShor
               </div>
 
               {/* Signature */}
-              <div className="mb-4">
-                <label htmlFor="signature" className="block text-sm font-medium text-neutral-700 mb-2">
-                  Signature
-                </label>
-                <textarea
-                  id="signature"
-                  rows={3}
-                  value={formData.signature}
-                  onChange={(e) => setFormData({ ...formData, signature: e.target.value })}
-                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Use your mouse or finger to draw your signature above"
-                />
-                <label className="block text-xs text-neutral-500 mt-1">Use your mouse or finger to draw your signature above</label>
-              </div>
+              <SignatureCanvasComponent
+                value={formData.signature}
+                onChange={(signature) => setFormData({ ...formData, signature })}
+                label="Signature"
+              />
 
               {/* Date/Time */}
               <div>
