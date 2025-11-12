@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { stackServerApp } from "@/lib/stack";
+import { requireAdmin, handleAuthError } from "@/lib/auth";
 
 interface RouteParams {
   params: Promise<{ formId: string }>;
@@ -8,11 +8,8 @@ interface RouteParams {
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    // Check if user is authenticated
-    const user = await stackServerApp.getUser();
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    // Require admin authentication
+    await requireAdmin();
 
     const { formId } = await params;
     const { searchParams } = new URL(request.url);
@@ -54,6 +51,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       hasMore,
     });
   } catch (error: any) {
+    // Handle authentication errors
+    if (error.message === "UNAUTHORIZED" || error.message === "FORBIDDEN") {
+      return handleAuthError(error);
+    }
+
+    // Handle other errors
     console.error("Error fetching submissions:", error);
     return NextResponse.json(
       { error: error.message || "Failed to fetch submissions" },
