@@ -10,6 +10,7 @@ import { generateSignedUrl } from "@/lib/signedUrls";
 import { Resend } from "resend";
 import { uploadFile, validateFile } from "@/lib/fileStorage";
 import { rateLimitFormSubmission } from "@/lib/rateLimit";
+import { sanitizeFormData } from "@/lib/sanitize";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -65,9 +66,13 @@ export async function POST(request: NextRequest) {
     console.log(`✅ Rate limit check passed for IP: ${ipAddress} (${rateLimitResult.remaining} remaining)`);
 
     const body = await request.json();
-    const { slug, formId, w9Upload, ...formData } = body;
+    const { slug, formId, w9Upload, ...rawFormData } = body;
 
-    // 1. Validate form exists and is active
+    // 1. Sanitize all user inputs to prevent XSS attacks
+    const formData = sanitizeFormData(rawFormData);
+    console.log("✅ Form data sanitized");
+
+    // 2. Validate form exists and is active
     const form = await prisma.form.findUnique({
       where: { id: formId },
     });
@@ -80,7 +85,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Form is no longer active" }, { status: 400 });
     }
 
-    // 2. Validate and upload W9 file to cloud storage
+    // 3. Validate and upload W9 file to cloud storage
     let w9FileData = null;
     let w9Buffer = null;
     if (w9Upload) {
@@ -121,14 +126,14 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 3. Get client metadata (ipAddress already extracted for rate limiting)
+    // 4. Get client metadata (ipAddress already extracted for rate limiting)
     const userAgent = request.headers.get("user-agent") || null;
 
-    // 4. Calculate sizes for storage tracking
+    // 5. Calculate sizes for storage tracking
     const formDataSize = JSON.stringify(formData).length;
     const filesSize = w9FileData ? w9FileData.size : 0;
 
-    // 5. Create submission in database with dual-write (legacy fields + formData)
+    // 6. Create submission in database with dual-write (legacy fields + formData)
     const submission = await prisma.submission.create({
       data: {
         formId: form.id,
@@ -220,7 +225,7 @@ export async function POST(request: NextRequest) {
 
     console.log("✅ Submission created:", submission.id);
 
-    // 4. Generate onboarding PDF
+    // 7. Generate onboarding PDF
     const pdfBuffer = await renderToBuffer(
       ClientOnboardingPDF({
         formData: {
@@ -236,7 +241,7 @@ export async function POST(request: NextRequest) {
 
     console.log("✅ Onboarding PDF generated");
 
-    // 5. Save PDFs to temporary directory
+    // 8. Save PDFs to temporary directory
     // Use /tmp for serverless environments (Vercel), otherwise use local temp
     const tempBase = process.env.VERCEL ? "/tmp" : join(process.cwd(), "temp");
     const tempDir = join(tempBase, "submissions", submission.id);
@@ -253,7 +258,7 @@ export async function POST(request: NextRequest) {
       console.log("✅ W9 PDF saved to disk");
     }
 
-    // 6. Prepare filenames
+    // 9. Prepare filenames
     const sanitizedCompanyName = formData.companyLegalName
       .replace(/[^a-zA-Z0-9]/g, "_")
       .substring(0, 50);
@@ -262,12 +267,12 @@ export async function POST(request: NextRequest) {
     const onboardingFilename = `Onboarding_${sanitizedCompanyName}_${timestamp}.pdf`;
     const w9Filename = w9Upload ? `W9_${sanitizedCompanyName}_${timestamp}.pdf` : null;
 
-    // 7. Generate signed download URLs (expires in 7 days)
+    // 10. Generate signed download URLs (expires in 7 days)
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || request.headers.get("origin") || "http://localhost:3000";
     const onboardingUrl = `${baseUrl}${generateSignedUrl(submission.id, "onboarding", 7 * 24 * 60 * 60)}`;
     const w9Url = w9Upload ? `${baseUrl}${generateSignedUrl(submission.id, "w9", 7 * 24 * 60 * 60)}` : null;
 
-    // 8. Send to Zapier webhook
+    // 11. Send to Zapier webhook
     const zapierPayload = {
       submission_id: submission.id,
       company_name: formData.companyLegalName,
@@ -327,7 +332,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // 9. Send email notifications with attachments
+    // 12. Send email notifications with attachments
     try {
       console.log("📧 Preparing email notification...");
 
