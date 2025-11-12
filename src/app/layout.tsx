@@ -1,5 +1,6 @@
 import { type Metadata } from 'next'
 import localFont from 'next/font/local'
+import { Analytics } from '@vercel/analytics/next'
 
 import '@/styles/tailwind.css'
 import { ReCaptchaProvider } from '@/components/ReCaptchaProvider'
@@ -76,6 +77,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <StackProvider>
           <ReCaptchaProvider>{children}</ReCaptchaProvider>
         </StackProvider>
+        <Analytics />
       </body>
     </html>
   )
