@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { renderToBuffer } from "@react-pdf/renderer";
+import { render } from "@react-email/render";
 import ClientOnboardingPDF from "@/components/pdf/ClientOnboardingPDF";
+import { ClientOnboardingEmail } from "@/lib/email-templates";
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
 import { generateSignedUrl } from "@/lib/signedUrls";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /**
  * Form Submission API Route
@@ -237,6 +242,47 @@ export async function POST(request: NextRequest) {
           zapierError: zapierError.message,
         },
       });
+    }
+
+    // 9. Send email notifications with attachments
+    try {
+      console.log("📧 Preparing email notification...");
+
+      // Render HTML email
+      const emailHtml = await render(
+        ClientOnboardingEmail({
+          data: formData,
+          submissionId: submission.id,
+        })
+      );
+
+      // Prepare W9 attachment (convert base64 to buffer)
+      const w9Buffer = w9Upload ? Buffer.from(w9Upload, "base64") : null;
+
+      // Send email to recipients with attachments
+      // TODO: Update to production emails after testing
+      const emailResult = await resend.emails.send({
+        from: "CR Express <noreply@crexpressinc.com>",
+        to: ["andrew@goweblink.io"], // Test email - change to production after verification
+        // Production emails: ["cr@crexpressinc.com", "CLIENTONBOARDING@CREXPRESSINC.COM", "Aamro@crexpressinc.com"]
+        subject: `[TEST] New Client Onboarding: ${formData.companyLegalName}`,
+        html: emailHtml,
+        attachments: [
+          {
+            filename: onboardingFilename,
+            content: pdfBuffer,
+          },
+          ...(w9Buffer ? [{
+            filename: w9Filename!,
+            content: w9Buffer,
+          }] : []),
+        ],
+      });
+
+      console.log("✅ Email sent successfully:", emailResult.data?.id || "success");
+    } catch (emailError: any) {
+      console.error("❌ Error sending email:", emailError);
+      // Don't fail the submission if email fails, just log it
     }
 
     console.log("✅ Form submission completed successfully");
