@@ -254,7 +254,10 @@ export default function SubmissionsClient({
         throw new Error("Failed to delete submission");
       }
 
-      // Refresh the page to show updated list
+      // Remove the deleted submission from state immediately
+      setSubmissions(submissions.filter(s => s.id !== submissionId));
+
+      // Also refresh the page data in the background
       router.refresh();
     } catch (error) {
       console.error("Error deleting submission:", error);
