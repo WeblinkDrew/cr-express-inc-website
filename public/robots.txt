@@ -2,5 +2,9 @@
 User-agent: *
 Allow: /
 
+# Disallow all form submission pages (internal forms should not be indexed)
+Disallow: /form/
+Disallow: /admin/
+
 # Sitemap
 Sitemap: https://www.crexpressinc.com/sitemap.xml

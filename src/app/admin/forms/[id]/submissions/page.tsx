@@ -16,13 +16,26 @@ export default async function SubmissionsPage({ params }: PageProps) {
 
   const { id } = await params;
 
-  // Fetch form with submissions
+  // Fetch form with submissions (optimized: only fetch necessary fields)
   const form = await prisma.form.findUnique({
     where: { id },
     include: {
       Submission: {
         orderBy: {
           submittedAt: "desc",
+        },
+        select: {
+          id: true,
+          submittedAt: true,
+          submitterName: true,
+          submitterEmail: true,
+          submitterPhone: true,
+          companyName: true,
+          ipAddress: true,
+          sentToZapier: true,
+          zapierSentAt: true,
+          // Don't fetch formData or files - they can be huge!
+          // These will be fetched on-demand when viewing individual submissions
         },
       },
     },

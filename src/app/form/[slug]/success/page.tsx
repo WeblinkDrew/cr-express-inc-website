@@ -1,3 +1,10 @@
+export const metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 export default function SuccessPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-4">

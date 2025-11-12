@@ -6,6 +6,10 @@ import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
 import { generateSignedUrl } from "@/lib/signedUrls";
 
+// Database optimization constants
+const MAX_FORM_DATA_SIZE = 10 * 1024 * 1024; // 10MB limit for formData JSON
+const MAX_FILES_SIZE = 50 * 1024 * 1024; // 50MB limit for files JSON
+
 /**
  * Unified Form Submission API
  *
@@ -24,6 +28,11 @@ export async function POST(request: NextRequest) {
     // 1. Validate form exists and is active
     const form = await prisma.form.findUnique({
       where: { id: formId },
+      select: {
+        id: true,
+        formType: true,
+        isActive: true,
+      },
     });
 
     if (!form) {
@@ -34,11 +43,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Form is no longer active" }, { status: 400 });
     }
 
-    // 2. Get client metadata
+    // 2. Validate data size to prevent database bloat
+    const formDataSize = JSON.stringify(formData).length;
+    const filesSize = files ? JSON.stringify(files).length : 0;
+
+    if (formDataSize > MAX_FORM_DATA_SIZE) {
+      return NextResponse.json(
+        { error: `Form data too large (${(formDataSize / 1024 / 1024).toFixed(2)}MB). Maximum allowed is 10MB.` },
+        { status: 413 }
+      );
+    }
+
+    if (filesSize > MAX_FILES_SIZE) {
+      return NextResponse.json(
+        { error: `Files too large (${(filesSize / 1024 / 1024).toFixed(2)}MB). Maximum allowed is 50MB.` },
+        { status: 413 }
+      );
+    }
+
+    // 3. Get client metadata
     const ipAddress = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || null;
     const userAgent = request.headers.get("user-agent") || null;
 
-    // 3. Extract common fields based on form type
+    // 4. Extract common fields based on form type
     let submitterName = null;
     let submitterEmail = null;
     let submitterPhone = null;
@@ -78,7 +105,7 @@ export async function POST(request: NextRequest) {
       // Other forms don't have standard contact info
     }
 
-    // 4. Create submission in database
+    // 5. Create submission in database
     const submission = await prisma.submission.create({
       data: {
         formId: form.id,
@@ -103,7 +130,7 @@ export async function POST(request: NextRequest) {
 
     console.log(`✅ ${form.formType} submission created:`, submission.id);
 
-    // 5. Generate PDF (form-specific logic will be added later)
+    // 6. Generate PDF (form-specific logic will be added later)
     let pdfBuffer = null;
     let pdfFilename = null;
 
@@ -131,7 +158,7 @@ export async function POST(request: NextRequest) {
     }
     // TODO: Add PDF generation for other form types in Phase 4
 
-    // 6. Save PDF to temp directory if generated
+    // 7. Save PDF to temp directory if generated
     if (pdfBuffer) {
       const tempDir = join(process.cwd(), "temp", "submissions", submission.id);
       await mkdir(tempDir, { recursive: true });
@@ -139,7 +166,7 @@ export async function POST(request: NextRequest) {
       console.log(`✅ PDF saved: ${pdfFilename}`);
     }
 
-    // 7. Send to Zapier ONLY for CARRIER_ONBOARDING (original form)
+    // 8. Send to Zapier ONLY for CARRIER_ONBOARDING (original form)
     if (form.formType === "CARRIER_ONBOARDING" && process.env.ONBOARDING_ZAPIER_WEBHOOK_URL) {
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || request.headers.get("origin") || "http://localhost:3000";
       const onboardingUrl = `${baseUrl}${generateSignedUrl(submission.id, "onboarding", 7 * 24 * 60 * 60)}`;
