@@ -476,3 +476,175 @@ export function ContactEmail({ data }: { data: any }) {
     </EmailLayout>
   )
 }
+
+// Client Onboarding Email Template
+export function ClientOnboardingEmail({ data, submissionId }: { data: any; submissionId: string }) {
+  return (
+    <EmailLayout>
+      <Heading as="h2" style={{ color: '#0a0a0a', marginTop: 0, fontSize: '24px' }}>New Client Onboarding Submission</Heading>
+      <Text style={{ color: '#737373', fontSize: '14px', marginBottom: '30px' }}>
+        Submission ID: <strong>{submissionId}</strong>
+      </Text>
+
+      {/* Company Information */}
+      <div style={{ marginBottom: '30px' }}>
+        <h3 style={{ color: '#0a0a0a', fontSize: '18px', borderBottom: '2px solid #e5e5e5', paddingBottom: '10px' }}>Company Information</h3>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <tr>
+            <td style={{ padding: '8px 0', width: '40%', color: '#737373' }}>Company Legal Name:</td>
+            <td style={{ padding: '8px 0', fontWeight: 'bold' }}>{data.companyLegalName}</td>
+          </tr>
+          {data.division && (
+            <tr>
+              <td style={{ padding: '8px 0', color: '#737373' }}>Division:</td>
+              <td style={{ padding: '8px 0' }}>{data.division}</td>
+            </tr>
+          )}
+          <tr>
+            <td style={{ padding: '8px 0', color: '#737373' }}>Branch Address:</td>
+            <td style={{ padding: '8px 0' }}>
+              {data.branchAddressLine1}<br />
+              {data.branchCity}, {data.branchState} {data.branchZipCode}
+            </td>
+          </tr>
+          {data.mc && (
+            <tr>
+              <td style={{ padding: '8px 0', color: '#737373' }}>MC#:</td>
+              <td style={{ padding: '8px 0' }}>{data.mc}</td>
+            </tr>
+          )}
+          {data.dot && (
+            <tr>
+              <td style={{ padding: '8px 0', color: '#737373' }}>DOT#:</td>
+              <td style={{ padding: '8px 0' }}>{data.dot}</td>
+            </tr>
+          )}
+          {data.scacCode && (
+            <tr>
+              <td style={{ padding: '8px 0', color: '#737373' }}>SCAC Code:</td>
+              <td style={{ padding: '8px 0' }}>{data.scacCode}</td>
+            </tr>
+          )}
+        </table>
+      </div>
+
+      {/* Primary Contact */}
+      <div style={{ marginBottom: '30px', backgroundColor: '#f9f9f9', padding: '20px', borderRadius: '8px' }}>
+        <h3 style={{ color: '#0a0a0a', fontSize: '18px', marginTop: 0 }}>Primary Contact</h3>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <tr>
+            <td style={{ padding: '8px 0', width: '40%', color: '#737373' }}>Name:</td>
+            <td style={{ padding: '8px 0', fontWeight: 'bold' }}>
+              {data.primaryContactFirstName} {data.primaryContactLastName}
+            </td>
+          </tr>
+          <tr>
+            <td style={{ padding: '8px 0', color: '#737373' }}>Email:</td>
+            <td style={{ padding: '8px 0', color: '#0a0a0a' }}>{data.primaryContactEmail}</td>
+          </tr>
+          <tr>
+            <td style={{ padding: '8px 0', color: '#737373' }}>Phone:</td>
+            <td style={{ padding: '8px 0', color: '#0a0a0a' }}>{data.primaryContactPhone}</td>
+          </tr>
+        </table>
+      </div>
+
+      {/* Secondary Contact */}
+      {(data.secondaryContactFirstName || data.secondaryContactEmail) && (
+        <div style={{ marginBottom: '30px' }}>
+          <h3 style={{ color: '#0a0a0a', fontSize: '18px', borderBottom: '2px solid #e5e5e5', paddingBottom: '10px' }}>Secondary Contact</h3>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            {data.secondaryContactFirstName && (
+              <tr>
+                <td style={{ padding: '8px 0', width: '40%', color: '#737373' }}>Name:</td>
+                <td style={{ padding: '8px 0' }}>
+                  {data.secondaryContactFirstName} {data.secondaryContactLastName}
+                </td>
+              </tr>
+            )}
+            {data.secondaryContactEmail && (
+              <tr>
+                <td style={{ padding: '8px 0', color: '#737373' }}>Email:</td>
+                <td style={{ padding: '8px 0' }}>{data.secondaryContactEmail}</td>
+              </tr>
+            )}
+            {data.secondaryContactPhone && (
+              <tr>
+                <td style={{ padding: '8px 0', color: '#737373' }}>Phone:</td>
+                <td style={{ padding: '8px 0' }}>{data.secondaryContactPhone}</td>
+              </tr>
+            )}
+          </table>
+        </div>
+      )}
+
+      {/* Billing Information */}
+      <div style={{ marginBottom: '30px' }}>
+        <h3 style={{ color: '#0a0a0a', fontSize: '18px', borderBottom: '2px solid #e5e5e5', paddingBottom: '10px' }}>Billing Information</h3>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <tr>
+            <td style={{ padding: '8px 0', width: '40%', color: '#737373' }}>Billing Address:</td>
+            <td style={{ padding: '8px 0' }}>
+              {data.billingAddressLine1}<br />
+              {data.billingCity}, {data.billingState} {data.billingZipCode}
+            </td>
+          </tr>
+          {data.paymentMethod && (
+            <tr>
+              <td style={{ padding: '8px 0', color: '#737373' }}>Payment Method:</td>
+              <td style={{ padding: '8px 0' }}>{data.paymentMethod}</td>
+            </tr>
+          )}
+          {data.accountsPayableFirstName && (
+            <tr>
+              <td style={{ padding: '8px 0', color: '#737373' }}>AP Contact:</td>
+              <td style={{ padding: '8px 0' }}>
+                {data.accountsPayableFirstName} {data.accountsPayableLastName}<br />
+                {data.accountsPayableEmail && <span>{data.accountsPayableEmail}<br /></span>}
+                {data.accountsPayablePhone && <span>{data.accountsPayablePhone}</span>}
+              </td>
+            </tr>
+          )}
+        </table>
+      </div>
+
+      {/* Operations Information */}
+      <div style={{ marginBottom: '30px' }}>
+        <h3 style={{ color: '#0a0a0a', fontSize: '18px', borderBottom: '2px solid #e5e5e5', paddingBottom: '10px' }}>Operations Information</h3>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          {data.shipmentTypes && (
+            <tr>
+              <td style={{ padding: '8px 0', width: '40%', color: '#737373' }}>Shipment Types:</td>
+              <td style={{ padding: '8px 0' }}>{data.shipmentTypes}</td>
+            </tr>
+          )}
+          {data.equipmentTypes && (
+            <tr>
+              <td style={{ padding: '8px 0', color: '#737373' }}>Equipment Types:</td>
+              <td style={{ padding: '8px 0' }}>{data.equipmentTypes}</td>
+            </tr>
+          )}
+          {data.monthlyShipments && (
+            <tr>
+              <td style={{ padding: '8px 0', color: '#737373' }}>Monthly Shipments:</td>
+              <td style={{ padding: '8px 0' }}>{data.monthlyShipments}</td>
+            </tr>
+          )}
+        </table>
+      </div>
+
+      {/* Action Required */}
+      <div style={{ padding: '15px', backgroundColor: '#d4edda', borderLeft: '4px solid #28a745', marginTop: '30px' }}>
+        <p style={{ margin: 0, fontSize: '14px', color: '#155724' }}>
+          <strong>Attachments:</strong> W9 form and complete onboarding PDF are attached to this email.
+        </p>
+      </div>
+
+      <div style={{ padding: '15px', backgroundColor: '#fff3cd', borderLeft: '4px solid #ffc107', marginTop: '15px' }}>
+        <p style={{ margin: 0, fontSize: '14px', color: '#856404' }}>
+          <strong>Action Required:</strong> Please review this onboarding submission and follow up within 24-48 hours.
+        </p>
+      </div>
+    </EmailLayout>
+  )
+}

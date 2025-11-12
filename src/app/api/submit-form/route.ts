@@ -1,14 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { renderToBuffer } from "@react-pdf/renderer";
+import { render } from "@react-email/render";
 import ClientOnboardingPDF from "@/components/pdf/ClientOnboardingPDF";
+import { ClientOnboardingEmail } from "@/lib/email-templates";
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
 import { generateSignedUrl } from "@/lib/signedUrls";
+import { Resend } from "resend";
 
 // Database optimization constants
 const MAX_FORM_DATA_SIZE = 10 * 1024 * 1024; // 10MB limit for formData JSON
 const MAX_FILES_SIZE = 50 * 1024 * 1024; // 50MB limit for files JSON
+
+// Initialize Resend for email notifications
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /**
  * Unified Form Submission API
@@ -270,6 +276,48 @@ export async function POST(request: NextRequest) {
             zapierError: zapierError.message,
           },
         });
+      }
+    }
+
+    // 9. Send email notifications for CARRIER_ONBOARDING form
+    if (form.formType === "CARRIER_ONBOARDING" && pdfBuffer && files?.w9) {
+      try {
+        // Render HTML email
+        const emailHtml = await render(
+          ClientOnboardingEmail({
+            data: formData,
+            submissionId: submission.id,
+          })
+        );
+
+        // Prepare W9 attachment (convert base64 to buffer)
+        const w9Data = files.w9.data || files.w9; // Handle different formats
+        const w9Buffer = Buffer.from(w9Data, "base64");
+
+        // Send email to recipients with attachments
+        // TODO: Update to production emails after testing
+        const emailResult = await resend.emails.send({
+          from: "CR Express <noreply@crexpressinc.com>",
+          to: ["andrew@goweblink.io"], // Test email - change to production after verification
+          // Production emails: ["cr@crexpressinc.com", "CLIENTONBOARDING@CREXPRESSINC.COM", "Aamro@crexpressinc.com"]
+          subject: `[TEST] New Client Onboarding: ${formData.companyLegalName}`,
+          html: emailHtml,
+          attachments: [
+            {
+              filename: pdfFilename!,
+              content: pdfBuffer,
+            },
+            {
+              filename: `W9_${formData.companyLegalName.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`,
+              content: w9Buffer,
+            },
+          ],
+        });
+
+        console.log("✅ Email sent successfully:", emailResult.data?.id || "success");
+      } catch (emailError: any) {
+        console.error("❌ Error sending email:", emailError);
+        // Don't fail the submission if email fails, just log it
       }
     }
 
