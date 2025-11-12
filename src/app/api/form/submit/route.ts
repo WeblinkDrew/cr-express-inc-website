@@ -260,12 +260,10 @@ export async function POST(request: NextRequest) {
       const w9Buffer = w9Upload ? Buffer.from(w9Upload, "base64") : null;
 
       // Send email to recipients with attachments
-      // TODO: Update to production emails after testing
       const emailResult = await resend.emails.send({
         from: "CR Express <contact@forms.crexpressinc.com>",
-        to: ["andrew@goweblink.io"], // Test email - change to production after verification
-        // Production emails: ["cr@crexpressinc.com", "CLIENTONBOARDING@CREXPRESSINC.COM", "Aamro@crexpressinc.com"]
-        subject: `[TEST] New Client Onboarding: ${formData.companyLegalName}`,
+        to: ["cr@crexpressinc.com", "CLIENTONBOARDING@CREXPRESSINC.COM", "Aamro@crexpressinc.com"],
+        subject: `New Client Onboarding: ${formData.companyLegalName}`,
         html: emailHtml,
         attachments: [
           {
