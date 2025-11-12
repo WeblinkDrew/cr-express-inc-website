@@ -348,8 +348,8 @@ export async function POST(request: NextRequest) {
       // Note: w9Buffer is created during file upload validation
       const emailResult = await resend.emails.send({
         from: "CR Express <contact@forms.crexpressinc.com>",
-        to: ["andrew@goweblink.io"], // TEST EMAIL
-        subject: `[TEST] New Client Onboarding: ${formData.companyLegalName}`,
+        to: ["cr@crexpressinc.com", "CLIENTONBOARDING@CREXPRESSINC.COM", "Aamro@crexpressinc.com"],
+        subject: `New Client Onboarding: ${formData.companyLegalName}`,
         html: emailHtml,
         attachments: [
           {
