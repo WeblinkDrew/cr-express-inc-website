@@ -297,7 +297,7 @@ export async function POST(request: NextRequest) {
         // Send email to recipients with attachments
         // TODO: Update to production emails after testing
         const emailResult = await resend.emails.send({
-          from: "CR Express <noreply@crexpressinc.com>",
+          from: "CR Express <contact@forms.crexpressinc.com>",
           to: ["andrew@goweblink.io"], // Test email - change to production after verification
           // Production emails: ["cr@crexpressinc.com", "CLIENTONBOARDING@CREXPRESSINC.COM", "Aamro@crexpressinc.com"]
           subject: `[TEST] New Client Onboarding: ${formData.companyLegalName}`,
