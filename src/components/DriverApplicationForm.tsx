@@ -186,14 +186,20 @@ export function DriverApplicationForm({ jobTitle, department }: DriverApplicatio
         }),
       })
 
-      const result = await response.json()
-
       if (response.ok) {
         alert('Application submitted successfully! We will review your application and get back to you soon.')
         // Reset form
         window.location.reload()
       } else {
-        alert(`Error: ${result.error || 'Failed to submit application. Please try again.'}`)
+        let errorMessage = 'Failed to submit application. Please try again.'
+        try {
+          const result = await response.json()
+          errorMessage = result.error || errorMessage
+        } catch (e) {
+          // Response wasn't JSON (probably HTML error page from 405/500)
+          errorMessage = `Server error: ${response.status}. Please try again later.`
+        }
+        alert(`Error: ${errorMessage}`)
       }
     } catch (error) {
       console.error('Submission error:', error)

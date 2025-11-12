@@ -35,14 +35,21 @@ export function NewsletterForm() {
         body: JSON.stringify({ name, email }),
       })
 
-      const result = await response.json()
-
       if (response.ok) {
+        const result = await response.json()
         setMessage({ type: 'success', text: 'Successfully subscribed! Check your inbox.' })
         setName('') // Clear the inputs
         setEmail('')
       } else {
-        setMessage({ type: 'error', text: result.error || 'Failed to subscribe. Please try again.' })
+        let errorMessage = 'Failed to subscribe. Please try again.'
+        try {
+          const result = await response.json()
+          errorMessage = result.error || errorMessage
+        } catch (e) {
+          // Response wasn't JSON (probably HTML error page from 405/500)
+          errorMessage = `Server error: ${response.status}. Please try again later.`
+        }
+        setMessage({ type: 'error', text: errorMessage })
       }
     } catch (error) {
       console.error('Submission error:', error)

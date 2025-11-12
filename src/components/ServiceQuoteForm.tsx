@@ -108,8 +108,6 @@ export function ServiceQuoteForm({ serviceName, serviceType }: ServiceQuoteFormP
         }),
       })
 
-      const result = await response.json()
-
       if (response.ok) {
         alert('Quote request submitted successfully! We will get back to you within 24 hours.')
         // Reset form
@@ -121,7 +119,15 @@ export function ServiceQuoteForm({ serviceName, serviceType }: ServiceQuoteFormP
           service: '',
         })
       } else {
-        alert(`Error: ${result.error || 'Failed to submit quote request. Please try again.'}`)
+        let errorMessage = 'Failed to submit quote request. Please try again.'
+        try {
+          const result = await response.json()
+          errorMessage = result.error || errorMessage
+        } catch (e) {
+          // Response wasn't JSON (probably HTML error page from 405/500)
+          errorMessage = `Server error: ${response.status}. Please try again later.`
+        }
+        alert(`Error: ${errorMessage}`)
       }
     } catch (error) {
       console.error('Submission error:', error)

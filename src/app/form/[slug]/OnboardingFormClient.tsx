@@ -200,8 +200,15 @@ export default function OnboardingFormClient({ slug, formId }: OnboardingFormCli
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Submission failed");
+        let errorMessage = "Submission failed";
+        try {
+          const data = await response.json();
+          errorMessage = data.error || errorMessage;
+        } catch (e) {
+          // Response wasn't JSON (probably HTML error page from 405/500)
+          errorMessage = `Server error: ${response.status} ${response.statusText}. Please try again or contact support.`;
+        }
+        throw new Error(errorMessage);
       }
 
       // Show success message
