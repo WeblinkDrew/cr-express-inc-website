@@ -104,12 +104,25 @@ export default function OnboardingFormClient({ slug, formId }: OnboardingFormCli
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      if (file.type === "application/pdf") {
-        setFormData({ ...formData, w9Upload: file });
-      } else {
-        alert("Please upload a PDF file");
+
+      // Validate file type
+      if (file.type !== "application/pdf") {
+        setError("Please upload a PDF file only");
         e.target.value = "";
+        return;
       }
+
+      // Validate file size (10MB max)
+      const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+      if (file.size > maxSize) {
+        setError(`File is too large. Maximum size is 10MB. Your file is ${(file.size / 1024 / 1024).toFixed(2)}MB`);
+        e.target.value = "";
+        return;
+      }
+
+      // Clear any previous errors
+      setError("");
+      setFormData({ ...formData, w9Upload: file });
     }
   };
 
@@ -850,11 +863,14 @@ export default function OnboardingFormClient({ slug, formId }: OnboardingFormCli
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
                   <p className="mt-2">Drag and drop here or Browse files</p>
-                  <p className="text-xs text-neutral-500 mt-1">Max file size: 10 MB</p>
+                  <p className="text-xs text-neutral-500 mt-1">PDF only • Max file size: 10 MB</p>
                 </div>
               </label>
               {formData.w9Upload && (
-                <p className="mt-2 text-sm text-green-600">File selected: {formData.w9Upload.name}</p>
+                <div className="mt-2 text-sm text-green-600">
+                  <p className="font-medium">✓ File selected: {formData.w9Upload.name}</p>
+                  <p className="text-xs text-neutral-600">Size: {(formData.w9Upload.size / 1024 / 1024).toFixed(2)} MB</p>
+                </div>
               )}
               {error && !formData.w9Upload && (
                 <p className="mt-2 text-sm text-red-600">{error}</p>
