@@ -58,13 +58,28 @@ import { format } from "date-fns";
 
 interface SubmissionsClientProps {
   form: any; // Using any for now - will be properly typed in Phase 5
+  submissions: any[]; // Paginated submissions
+  totalCount: number; // Total submission count for pagination UI
+  nextCursor: string | null; // Cursor for next page
+  hasMore: boolean; // Whether there are more submissions
   user?: any;
 }
 
 type SortField = "company" | "contact" | "location" | "submitted" | "status";
 type SortOrder = "asc" | "desc";
 
-export default function SubmissionsClient({ form, user }: SubmissionsClientProps) {
+export default function SubmissionsClient({
+  form,
+  submissions: initialSubmissions,
+  totalCount,
+  nextCursor: initialNextCursor,
+  hasMore: initialHasMore,
+  user
+}: SubmissionsClientProps) {
+  const [submissions, setSubmissions] = useState(initialSubmissions);
+  const [nextCursor, setNextCursor] = useState(initialNextCursor);
+  const [hasMore, setHasMore] = useState(initialHasMore);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const router = useRouter();
   const [selectedSubmission, setSelectedSubmission] = useState<any | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -141,8 +156,8 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
     );
   };
 
-  // Filter and sort submissions
-  const filteredSubmissions = form.Submission.filter((submission: any) => {
+  // Filter and sort submissions (client-side for now - can be moved to server later)
+  const filteredSubmissions = submissions.filter((submission: any) => {
     const name = getSubmissionName(submission);
     const email = getSubmissionEmail(submission);
 
@@ -178,10 +193,10 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
     }
   });
 
-  // Stats
-  const totalSubmissions = form.Submission.length;
-  const sentSubmissions = form.Submission.filter((s: any) => s.sentToZapier).length;
-  const pendingSubmissions = form.Submission.filter((s: any) => !s.sentToZapier).length;
+  // Stats (use totalCount from server for accurate total)
+  const totalSubmissions = totalCount;
+  const sentSubmissions = submissions.filter((s: any) => s.sentToZapier).length;
+  const pendingSubmissions = submissions.filter((s: any) => !s.sentToZapier).length;
 
   const downloadPDF = async (submissionId: string, companyName: string) => {
     try {
@@ -246,6 +261,34 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
       alert("Failed to delete submission. Please try again.");
     } finally {
       setDeletingId(null);
+    }
+  };
+
+  const loadMore = async () => {
+    if (!nextCursor || isLoadingMore) return;
+
+    setIsLoadingMore(true);
+
+    try {
+      const response = await fetch(
+        `/api/admin/forms/${form.id}/submissions?cursor=${nextCursor}&limit=50`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to load more submissions");
+      }
+
+      const data = await response.json();
+
+      // Append new submissions to existing ones
+      setSubmissions([...submissions, ...data.submissions]);
+      setNextCursor(data.nextCursor);
+      setHasMore(data.hasMore);
+    } catch (error) {
+      console.error("Error loading more submissions:", error);
+      alert("Failed to load more submissions. Please try again.");
+    } finally {
+      setIsLoadingMore(false);
     }
   };
 
@@ -718,6 +761,34 @@ export default function SubmissionsClient({ form, user }: SubmissionsClientProps
                   )}
                 </TableBody>
               </Table>
+            </div>
+
+            {/* Load More Button */}
+            {hasMore && (
+              <div className="flex justify-center pt-6 border-t border-gray-200 dark:border-gray-800">
+                <Button
+                  onClick={loadMore}
+                  disabled={isLoadingMore}
+                  variant="outline"
+                  className="min-w-[200px]"
+                >
+                  {isLoadingMore ? (
+                    <>
+                      <Clock className="mr-2 h-4 w-4 animate-spin" />
+                      Loading...
+                    </>
+                  ) : (
+                    <>
+                      Load More ({totalCount - submissions.length} remaining)
+                    </>
+                  )}
+                </Button>
+              </div>
+            )}
+
+            {/* Pagination Info */}
+            <div className="flex justify-center pt-4 text-sm text-gray-500 dark:text-gray-400">
+              Showing {submissions.length} of {totalCount} submissions
             </div>
           </CardContent>
         </Card>
