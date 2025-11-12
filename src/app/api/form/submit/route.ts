@@ -9,6 +9,7 @@ import { join } from "path";
 import { generateSignedUrl } from "@/lib/signedUrls";
 import { Resend } from "resend";
 import { uploadFile, validateFile } from "@/lib/fileStorage";
+import { rateLimitFormSubmission } from "@/lib/rateLimit";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -22,9 +23,47 @@ const resend = new Resend(process.env.RESEND_API_KEY);
  *
  * This ensures the existing system continues working while we build the new multi-form infrastructure.
  * Once all forms are migrated, we can deprecate the legacy fields.
+ *
+ * SECURITY:
+ * - Rate limiting: 5 submissions per hour per IP address
+ * - File validation: PDF only, 10MB max, magic bytes check
+ * - reCAPTCHA v3 verification
  */
 export async function POST(request: NextRequest) {
   try {
+    // 0. Rate limiting check
+    const ipAddress = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+                     request.headers.get("x-real-ip") ||
+                     "unknown";
+    const ipAddressForDb = ipAddress === "unknown" ? null : ipAddress;
+
+    const rateLimitResult = await rateLimitFormSubmission(ipAddress);
+
+    if (!rateLimitResult.success) {
+      const resetDate = new Date(rateLimitResult.reset);
+      const minutesUntilReset = Math.ceil((rateLimitResult.reset - Date.now()) / 60000);
+
+      console.log(`⚠️ Rate limit exceeded for IP: ${ipAddress}`);
+
+      return NextResponse.json(
+        {
+          error: `Too many form submissions. Please try again in ${minutesUntilReset} minutes.`,
+          retryAfter: resetDate.toISOString(),
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": Math.ceil((rateLimitResult.reset - Date.now()) / 1000).toString(),
+            "X-RateLimit-Limit": "5",
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": rateLimitResult.reset.toString(),
+          }
+        }
+      );
+    }
+
+    console.log(`✅ Rate limit check passed for IP: ${ipAddress} (${rateLimitResult.remaining} remaining)`);
+
     const body = await request.json();
     const { slug, formId, w9Upload, ...formData } = body;
 
@@ -82,8 +121,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 3. Get client metadata
-    const ipAddress = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || null;
+    // 3. Get client metadata (ipAddress already extracted for rate limiting)
     const userAgent = request.headers.get("user-agent") || null;
 
     // 4. Calculate sizes for storage tracking
@@ -94,7 +132,7 @@ export async function POST(request: NextRequest) {
     const submission = await prisma.submission.create({
       data: {
         formId: form.id,
-        ipAddress,
+        ipAddress: ipAddressForDb,
         userAgent,
         browser: userAgent?.split(" ")[0] || null,
         location: null, // Could add geolocation later
