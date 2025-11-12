@@ -2,6 +2,7 @@
 
 import { FormType } from "@prisma/client";
 import dynamic from "next/dynamic";
+import { ReCaptchaProvider } from "@/components/ReCaptchaProvider";
 
 /**
  * Dynamic Form Renderer
@@ -102,9 +103,13 @@ interface FormRendererProps {
 }
 
 export default function FormRenderer({ formType, formId, slug, formName }: FormRendererProps) {
-  // Carrier Onboarding uses old props format
+  // Carrier Onboarding uses old props format and has reCAPTCHA protection
   if (formType === "CARRIER_ONBOARDING") {
-    return <CarrierOnboardingForm slug={slug} formId={formId} />;
+    return (
+      <ReCaptchaProvider>
+        <CarrierOnboardingForm slug={slug} formId={formId} />
+      </ReCaptchaProvider>
+    );
   }
 
   // Axiom Invoicing

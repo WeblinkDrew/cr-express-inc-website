@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 interface OnboardingFormClientProps {
   slug: string;
@@ -8,6 +9,7 @@ interface OnboardingFormClientProps {
 }
 
 export default function OnboardingFormClient({ slug, formId }: OnboardingFormClientProps) {
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
@@ -116,6 +118,13 @@ export default function OnboardingFormClient({ slug, formId }: OnboardingFormCli
     setLoading(true);
     setError("");
 
+    // Check reCAPTCHA is ready
+    if (!executeRecaptcha) {
+      setError("reCAPTCHA not ready. Please try again.");
+      setLoading(false);
+      return;
+    }
+
     // Validate W9 upload
     if (!formData.w9Upload) {
       setError("Please upload your W9 form");
@@ -143,6 +152,8 @@ export default function OnboardingFormClient({ slug, formId }: OnboardingFormCli
     }
 
     try {
+      // Generate reCAPTCHA token
+      const recaptchaToken = await executeRecaptcha("client_onboarding_submit");
       let w9Base64 = null;
       if (formData.w9Upload) {
         const reader = new FileReader();
@@ -166,6 +177,7 @@ export default function OnboardingFormClient({ slug, formId }: OnboardingFormCli
         reviewFrequency: formData.reviewFrequency === "Other" ? formData.reviewFrequencyOther : formData.reviewFrequency,
         slug,
         formId,
+        recaptchaToken, // Add reCAPTCHA token
       };
 
       const response = await fetch("/api/form/submit", {

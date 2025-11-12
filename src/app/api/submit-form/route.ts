@@ -23,7 +23,7 @@ const MAX_FILES_SIZE = 50 * 1024 * 1024; // 50MB limit for files JSON
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { formId, formData, files } = body;
+    const { formId, formData, files, recaptchaToken } = body;
 
     // 1. Validate form exists and is active
     const form = await prisma.form.findUnique({
@@ -41,6 +41,55 @@ export async function POST(request: NextRequest) {
 
     if (!form.isActive) {
       return NextResponse.json({ error: "Form is no longer active" }, { status: 400 });
+    }
+
+    // 1.5. Verify reCAPTCHA for CARRIER_ONBOARDING form
+    if (form.formType === "CARRIER_ONBOARDING") {
+      const BYPASS_RECAPTCHA = process.env.NODE_ENV === "development" || process.env.BYPASS_RECAPTCHA === "true";
+
+      if (!BYPASS_RECAPTCHA) {
+        if (!recaptchaToken) {
+          return NextResponse.json(
+            { error: "reCAPTCHA token missing" },
+            { status: 400 }
+          );
+        }
+
+        try {
+          const recaptchaResponse = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
+          });
+
+          const recaptchaResult = await recaptchaResponse.json();
+
+          console.log("reCAPTCHA result:", {
+            success: recaptchaResult.success,
+            score: recaptchaResult.score,
+            action: recaptchaResult.action,
+          });
+
+          if (!recaptchaResult.success || recaptchaResult.score < 0.3) {
+            console.error("reCAPTCHA verification failed:", recaptchaResult);
+            return NextResponse.json(
+              {
+                error: "reCAPTCHA verification failed. Please try again.",
+                details: recaptchaResult["error-codes"],
+              },
+              { status: 400 }
+            );
+          }
+        } catch (recaptchaError: any) {
+          console.error("reCAPTCHA verification error:", recaptchaError);
+          return NextResponse.json(
+            { error: "reCAPTCHA verification failed" },
+            { status: 500 }
+          );
+        }
+      }
     }
 
     // 2. Validate data size to prevent database bloat
