@@ -1,11 +1,50 @@
-import DOMPurify from 'isomorphic-dompurify';
-
 /**
  * Input Sanitization Utility
  *
  * Sanitizes user inputs to prevent XSS attacks while preserving safe content.
- * Uses DOMPurify which works in both Node.js and browser environments.
+ * Uses simple string manipulation that works in all environments.
  */
+
+/**
+ * Escape HTML entities to prevent XSS
+ */
+function escapeHtml(str: string): string {
+  const htmlEscapes: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '/': '&#x2F;',
+  };
+
+  return str.replace(/[&<>"'\/]/g, (match) => htmlEscapes[match]);
+}
+
+/**
+ * Remove all HTML tags from a string
+ */
+function stripHtmlTags(str: string): string {
+  // Remove script tags and their content entirely
+  str = str.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+
+  // Remove style tags and their content
+  str = str.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '');
+
+  // Remove all other HTML tags but keep content
+  str = str.replace(/<[^>]+>/g, '');
+
+  // Decode common HTML entities
+  str = str.replace(/&nbsp;/g, ' ')
+           .replace(/&amp;/g, '&')
+           .replace(/&lt;/g, '<')
+           .replace(/&gt;/g, '>')
+           .replace(/&quot;/g, '"')
+           .replace(/&#x27;/g, "'")
+           .replace(/&#x2F;/g, '/');
+
+  return str.trim();
+}
 
 /**
  * Sanitize a string input to remove potentially dangerous HTML/JS
@@ -20,19 +59,15 @@ export function sanitizeString(input: string | null | undefined, allowBasicForma
   // Convert to string if needed
   const str = String(input);
 
-  if (allowBasicFormatting) {
-    // Allow basic formatting tags but strip everything else
-    return DOMPurify.sanitize(str, {
-      ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'p', 'br'],
-      ALLOWED_ATTR: [],
-    });
+  // Strip HTML tags first
+  const stripped = stripHtmlTags(str);
+
+  // For plain text, also escape any remaining HTML entities
+  if (!allowBasicFormatting) {
+    return escapeHtml(stripped);
   }
 
-  // Strip all HTML tags - return plain text only
-  return DOMPurify.sanitize(str, {
-    ALLOWED_TAGS: [],
-    ALLOWED_ATTR: [],
-  });
+  return stripped;
 }
 
 /**
