@@ -90,6 +90,17 @@ export function Footer() {
                   <p>Sales: <a href="tel:+12244029537" className="hover:text-neutral-950 transition">+1 (224) 402-9537</a></p>
                   <p>Operations: <a href="tel:+18473547979" className="hover:text-neutral-950 transition">+1 (847) 354-7979</a></p>
                 </div>
+
+                <h3 className="font-display text-sm font-semibold tracking-wider text-neutral-950 mt-8">
+                  Holiday Hours
+                </h3>
+                <div className="mt-4 text-sm text-neutral-700 space-y-2">
+                  <p className="font-medium">Observed Holidays:</p>
+                  <p className="text-xs">Memorial Day, Labor Day, 4th of July, Thanksgiving Day, Christmas Day, New Years Day</p>
+                  <p className="font-medium mt-3">Local Transportation:</p>
+                  <p className="text-xs">6 AM - 4 PM (Last dispatch 2 PM)</p>
+                  <p className="text-xs italic">Normal hours day before and after holidays</p>
+                </div>
               </div>
             </div>
           </div>
