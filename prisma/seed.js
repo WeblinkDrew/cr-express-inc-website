@@ -7,7 +7,7 @@ async function main() {
 
   // Create the original Client Onboarding form (the complex 50+ field form)
   const carrierForm = await prisma.form.upsert({
-    where: { slug: 'carrier-onboarding' },
+    where: { slug: 'client-onboarding' },
     update: {
       name: 'Client Onboarding Form',
       formType: 'CARRIER_ONBOARDING',
@@ -15,7 +15,7 @@ async function main() {
     },
     create: {
       name: 'Client Onboarding Form',
-      slug: 'carrier-onboarding',
+      slug: 'client-onboarding',
       formType: 'CARRIER_ONBOARDING',
       description: 'Complete client onboarding form for new partnerships (50+ fields)',
       isActive: true,

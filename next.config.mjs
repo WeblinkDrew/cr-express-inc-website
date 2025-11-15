@@ -33,6 +33,12 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // FORM REDIRECTS - Ensure old form URLs remain functional
+      {
+        source: '/form/carrier-onboarding',
+        destination: '/form/client-onboarding',
+        permanent: true,
+      },
       // CRITICAL PAGE REDIRECTS - Old site URLs to new structure
       {
         source: '/about-page',
