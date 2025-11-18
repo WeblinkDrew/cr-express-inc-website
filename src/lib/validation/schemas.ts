@@ -89,6 +89,20 @@ export const driverApplicationSchema = z.object({
   recaptchaToken: z.string().min(1, "reCAPTCHA verification failed"),
 });
 
+// Drayage quote schema
+export const drayageQuoteSchema = z.object({
+  name: nameField,
+  email: emailField,
+  phone: phoneField,
+  company: z.string().min(1, "Company is required").max(200, "Company name is too long"),
+  city: z.string().min(1, "City is required").max(100, "City name is too long"),
+  state: z.string().min(1, "State is required").max(50, "State is too long"),
+  serviceNeeded: z.string().min(1, "Service selection is required"),
+  message: z.string().max(10000, "Message is too long").optional().or(z.literal("")),
+  cityName: z.string().max(100, "City name is too long").optional(),
+  recaptchaToken: z.string().min(1, "reCAPTCHA verification failed"),
+});
+
 // Type exports for TypeScript
 export type NewsletterFormData = z.infer<typeof newsletterSchema>;
 export type ContactFormData = z.infer<typeof contactSchema>;
@@ -96,3 +110,4 @@ export type ServiceQuoteFormData = z.infer<typeof serviceQuoteSchema>;
 export type LocationQuoteFormData = z.infer<typeof locationQuoteSchema>;
 export type JobApplicationFormData = z.infer<typeof jobApplicationSchema>;
 export type DriverApplicationFormData = z.infer<typeof driverApplicationSchema>;
+export type DrayageQuoteFormData = z.infer<typeof drayageQuoteSchema>;

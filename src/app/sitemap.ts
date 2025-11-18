@@ -1,6 +1,7 @@
 import { type MetadataRoute } from 'next'
 import { loadArticles, loadCaseStudies } from '@/lib/mdx'
 import { citiesData } from '@/lib/location-data'
+import { drayageCitiesData } from '@/lib/drayage-city-data'
 import { getSeobotArticles } from '@/lib/seobot'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -114,12 +115,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   )
 
-  // Dynamic location pages
+  // Dynamic location pages (bonded warehouse)
   const locationRoutes: MetadataRoute.Sitemap = citiesData.map((city) => ({
     url: `${baseUrl}/locations/${city.slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.7,
+  }))
+
+  // Dynamic drayage city pages
+  const drayageRoutes: MetadataRoute.Sitemap = drayageCitiesData.map((city) => ({
+    url: `${baseUrl}/services/drayage/${city.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
   }))
 
   // Dynamic work/case study pages
@@ -137,6 +146,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...blogRoutes,
     ...seobotBlogRoutes,
     ...locationRoutes,
+    ...drayageRoutes,
     ...workRoutes,
   ]
 }

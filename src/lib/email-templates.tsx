@@ -358,6 +358,84 @@ export function ServiceQuoteEmail({ data, serviceName, serviceType }: {
   )
 }
 
+// Drayage Quote Email Template
+export function DrayageQuoteEmail({ data, cityName }: {
+  data: any
+  cityName?: string
+}) {
+  return (
+    <EmailLayout>
+      <h2 style={{ color: '#0a0a0a', marginTop: 0, fontSize: '24px' }}>🚛 New Drayage Quote Request</h2>
+      {cityName && (
+        <p style={{ color: '#737373', fontSize: '14px', marginBottom: '30px' }}>
+          Location: <strong>{cityName} Drayage Services</strong>
+        </p>
+      )}
+
+      <div style={{ backgroundColor: '#f9f9f9', padding: '20px', borderRadius: '8px', marginBottom: '30px' }}>
+        <h3 style={{ color: '#0a0a0a', fontSize: '18px', marginTop: 0 }}>Contact Information</h3>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <tr>
+            <td style={{ padding: '8px 0', width: '30%', color: '#737373' }}>Name:</td>
+            <td style={{ padding: '8px 0', fontWeight: 'bold' }}>{data.name}</td>
+          </tr>
+          <tr>
+            <td style={{ padding: '8px 0', color: '#737373' }}>Company:</td>
+            <td style={{ padding: '8px 0' }}>{data.company}</td>
+          </tr>
+          <tr>
+            <td style={{ padding: '8px 0', color: '#737373' }}>Email:</td>
+            <td style={{ padding: '8px 0', color: '#0a0a0a' }}>{data.email}</td>
+          </tr>
+          {data.phone && (
+            <tr>
+              <td style={{ padding: '8px 0', color: '#737373' }}>Phone:</td>
+              <td style={{ padding: '8px 0', color: '#0a0a0a' }}>{data.phone}</td>
+            </tr>
+          )}
+          {data.city && (
+            <tr>
+              <td style={{ padding: '8px 0', color: '#737373' }}>City:</td>
+              <td style={{ padding: '8px 0', color: '#0a0a0a' }}>{data.city}</td>
+            </tr>
+          )}
+          {data.state && (
+            <tr>
+              <td style={{ padding: '8px 0', color: '#737373' }}>State:</td>
+              <td style={{ padding: '8px 0', color: '#0a0a0a' }}>{data.state}</td>
+            </tr>
+          )}
+        </table>
+      </div>
+
+      <div style={{ marginBottom: '30px' }}>
+        <h3 style={{ color: '#0a0a0a', fontSize: '18px', borderBottom: '2px solid #e5e5e5', paddingBottom: '10px' }}>Drayage Service Requested</h3>
+        <p style={{ fontSize: '16px', fontWeight: 'bold', color: '#0a0a0a', margin: '10px 0' }}>{data.serviceNeeded}</p>
+      </div>
+
+      {data.message && (
+        <div style={{ marginBottom: '30px' }}>
+          <h3 style={{ color: '#0a0a0a', fontSize: '18px', borderBottom: '2px solid #e5e5e5', paddingBottom: '10px' }}>Additional Details</h3>
+          <p style={{ whiteSpace: 'pre-wrap', fontSize: '14px', lineHeight: '1.6' }}>{data.message}</p>
+        </div>
+      )}
+
+      <div style={{ padding: '15px', backgroundColor: '#fff3cd', borderLeft: '4px solid #ffc107', marginTop: '30px' }}>
+        <p style={{ margin: 0, fontSize: '14px', color: '#856404' }}>
+          <strong>Action Required:</strong> Please respond to this drayage quote request within 24 hours.
+        </p>
+      </div>
+
+      <div style={{ marginTop: '30px', padding: '15px', backgroundColor: '#e8f4f8', borderRadius: '8px' }}>
+        <p style={{ margin: 0, fontSize: '12px', color: '#0c5460' }}>
+          <strong>Quick Info:</strong> This request came from the {cityName || 'Drayage'} location page.
+          Customer is interested in intermodal drayage services with private chassis fleet.
+        </p>
+      </div>
+    </EmailLayout>
+  )
+}
+
 // Location Quote Email Template
 export function LocationQuoteEmail({ data, cityName }: {
   data: any
