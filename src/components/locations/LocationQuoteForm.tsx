@@ -33,37 +33,6 @@ function TextInput({
   )
 }
 
-function SelectInput({
-  label,
-  children,
-  ...props
-}: React.ComponentPropsWithoutRef<'select'> & { label: string }) {
-  let id = useId()
-
-  return (
-    <div className="group relative z-0 transition-all focus-within:z-10">
-      <select
-        id={id}
-        {...props}
-        className="peer block w-full border border-neutral-300 bg-transparent px-6 pt-12 pb-4 text-base/6 text-neutral-950 ring-4 ring-transparent transition group-first:rounded-t-2xl group-last:rounded-b-2xl focus:border-neutral-950 focus:ring-neutral-950/5 focus:outline-hidden appearance-none"
-      >
-        {children}
-      </select>
-      <label
-        htmlFor={id}
-        className="pointer-events-none absolute top-1/2 left-6 -mt-3 origin-left text-base/6 text-neutral-500 transition-all duration-200 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:font-semibold peer-focus:text-neutral-950 peer-not-[:placeholder-shown]:-translate-y-4 peer-not-[:placeholder-shown]:scale-75 peer-not-[:placeholder-shown]:font-semibold peer-not-[:placeholder-shown]:text-neutral-950"
-      >
-        {label}
-      </label>
-      <div className="pointer-events-none absolute right-6 top-1/2 -mt-2">
-        <svg className="h-4 w-4 fill-neutral-950" viewBox="0 0 16 16">
-          <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z" />
-        </svg>
-      </div>
-    </div>
-  )
-}
-
 interface LocationQuoteFormProps {
   city: CityData
 }
@@ -75,7 +44,7 @@ export function LocationQuoteForm({ city }: LocationQuoteFormProps) {
     company: '',
     email: '',
     phone: '',
-    service: '',
+    service: 'bonded-warehouse', // Auto-set for bonded warehouse landing pages
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -119,7 +88,7 @@ export function LocationQuoteForm({ city }: LocationQuoteFormProps) {
           company: '',
           email: '',
           phone: '',
-          service: '',
+          service: 'bonded-warehouse', // Auto-set for bonded warehouse landing pages
           message: '',
         })
       } else {
@@ -191,27 +160,6 @@ export function LocationQuoteForm({ city }: LocationQuoteFormProps) {
                   onChange={handleChange}
                   required
                 />
-                <SelectInput
-                  label="Service Needed"
-                  name="service"
-                  value={formData.service}
-                  onChange={handleChange}
-                >
-                  <option value="">Select a service</option>
-                  <option value="general-inquiry">General Inquiry</option>
-                  <option value="air-import">Air Import</option>
-                  <option value="air-export">Air Export</option>
-                  <option value="warehousing">Warehousing</option>
-                  <option value="drayage">Drayage</option>
-                  <option value="local-operations">Local OBD / Chicago Operations</option>
-                  <option value="otr-operations">OTR Operations</option>
-                  <option value="imdl-operations">IMDL Operations</option>
-                  <option value="accounting-billing">Accounting / Billing</option>
-                  <option value="freight-tracking">Freight Tracking</option>
-                  <option value="claims-disputes">Claims & Disputes</option>
-                  <option value="feedback-suggestions">Feedback & Suggestions</option>
-                  <option value="careers-hr">Careers & HR</option>
-                </SelectInput>
                 <TextInput
                   label="Message or special requirements"
                   name="message"

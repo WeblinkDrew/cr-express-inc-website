@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
       company: validatedData.company || '',
       message: validatedData.message,
       cityName: validatedData.cityName || '',
+      service: formData.service || '', // Include service field for Zapier routing
     });
 
     // 5. Render and send email

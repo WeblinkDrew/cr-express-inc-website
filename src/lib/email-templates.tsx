@@ -496,6 +496,12 @@ export function LocationQuoteEmail({ data, cityName }: {
           <strong>Action Required:</strong> Please respond to this quote request within 24 hours.
         </p>
       </div>
+
+      <div style={{ marginTop: '30px', padding: '15px', backgroundColor: '#f0f0f0', borderRadius: '8px', borderTop: '3px solid #0a0a0a' }}>
+        <p style={{ margin: 0, fontSize: '12px', color: '#737373', textAlign: 'center' }}>
+          <strong style={{ color: '#0a0a0a' }}>Lead Source:</strong> Bonded Warehouse Landing Page - {cityName}
+        </p>
+      </div>
     </EmailLayout>
   )
 }
