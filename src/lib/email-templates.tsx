@@ -475,12 +475,12 @@ export function LocationQuoteEmail({ data, cityName }: {
       <div style={{ marginBottom: '20px' }}>
         <h3 style={{ color: '#0a0a0a', fontSize: '18px', borderBottom: '2px solid #e5e5e5', paddingBottom: '10px' }}>Service Requested</h3>
         <p style={{ fontSize: '16px', fontWeight: 'bold', color: '#0a0a0a' }}>
-          {data.service === 'bonded-warehouse' ? 'Bonded Warehouse Storage' :
-           data.service === 'container-transloading' ? 'Container Transloading' :
-           data.service === 'customs-brokerage' ? 'Customs Brokerage' :
-           data.service === 'drayage' ? 'Intermodal Drayage' :
-           data.service === 'air-cargo' ? 'Air Cargo Services' :
-           'General Inquiry'}
+          {data.service === 'warehousing' ? 'Bonded Warehouse Storage' :
+            data.service === 'container-transloading' ? 'Container Transloading' :
+              data.service === 'customs-brokerage' ? 'Customs Brokerage' :
+                data.service === 'drayage' ? 'Intermodal Drayage' :
+                  data.service === 'air-cargo' ? 'Air Cargo Services' :
+                    'General Inquiry'}
         </p>
       </div>
 
@@ -512,7 +512,7 @@ export function ContactEmail({ data }: { data: any }) {
     <EmailLayout>
       <h2 style={{ color: '#0a0a0a', marginTop: 0, fontSize: '24px' }}>New Contact Form Submission</h2>
       <p style={{ color: '#737373', fontSize: '14px', marginBottom: '30px' }}>
-        Category: <strong>{data.category || 'General Inquiry'}</strong>
+        Service: <strong>{data.service || 'General Inquiry'}</strong>
       </p>
 
       <div style={{ backgroundColor: '#f9f9f9', padding: '20px', borderRadius: '8px', marginBottom: '30px' }}>

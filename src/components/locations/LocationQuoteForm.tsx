@@ -44,7 +44,7 @@ export function LocationQuoteForm({ city }: LocationQuoteFormProps) {
     company: '',
     email: '',
     phone: '',
-    service: 'bonded-warehouse', // Auto-set for bonded warehouse landing pages
+    service: 'warehousing', // Auto-set for bonded warehouse landing pages
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -88,7 +88,7 @@ export function LocationQuoteForm({ city }: LocationQuoteFormProps) {
           company: '',
           email: '',
           phone: '',
-          service: 'bonded-warehouse', // Auto-set for bonded warehouse landing pages
+          service: 'warehousing', // Auto-set for bonded warehouse landing pages
           message: '',
         })
       } else {

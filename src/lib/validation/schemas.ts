@@ -26,6 +26,7 @@ export const contactSchema = z.object({
   email: emailField,
   phone: phoneField,
   message: messageField,
+  service: z.string().max(100, "Service name is too long").optional().or(z.literal("")),
   recaptchaToken: z.string().min(1, "reCAPTCHA verification failed"),
 });
 

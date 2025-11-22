@@ -29,8 +29,8 @@ export async function POST(request: NextRequest) {
   try {
     // 1. Rate limiting check (5 requests per hour per IP)
     const ipAddress = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-                     request.headers.get("x-real-ip") ||
-                     "unknown";
+      request.headers.get("x-real-ip") ||
+      "unknown";
 
     const rateLimitResult = await rateLimitFormSubmission(ipAddress);
 
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
       email: validatedData.email,
       phone: validatedData.phone || '',
       message: validatedData.message,
-      category: formData.category || 'General Inquiry',
+      service: formData.service || 'General Inquiry',
     });
     console.log('✅ Contact form data sanitized');
 
@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
       from: 'CR Express <contact@forms.crexpressinc.com>',
       to: ['aamro@crexpressinc.com'],
       replyTo: sanitizedData.email,
-      subject: `New Contact Form: ${sanitizedData.category} - ${sanitizedData.name}`,
+      subject: `New Contact Form: ${sanitizedData.service} - ${sanitizedData.name}`,
       html: emailHtml,
     });
 
@@ -170,6 +170,7 @@ export async function POST(request: NextRequest) {
           body: JSON.stringify({
             formType: 'contact',
             ...sanitizedData,
+            service: sanitizedData.service ? sanitizedData.service.toLowerCase().trim().replace(/\s+/g, '-') : 'general-inquiry',
             phone: sanitizedData.phone ? formatPhoneForClickUp(sanitizedData.phone) : '',
             submittedAt: new Date().toISOString(),
             ipAddress: ipAddress === 'unknown' ? null : ipAddress,
