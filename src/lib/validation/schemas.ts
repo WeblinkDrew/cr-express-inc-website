@@ -10,7 +10,7 @@ import { z } from 'zod';
 // Common field validators (reusable)
 const nameField = z.string().min(1, "Name is required").max(100, "Name is too long");
 const emailField = z.string().email("Invalid email address").max(255, "Email is too long");
-const phoneField = z.string().min(10, "Phone number is too short").max(30, "Phone number is too long").optional().or(z.literal(""));
+const phoneField = z.string().max(30, "Phone number is too long").optional().or(z.literal(""));
 const messageField = z.string().min(1, "Message is required").max(10000, "Message is too long");
 
 // Newsletter subscription schema
@@ -25,6 +25,9 @@ export const contactSchema = z.object({
   name: nameField,
   email: emailField,
   phone: phoneField,
+  company: z.string().max(200, "Company name is too long").optional().or(z.literal("")),
+  city: z.string().max(100, "City is too long").optional().or(z.literal("")),
+  state: z.string().max(50, "State is too long").optional().or(z.literal("")),
   message: messageField,
   service: z.string().max(100, "Service name is too long").optional().or(z.literal("")),
   recaptchaToken: z.string().min(1, "reCAPTCHA verification failed"),

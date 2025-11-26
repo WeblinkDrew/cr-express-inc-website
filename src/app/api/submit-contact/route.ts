@@ -130,6 +130,9 @@ export async function POST(request: NextRequest) {
       name: validatedData.name,
       email: validatedData.email,
       phone: validatedData.phone || '',
+      company: validatedData.company || '',
+      city: validatedData.city || '',
+      state: validatedData.state || '',
       message: validatedData.message,
       service: formData.service || 'General Inquiry',
     });
