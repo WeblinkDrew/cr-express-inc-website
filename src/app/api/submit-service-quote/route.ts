@@ -58,7 +58,8 @@ export async function POST(request: NextRequest) {
       email: validatedData.email,
       phone: validatedData.phone || '',
       company: validatedData.company || '',
-      message: validatedData.message,
+      service: validatedData.service || '',
+      message: validatedData.message || '',
       serviceName: validatedData.serviceName || '',
       serviceType: validatedData.serviceType || '',
     });

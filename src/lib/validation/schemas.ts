@@ -36,9 +36,10 @@ export const serviceQuoteSchema = z.object({
   email: emailField,
   phone: phoneField,
   company: z.string().max(200, "Company name is too long").optional().or(z.literal("")),
+  service: z.string().max(100, "Service selection is too long").optional().or(z.literal("")),
   serviceName: z.string().optional(),
   serviceType: z.string().optional(),
-  message: messageField,
+  message: z.string().max(10000, "Message is too long").optional().or(z.literal("")),
   recaptchaToken: z.string().min(1, "reCAPTCHA verification failed"),
 });
 
