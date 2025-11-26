@@ -536,10 +536,10 @@ export function ContactEmail({ data }: { data: any }) {
             <td style={{ padding: '8px 0', color: '#737373' }}>Phone:</td>
             <td style={{ padding: '8px 0', color: '#0a0a0a' }}>{data.phone}</td>
           </tr>
-          {data.city && data.state && (
+          {(data.city || data.state) && (
             <tr>
               <td style={{ padding: '8px 0', color: '#737373' }}>Location:</td>
-              <td style={{ padding: '8px 0' }}>{data.city}, {data.state}</td>
+              <td style={{ padding: '8px 0' }}>{[data.city, data.state].filter(Boolean).join(', ')}</td>
             </tr>
           )}
         </table>
