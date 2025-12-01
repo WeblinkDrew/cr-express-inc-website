@@ -66,7 +66,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Manufacturing', 'Distribution', 'E-commerce', 'Food & Beverage', 'Retail'],
     nearestRailyard: 'NS Chicago Rails',
     railyardDistance: 22,
-    seoTitle: 'Chicago Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Chicago',
     seoDescription: 'Professional intermodal drayage services in Chicago, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. Access to all major railyards. Get quote today.',
     targetKeywords: [
       'drayage services chicago',
@@ -91,7 +91,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Logistics', 'Manufacturing', 'Distribution', 'Industrial', 'E-commerce'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 8,
-    seoTitle: 'Elk Grove Village Drayage | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Elk Grove Village',
     seoDescription: 'Professional intermodal drayage services in Elk Grove Village, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 8 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services elk grove village',
@@ -116,7 +116,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Corporate Headquarters', 'Distribution', 'Technology', 'Healthcare', 'Retail'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 12,
-    seoTitle: 'Schaumburg Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Schaumburg',
     seoDescription: 'Professional intermodal drayage services in Schaumburg, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 12 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services schaumburg',
@@ -141,7 +141,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Manufacturing', 'Distribution', 'Healthcare', 'Logistics', 'Industrial'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 10,
-    seoTitle: 'Des Plaines Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Des Plaines',
     seoDescription: 'Professional intermodal drayage services in Des Plaines, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 10 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services des plaines',
@@ -166,7 +166,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Manufacturing', 'Corporate', 'Healthcare', 'Distribution', 'Technology'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 11,
-    seoTitle: 'Arlington Heights Drayage | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Arlington Heights',
     seoDescription: 'Professional intermodal drayage services in Arlington Heights, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 11 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services arlington heights',
@@ -191,7 +191,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Hospitality', 'Entertainment', 'Convention', 'Logistics', 'Distribution'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 9,
-    seoTitle: 'Rosemont Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Rosemont',
     seoDescription: 'Professional intermodal drayage services in Rosemont, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 9 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services rosemont',
@@ -215,7 +215,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Rail', 'Logistics', 'Manufacturing', 'Distribution', 'Industrial'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 2,
-    seoTitle: 'Bensenville Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Bensenville',
     seoDescription: 'Professional intermodal drayage services in Bensenville, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. Just 2 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services bensenville',
@@ -239,7 +239,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Manufacturing', 'Logistics', 'Distribution', 'Industrial', 'Aviation'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 7,
-    seoTitle: 'Wood Dale Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Wood Dale',
     seoDescription: 'Professional intermodal drayage services in Wood Dale, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 7 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services wood dale',
@@ -263,7 +263,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Corporate Headquarters', 'Distribution', 'Technology', 'Healthcare', 'Manufacturing'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 8,
-    seoTitle: 'Itasca Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Itasca',
     seoDescription: 'Professional intermodal drayage services in Itasca, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 8 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services itasca',
@@ -287,7 +287,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Manufacturing', 'Distribution', 'Logistics', 'Industrial', 'Automotive'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 6,
-    seoTitle: 'Addison Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Addison',
     seoDescription: 'Professional intermodal drayage services in Addison, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 6 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services addison',
@@ -311,7 +311,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Corporate Headquarters', 'Technology', 'Healthcare', 'Retail', 'Distribution'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 14,
-    seoTitle: 'Hoffman Estates Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Hoffman Estates',
     seoDescription: 'Professional intermodal drayage services in Hoffman Estates, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 14 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services hoffman estates',
@@ -335,7 +335,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Manufacturing', 'Technology', 'Healthcare', 'Distribution', 'Retail'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 15,
-    seoTitle: 'Palatine Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Palatine',
     seoDescription: 'Professional intermodal drayage services in Palatine, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 15 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services palatine',
@@ -359,7 +359,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Manufacturing', 'Distribution', 'Hospitality', 'Industrial', 'Logistics'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 16,
-    seoTitle: 'Wheeling Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Wheeling',
     seoDescription: 'Professional intermodal drayage services in Wheeling, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 16 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services wheeling',
@@ -383,7 +383,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Corporate Headquarters', 'Manufacturing', 'Technology', 'Healthcare', 'Retail'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 18,
-    seoTitle: 'Northbrook Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Northbrook',
     seoDescription: 'Professional intermodal drayage services in Northbrook, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 18 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services northbrook',
@@ -407,7 +407,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Corporate', 'Technology', 'Healthcare', 'Manufacturing', 'Distribution'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 17,
-    seoTitle: 'Glenview Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Glenview',
     seoDescription: 'Professional intermodal drayage services in Glenview, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 17 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services glenview',
@@ -431,7 +431,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Manufacturing', 'Healthcare', 'Technology', 'Distribution', 'Retail'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 19,
-    seoTitle: 'Skokie Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Skokie',
     seoDescription: 'Professional intermodal drayage services in Skokie, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 19 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services skokie',
@@ -455,7 +455,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Education', 'Healthcare', 'Technology', 'Manufacturing', 'Retail'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 21,
-    seoTitle: 'Evanston Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Evanston',
     seoDescription: 'Professional intermodal drayage services in Evanston, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 21 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services evanston',
@@ -479,7 +479,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Healthcare', 'Education', 'Retail', 'Technology', 'Distribution'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 10,
-    seoTitle: 'Elmhurst Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Elmhurst',
     seoDescription: 'Professional intermodal drayage services in Elmhurst, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 10 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services elmhurst',
@@ -503,7 +503,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Corporate', 'Technology', 'Healthcare', 'Distribution', 'Manufacturing'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 12,
-    seoTitle: 'Lombard Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Lombard',
     seoDescription: 'Professional intermodal drayage services in Lombard, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 12 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services lombard',
@@ -527,7 +527,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Distribution', 'Logistics', 'Manufacturing', 'E-commerce', 'Industrial'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 11,
-    seoTitle: 'Carol Stream Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Carol Stream',
     seoDescription: 'Professional intermodal drayage services in Carol Stream, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 11 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services carol stream',
@@ -551,7 +551,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Technology', 'Healthcare', 'Corporate', 'Retail', 'Distribution'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 16,
-    seoTitle: 'Downers Grove Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Downers Grove',
     seoDescription: 'Professional intermodal drayage services in Downers Grove, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 16 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services downers grove',
@@ -575,7 +575,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Corporate Headquarters', 'Retail', 'Technology', 'Healthcare', 'Distribution'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 14,
-    seoTitle: 'Oak Brook Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Oak Brook',
     seoDescription: 'Professional intermodal drayage services in Oak Brook, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 14 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services oak brook',
@@ -599,7 +599,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Technology', 'Healthcare', 'Corporate', 'Manufacturing', 'Distribution'],
     nearestRailyard: 'CP Bensenville',
     railyardDistance: 23,
-    seoTitle: 'Naperville Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Naperville',
     seoDescription: 'Professional intermodal drayage services in Naperville, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 23 miles from CP Bensenville railyard. Get quote today.',
     targetKeywords: [
       'drayage services naperville',
@@ -623,7 +623,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Manufacturing', 'Distribution', 'Healthcare', 'Technology', 'Logistics'],
     nearestRailyard: 'BNSF Elwood/Joliet',
     railyardDistance: 28,
-    seoTitle: 'Aurora Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Aurora',
     seoDescription: 'Professional intermodal drayage services in Aurora, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 28 miles from BNSF Elwood railyard. Get quote today.',
     targetKeywords: [
       'drayage services aurora',
@@ -647,7 +647,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Distribution', 'Logistics', 'E-commerce', 'Manufacturing', 'Retail'],
     nearestRailyard: 'BNSF Elwood/Joliet',
     railyardDistance: 22,
-    seoTitle: 'Bolingbrook Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Bolingbrook',
     seoDescription: 'Professional intermodal drayage services in Bolingbrook, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. 22 miles from BNSF Elwood railyard. Get quote today.',
     targetKeywords: [
       'drayage services bolingbrook',
@@ -671,7 +671,7 @@ export const drayageCitiesData: DrayageCityData[] = [
     majorIndustries: ['Logistics', 'Distribution', 'Manufacturing', 'Rail', 'E-commerce'],
     nearestRailyard: 'BNSF Elwood/Joliet',
     railyardDistance: 8,
-    seoTitle: 'Joliet Drayage Services | Intermodal Transport',
+    seoTitle: 'Intermodal Drayage Services near Joliet',
     seoDescription: 'Professional intermodal drayage services in Joliet, IL. Same-day rail pickup, 7-day operation, privately-owned chassis. Just 8 miles from BNSF Elwood railyard. Get quote today.',
     targetKeywords: [
       'drayage services joliet',

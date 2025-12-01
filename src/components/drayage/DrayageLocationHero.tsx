@@ -37,7 +37,7 @@ export function DrayageLocationHero({ city }: DrayageLocationHeroProps) {
           <div className="lg:col-span-7">
             <FadeIn>
               <h1 className="font-display text-5xl font-medium tracking-tight text-balance text-neutral-950 sm:text-6xl">
-                {city.name} Drayage Services | Intermodal Rail Container Transport
+                Intermodal Drayage Services in {city.name}
               </h1>
               <p className="mt-6 text-xl text-neutral-600">
                 Professional intermodal drayage services in {city.name}, {city.stateAbbr}.
