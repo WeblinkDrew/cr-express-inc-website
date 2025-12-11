@@ -240,6 +240,24 @@ async function main() {
   });
   console.log('✅ Created Cargo Shortage/Overage form:', cargoShortageForm);
 
+  // Create DoorDash Driver Check-In form
+  const doordashDriverCheckinForm = await prisma.form.upsert({
+    where: { slug: 'doordash-driver-checkin' },
+    update: {
+      name: 'DoorDash Driver Check-In',
+      formType: 'DOORDASH_DRIVER_CHECKIN',
+      description: 'Driver check-in form for DoorDash deliveries with BOL upload',
+    },
+    create: {
+      name: 'DoorDash Driver Check-In',
+      slug: 'doordash-driver-checkin',
+      formType: 'DOORDASH_DRIVER_CHECKIN',
+      description: 'Driver check-in form for DoorDash deliveries with BOL upload',
+      isActive: true,
+    },
+  });
+  console.log('✅ Created DoorDash Driver Check-In form:', doordashDriverCheckinForm);
+
   console.log('🌱 Database seed completed!');
 }
 
