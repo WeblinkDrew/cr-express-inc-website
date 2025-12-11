@@ -77,6 +77,11 @@ const CargoShortageOverageForm = dynamic(
   { ssr: false }
 );
 
+const DoorDashDriverCheckInForm = dynamic(
+  () => import("./DoorDashDriverCheckInForm"),
+  { ssr: false }
+);
+
 // Placeholder component for forms not yet built
 function PlaceholderForm({ formName }: { formName: string }) {
   return (
@@ -165,6 +170,11 @@ export default function FormRenderer({ formType, formId, slug, formName }: FormR
   // Cargo Shortage/Overage Report
   if (formType === "CARGO_SHORTAGE_OVERAGE_REPORT") {
     return <CargoShortageOverageForm formId={formId} formType={formType} formName={formName} />;
+  }
+
+  // DoorDash Driver Check-In
+  if (formType === "DOORDASH_DRIVER_CHECKIN") {
+    return <DoorDashDriverCheckInForm formId={formId} formType={formType} formName={formName} />;
   }
 
   // Other forms show placeholder (being built in Phase 4)

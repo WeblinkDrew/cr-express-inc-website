@@ -157,6 +157,11 @@ export async function POST(request: NextRequest) {
       case "LOAD_CREATION_REQUEST":
         submitterName = `${formData.driverFirstName} ${formData.driverLastName}`;
         break;
+      case "DOORDASH_DRIVER_CHECKIN":
+        submitterName = `${formData.firstName} ${formData.lastName}`;
+        submitterPhone = formData.phoneNumber;
+        companyName = formData.carrierName;
+        break;
       // Other forms don't have standard contact info
     }
 
@@ -318,6 +323,83 @@ export async function POST(request: NextRequest) {
       } catch (emailError: any) {
         console.error("❌ Error sending email:", emailError);
         // Don't fail the submission if email fails, just log it
+      }
+    }
+
+    // 10. Send email for DOORDASH_DRIVER_CHECKIN form
+    if (form.formType === "DOORDASH_DRIVER_CHECKIN") {
+      try {
+        // Prepare BOL attachment if provided
+        let bolAttachment = null;
+        if (files?.bol) {
+          const bolData = files.bol.data || files.bol;
+          const bolBuffer = Buffer.from(bolData, "base64");
+          bolAttachment = {
+            filename: files.bol.filename || `BOL_${formData.firstName}_${formData.lastName}.pdf`,
+            content: bolBuffer,
+          };
+        }
+
+        // Format the email body with form data
+        const emailHtml = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #dc2626; border-bottom: 2px solid #dc2626; padding-bottom: 10px;">
+              New Driver Check-In Submission
+            </h2>
+
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+              <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5; font-weight: bold; width: 40%;">Driver Name:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5;">${formData.firstName} ${formData.lastName}</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5; font-weight: bold;">Carrier Name:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5;">${formData.carrierName}</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5; font-weight: bold;">Truck Type:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5;">${formData.truckType}</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5; font-weight: bold;">Phone Number:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5;">${formData.phoneNumber}</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5; font-weight: bold;">Truck Number:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5;">${formData.truckNumber}</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5; font-weight: bold;">Trailer Number:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5;">${formData.trailerNumber}</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5; font-weight: bold;">Submitted At:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e5e5;">${new Date(formData.submittedAt).toLocaleString()}</td>
+              </tr>
+            </table>
+
+            <p style="margin-top: 20px; color: #666;">
+              ${bolAttachment ? "BOL document is attached to this email." : "No BOL document was uploaded."}
+            </p>
+
+            <p style="margin-top: 20px; padding: 15px; background-color: #fef3c7; border-radius: 8px; color: #92400e;">
+              <strong>Submission ID:</strong> ${submission.id}
+            </p>
+          </div>
+        `;
+
+        const emailResult = await resend.emails.send({
+          from: "CR Express <contact@forms.crexpressinc.com>",
+          to: ["doordashlead@crexpressinc.com"],
+          subject: `Driver Check-In: ${formData.firstName} ${formData.lastName} - ${formData.carrierName}`,
+          html: emailHtml,
+          attachments: bolAttachment ? [bolAttachment] : [],
+        });
+
+        console.log("✅ DoorDash Driver Check-In email sent:", emailResult.data?.id || "success");
+      } catch (emailError: any) {
+        console.error("❌ Error sending DoorDash Driver Check-In email:", emailError);
+        // Don't fail the submission if email fails
       }
     }
 

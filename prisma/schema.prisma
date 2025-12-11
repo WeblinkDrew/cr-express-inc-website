@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Form types enum - all 13 forms (originally 12, but Carrier Onboarding and Axiom Carrier Onboarding are separate)
+// Form types enum - all 14 forms
 enum FormType {
   CARRIER_ONBOARDING                // Original carrier onboarding (50+ fields, complex)
   AXIOM_CARRIER_ONBOARDING          // Axiom Carrier Onboarding (simple company info form)
@@ -15,6 +15,7 @@ enum FormType {
   BATHROOM_REQUEST                  // Bathroom Request Form
   CARGO_DAMAGE_REPORT               // Cargo Irregularity Report (Damage)
   CARGO_SHORTAGE_OVERAGE_REPORT     // Cargo Irregularity Report (Shortage/Overage)
+  DOORDASH_DRIVER_CHECKIN           // DoorDash Driver Check-In Form
   DRIVER_FEEDBACK                   // Driver Feedback & Reporting
   EMPLOYEE_ASSET_CHECKIN            // Employee Asset Check-In
   FORKLIFT_INSPECTION               // Forklift Inspection
