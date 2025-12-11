@@ -584,6 +584,344 @@ export const citiesData: CityData[] = [
       'Custom Bonded Warehouse in rolling meadows'
     ]
   },
+  // High Priority Cities
+  {
+    name: 'Naperville',
+    slug: 'naperville',
+    state: 'IL',
+    distance: 28,
+    drivingTime: 35,
+    population: '149,540',
+    zipCodes: ['60540', '60563', '60564', '60565', '60566', '60567'],
+    majorIndustries: ['Corporate Headquarters', 'Technology', 'Healthcare', 'Finance'],
+    seoTitle: 'Bonded Warehouse Naperville IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Naperville, IL. CBW Class 3 certified, customs compliance, duty-free storage. 28 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse naperville',
+      'customs warehouse naperville',
+      'CBW class 3 naperville',
+      'duty free storage naperville',
+      'bonded storage near naperville',
+      'customs bonded warehouse near naperville',
+      'Custom Bonded Warehouse in naperville'
+    ]
+  },
+  {
+    name: 'Aurora',
+    slug: 'aurora',
+    state: 'IL',
+    distance: 32,
+    drivingTime: 40,
+    population: '180,542',
+    zipCodes: ['60502', '60503', '60504', '60505', '60506', '60507', '60568'],
+    majorIndustries: ['Manufacturing', 'Distribution', 'Healthcare', 'Technology'],
+    seoTitle: 'Bonded Warehouse Aurora IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Aurora, IL. CBW Class 3 certified, customs compliance, duty-free storage. 32 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse aurora',
+      'customs warehouse aurora',
+      'CBW class 3 aurora',
+      'duty free storage aurora',
+      'bonded storage near aurora',
+      'customs bonded warehouse near aurora',
+      'Custom Bonded Warehouse in aurora'
+    ]
+  },
+  {
+    name: 'Joliet',
+    slug: 'joliet',
+    state: 'IL',
+    distance: 42,
+    drivingTime: 50,
+    population: '150,362',
+    zipCodes: ['60431', '60432', '60433', '60434', '60435', '60436'],
+    majorIndustries: ['Logistics', 'Intermodal', 'Manufacturing', 'Distribution'],
+    seoTitle: 'Bonded Warehouse Joliet IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Joliet, IL. CBW Class 3 certified, customs compliance, duty-free storage. 42 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse joliet',
+      'customs warehouse joliet',
+      'CBW class 3 joliet',
+      'duty free storage joliet',
+      'bonded storage near joliet',
+      'customs bonded warehouse near joliet',
+      'Custom Bonded Warehouse in joliet'
+    ]
+  },
+  {
+    name: 'Elgin',
+    slug: 'elgin',
+    state: 'IL',
+    distance: 18,
+    drivingTime: 25,
+    population: '114,797',
+    zipCodes: ['60120', '60121', '60123', '60124'],
+    majorIndustries: ['Manufacturing', 'Distribution', 'Healthcare', 'Technology'],
+    seoTitle: 'Bonded Warehouse Elgin IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Elgin, IL. CBW Class 3 certified, customs compliance, duty-free storage. 18 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse elgin',
+      'customs warehouse elgin',
+      'CBW class 3 elgin',
+      'duty free storage elgin',
+      'bonded storage near elgin',
+      'customs bonded warehouse near elgin',
+      'Custom Bonded Warehouse in elgin'
+    ]
+  },
+  {
+    name: 'Waukegan',
+    slug: 'waukegan',
+    state: 'IL',
+    distance: 35,
+    drivingTime: 45,
+    population: '89,321',
+    zipCodes: ['60079', '60085', '60087'],
+    majorIndustries: ['Manufacturing', 'Port Operations', 'Industrial', 'Healthcare'],
+    seoTitle: 'Bonded Warehouse Waukegan IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Waukegan, IL. CBW Class 3 certified, customs compliance, duty-free storage. 35 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse waukegan',
+      'customs warehouse waukegan',
+      'CBW class 3 waukegan',
+      'duty free storage waukegan',
+      'bonded storage near waukegan',
+      'customs bonded warehouse near waukegan',
+      'Custom Bonded Warehouse in waukegan'
+    ]
+  },
+  {
+    name: 'Evanston',
+    slug: 'evanston',
+    state: 'IL',
+    distance: 18,
+    drivingTime: 25,
+    population: '78,110',
+    zipCodes: ['60201', '60202', '60203', '60204', '60208', '60209'],
+    majorIndustries: ['Education', 'Healthcare', 'Technology', 'Corporate'],
+    seoTitle: 'Bonded Warehouse Evanston IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Evanston, IL. CBW Class 3 certified, customs compliance, duty-free storage. 18 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse evanston',
+      'customs warehouse evanston',
+      'CBW class 3 evanston',
+      'duty free storage evanston',
+      'bonded storage near evanston',
+      'customs bonded warehouse near evanston',
+      'Custom Bonded Warehouse in evanston'
+    ]
+  },
+  {
+    name: 'Cicero',
+    slug: 'cicero',
+    state: 'IL',
+    distance: 15,
+    drivingTime: 22,
+    population: '85,268',
+    zipCodes: ['60804'],
+    majorIndustries: ['Manufacturing', 'Industrial', 'Distribution', 'Logistics'],
+    seoTitle: 'Bonded Warehouse Cicero IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Cicero, IL. CBW Class 3 certified, customs compliance, duty-free storage. 15 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse cicero',
+      'customs warehouse cicero',
+      'CBW class 3 cicero',
+      'duty free storage cicero',
+      'bonded storage near cicero',
+      'customs bonded warehouse near cicero',
+      'Custom Bonded Warehouse in cicero'
+    ]
+  },
+  {
+    name: 'Oak Park',
+    slug: 'oak-park',
+    state: 'IL',
+    distance: 12,
+    drivingTime: 18,
+    population: '54,583',
+    zipCodes: ['60301', '60302', '60303', '60304'],
+    majorIndustries: ['Corporate', 'Healthcare', 'Retail', 'Professional Services'],
+    seoTitle: 'Bonded Warehouse Oak Park IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Oak Park, IL. CBW Class 3 certified, customs compliance, duty-free storage. 12 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse oak park',
+      'customs warehouse oak park',
+      'CBW class 3 oak park',
+      'duty free storage oak park',
+      'bonded storage near oak park',
+      'customs bonded warehouse near oak park',
+      'Custom Bonded Warehouse in oak park'
+    ]
+  },
+  // Medium Priority Cities
+  {
+    name: 'Lombard',
+    slug: 'lombard',
+    state: 'IL',
+    distance: 14,
+    drivingTime: 20,
+    population: '44,906',
+    zipCodes: ['60148'],
+    majorIndustries: ['Distribution', 'Corporate', 'Retail', 'Healthcare'],
+    seoTitle: 'Bonded Warehouse Lombard IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Lombard, IL. CBW Class 3 certified, customs compliance, duty-free storage. 14 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse lombard',
+      'customs warehouse lombard',
+      'CBW class 3 lombard',
+      'duty free storage lombard',
+      'bonded storage near lombard',
+      'customs bonded warehouse near lombard',
+      'Custom Bonded Warehouse in lombard'
+    ]
+  },
+  {
+    name: 'Elmhurst',
+    slug: 'elmhurst',
+    state: 'IL',
+    distance: 10,
+    drivingTime: 15,
+    population: '47,121',
+    zipCodes: ['60126'],
+    majorIndustries: ['Corporate', 'Healthcare', 'Technology', 'Professional Services'],
+    seoTitle: 'Bonded Warehouse Elmhurst IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Elmhurst, IL. CBW Class 3 certified, customs compliance, duty-free storage. 10 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse elmhurst',
+      'customs warehouse elmhurst',
+      'CBW class 3 elmhurst',
+      'duty free storage elmhurst',
+      'bonded storage near elmhurst',
+      'customs bonded warehouse near elmhurst',
+      'Custom Bonded Warehouse in elmhurst'
+    ]
+  },
+  {
+    name: 'Oak Brook',
+    slug: 'oak-brook',
+    state: 'IL',
+    distance: 15,
+    drivingTime: 22,
+    population: '8,058',
+    zipCodes: ['60521', '60522', '60523'],
+    majorIndustries: ['Corporate Headquarters', 'Finance', 'Technology', 'Retail'],
+    seoTitle: 'Bonded Warehouse Oak Brook IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Oak Brook, IL. CBW Class 3 certified, customs compliance, duty-free storage. 15 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse oak brook',
+      'customs warehouse oak brook',
+      'CBW class 3 oak brook',
+      'duty free storage oak brook',
+      'bonded storage near oak brook',
+      'customs bonded warehouse near oak brook',
+      'Custom Bonded Warehouse in oak brook'
+    ]
+  },
+  {
+    name: 'Downers Grove',
+    slug: 'downers-grove',
+    state: 'IL',
+    distance: 18,
+    drivingTime: 25,
+    population: '49,670',
+    zipCodes: ['60515', '60516', '60517'],
+    majorIndustries: ['Corporate', 'Technology', 'Healthcare', 'Distribution'],
+    seoTitle: 'Bonded Warehouse Downers Grove IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Downers Grove, IL. CBW Class 3 certified, customs compliance, duty-free storage. 18 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse downers grove',
+      'customs warehouse downers grove',
+      'CBW class 3 downers grove',
+      'duty free storage downers grove',
+      'bonded storage near downers grove',
+      'customs bonded warehouse near downers grove',
+      'Custom Bonded Warehouse in downers grove'
+    ]
+  },
+  {
+    name: 'Tinley Park',
+    slug: 'tinley-park',
+    state: 'IL',
+    distance: 30,
+    drivingTime: 38,
+    population: '57,144',
+    zipCodes: ['60477', '60478', '60487'],
+    majorIndustries: ['Industrial', 'Distribution', 'Healthcare', 'Retail'],
+    seoTitle: 'Bonded Warehouse Tinley Park IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Tinley Park, IL. CBW Class 3 certified, customs compliance, duty-free storage. 30 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse tinley park',
+      'customs warehouse tinley park',
+      'CBW class 3 tinley park',
+      'duty free storage tinley park',
+      'bonded storage near tinley park',
+      'customs bonded warehouse near tinley park',
+      'Custom Bonded Warehouse in tinley park'
+    ]
+  },
+  {
+    name: 'Orland Park',
+    slug: 'orland-park',
+    state: 'IL',
+    distance: 28,
+    drivingTime: 35,
+    population: '60,333',
+    zipCodes: ['60462', '60467'],
+    majorIndustries: ['Corporate', 'Healthcare', 'Retail', 'Professional Services'],
+    seoTitle: 'Bonded Warehouse Orland Park IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Orland Park, IL. CBW Class 3 certified, customs compliance, duty-free storage. 28 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse orland park',
+      'customs warehouse orland park',
+      'CBW class 3 orland park',
+      'duty free storage orland park',
+      'bonded storage near orland park',
+      'customs bonded warehouse near orland park',
+      'Custom Bonded Warehouse in orland park'
+    ]
+  },
+  {
+    name: 'Bolingbrook',
+    slug: 'bolingbrook',
+    state: 'IL',
+    distance: 25,
+    drivingTime: 32,
+    population: '75,555',
+    zipCodes: ['60439', '60440', '60490'],
+    majorIndustries: ['Distribution', 'Logistics', 'Manufacturing', 'Warehousing'],
+    seoTitle: 'Bonded Warehouse Bolingbrook IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Bolingbrook, IL. CBW Class 3 certified, customs compliance, duty-free storage. 25 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse bolingbrook',
+      'customs warehouse bolingbrook',
+      'CBW class 3 bolingbrook',
+      'duty free storage bolingbrook',
+      'bonded storage near bolingbrook',
+      'customs bonded warehouse near bolingbrook',
+      'Custom Bonded Warehouse in bolingbrook'
+    ]
+  },
+  {
+    name: 'Romeoville',
+    slug: 'romeoville',
+    state: 'IL',
+    distance: 30,
+    drivingTime: 38,
+    population: '40,828',
+    zipCodes: ['60446'],
+    majorIndustries: ['Intermodal', 'Logistics', 'Distribution', 'Manufacturing'],
+    seoTitle: 'Bonded Warehouse Romeoville IL | CBW Class 3 | CR Express',
+    seoDescription: 'Professional bonded warehouse services in Romeoville, IL. CBW Class 3 certified, customs compliance, duty-free storage. 30 miles from facility. Get quote today.',
+    targetKeywords: [
+      'bonded warehouse romeoville',
+      'customs warehouse romeoville',
+      'CBW class 3 romeoville',
+      'duty free storage romeoville',
+      'bonded storage near romeoville',
+      'customs bonded warehouse near romeoville',
+      'Custom Bonded Warehouse in romeoville'
+    ]
+  },
 ]
 
 // Helper function to get city data by slug

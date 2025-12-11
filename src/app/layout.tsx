@@ -1,6 +1,7 @@
 import { type Metadata } from 'next'
 import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/next'
+import Script from 'next/script'
 
 import '@/styles/tailwind.css'
 import { ReCaptchaProvider } from '@/components/ReCaptchaProvider'
@@ -68,8 +69,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`h-full bg-neutral-950 text-base antialiased ${monaSans.variable}`}>
       <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-NRZWKG07CL"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-NRZWKG07CL');
+          `}
+        </Script>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.youtube.com" />
         <link rel="preconnect" href="https://www.google.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.youtube.com" />
         <link rel="dns-prefetch" href="https://www.google.com" />
       </head>
