@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { stackServerApp } from "@/lib/stack";
 import { renderToBuffer } from "@react-pdf/renderer";
 import ClientOnboardingPDF from "@/components/pdf/ClientOnboardingPDF";
+import DoorDashDriverCheckInPDF from "@/components/pdf/DoorDashDriverCheckInPDF";
 
 export async function GET(
   request: NextRequest,
@@ -17,73 +18,104 @@ export async function GET(
 
     const { id } = await params;
 
-    // Fetch the submission
+    // Fetch the submission with its form to determine the form type
     const submission = await prisma.submission.findUnique({
       where: { id },
+      include: { Form: true },
     });
 
     if (!submission) {
       return NextResponse.json({ error: "Submission not found" }, { status: 404 });
     }
 
-    // Prepare form data for PDF generation
-    const formData = {
-      companyLegalName: submission.companyLegalName,
-      division: submission.division,
-      branchAddressLine1: submission.branchAddressLine1,
-      branchCity: submission.branchCity,
-      branchState: submission.branchState,
-      branchZipCode: submission.branchZipCode,
-      mc: submission.mc,
-      dot: submission.dot,
-      scacCode: submission.scacCode,
-      primaryContactFirstName: submission.primaryContactFirstName,
-      primaryContactLastName: submission.primaryContactLastName,
-      primaryContactEmail: submission.primaryContactEmail,
-      primaryContactPhone: submission.primaryContactPhone,
-      secondaryContactFirstName: submission.secondaryContactFirstName,
-      secondaryContactLastName: submission.secondaryContactLastName,
-      secondaryContactEmail: submission.secondaryContactEmail,
-      secondaryContactPhone: submission.secondaryContactPhone,
-      escalationContactFirstName: submission.escalationContactFirstName,
-      escalationContactLastName: submission.escalationContactLastName,
-      escalationContactEmail: submission.escalationContactEmail,
-      escalationContactPhone: submission.escalationContactPhone,
-      accountsPayableFirstName: submission.accountsPayableFirstName,
-      accountsPayableLastName: submission.accountsPayableLastName,
-      accountsPayableEmail: submission.accountsPayableEmail,
-      accountsPayablePhone: submission.accountsPayablePhone,
-      billingAddressLine1: submission.billingAddressLine1,
-      billingCity: submission.billingCity,
-      billingState: submission.billingState,
-      billingZipCode: submission.billingZipCode,
-      invoicingInstructions: submission.invoicingInstructions,
-      paymentMethod: submission.paymentMethod,
-      w9Upload: submission.w9Upload,
-      shipmentTypes: submission.shipmentTypes,
-      equipmentTypes: submission.equipmentTypes,
-      shipmentBuild: submission.shipmentBuild,
-      additionalRequirements: submission.additionalRequirements,
-      monthlyShipments: submission.monthlyShipments,
-      exceptionCommunication: submission.exceptionCommunication,
-      reviewFrequency: submission.reviewFrequency,
-      submittedAt: submission.submittedAt.toISOString(),
-      submissionId: submission.id,
-      ipAddress: submission.ipAddress || "N/A",
-      userAgent: submission.userAgent || "N/A",
-      browser: submission.browser || "N/A",
-    };
+    let pdfBuffer: Buffer;
+    let filename: string;
 
-    // Generate PDF
-    const pdfBuffer = await renderToBuffer(
-      ClientOnboardingPDF({ formData })
-    );
+    // Generate PDF based on form type
+    if (submission.Form?.formType === "DOORDASH_DRIVER_CHECKIN") {
+      // DoorDash Driver Check-In form - data stored in formData JSON
+      const storedData = submission.formData as Record<string, any> || {};
+      const filesData = submission.files as Record<string, any> || {};
 
-    // Create filename
-    const sanitizedCompanyName = (submission.companyLegalName || "Unknown")
-      .replace(/[^a-zA-Z0-9]/g, "_")
-      .substring(0, 50);
-    const filename = `Onboarding_${sanitizedCompanyName}_${submission.id}.pdf`;
+      const formData = {
+        firstName: storedData.firstName || "",
+        lastName: storedData.lastName || "",
+        carrierName: storedData.carrierName || "",
+        phoneNumber: storedData.phoneNumber || "",
+        truckType: storedData.truckType || "",
+        truckNumber: storedData.truckNumber || "",
+        trailerNumber: storedData.trailerNumber || "",
+        hasBOL: !!filesData.bol,
+        submittedAt: submission.submittedAt.toISOString(),
+        submissionId: submission.id,
+      };
+
+      pdfBuffer = await renderToBuffer(
+        DoorDashDriverCheckInPDF({ formData })
+      );
+
+      const sanitizedName = `${storedData.firstName || "Unknown"}_${storedData.lastName || "Driver"}`
+        .replace(/[^a-zA-Z0-9]/g, "_")
+        .substring(0, 50);
+      filename = `DoorDash_CheckIn_${sanitizedName}_${submission.id}.pdf`;
+    } else {
+      // Default to Client Onboarding PDF (CARRIER_ONBOARDING)
+      const formData = {
+        companyLegalName: submission.companyLegalName,
+        division: submission.division,
+        branchAddressLine1: submission.branchAddressLine1,
+        branchCity: submission.branchCity,
+        branchState: submission.branchState,
+        branchZipCode: submission.branchZipCode,
+        mc: submission.mc,
+        dot: submission.dot,
+        scacCode: submission.scacCode,
+        primaryContactFirstName: submission.primaryContactFirstName,
+        primaryContactLastName: submission.primaryContactLastName,
+        primaryContactEmail: submission.primaryContactEmail,
+        primaryContactPhone: submission.primaryContactPhone,
+        secondaryContactFirstName: submission.secondaryContactFirstName,
+        secondaryContactLastName: submission.secondaryContactLastName,
+        secondaryContactEmail: submission.secondaryContactEmail,
+        secondaryContactPhone: submission.secondaryContactPhone,
+        escalationContactFirstName: submission.escalationContactFirstName,
+        escalationContactLastName: submission.escalationContactLastName,
+        escalationContactEmail: submission.escalationContactEmail,
+        escalationContactPhone: submission.escalationContactPhone,
+        accountsPayableFirstName: submission.accountsPayableFirstName,
+        accountsPayableLastName: submission.accountsPayableLastName,
+        accountsPayableEmail: submission.accountsPayableEmail,
+        accountsPayablePhone: submission.accountsPayablePhone,
+        billingAddressLine1: submission.billingAddressLine1,
+        billingCity: submission.billingCity,
+        billingState: submission.billingState,
+        billingZipCode: submission.billingZipCode,
+        invoicingInstructions: submission.invoicingInstructions,
+        paymentMethod: submission.paymentMethod,
+        w9Upload: submission.w9Upload,
+        shipmentTypes: submission.shipmentTypes,
+        equipmentTypes: submission.equipmentTypes,
+        shipmentBuild: submission.shipmentBuild,
+        additionalRequirements: submission.additionalRequirements,
+        monthlyShipments: submission.monthlyShipments,
+        exceptionCommunication: submission.exceptionCommunication,
+        reviewFrequency: submission.reviewFrequency,
+        submittedAt: submission.submittedAt.toISOString(),
+        submissionId: submission.id,
+        ipAddress: submission.ipAddress || "N/A",
+        userAgent: submission.userAgent || "N/A",
+        browser: submission.browser || "N/A",
+      };
+
+      pdfBuffer = await renderToBuffer(
+        ClientOnboardingPDF({ formData })
+      );
+
+      const sanitizedCompanyName = (submission.companyLegalName || "Unknown")
+        .replace(/[^a-zA-Z0-9]/g, "_")
+        .substring(0, 50);
+      filename = `Onboarding_${sanitizedCompanyName}_${submission.id}.pdf`;
+    }
 
     // Return PDF as download
     return new NextResponse(new Uint8Array(pdfBuffer), {

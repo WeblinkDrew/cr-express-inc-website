@@ -390,7 +390,7 @@ export async function POST(request: NextRequest) {
 
         const emailResult = await resend.emails.send({
           from: "CR Express <contact@forms.crexpressinc.com>",
-          to: ["doordashlead@crexpressinc.com"],
+          to: ["andrew@goweblink.io"], // TODO: Change back to doordashlead@crexpressinc.com after testing
           subject: `Driver Check-In: ${formData.firstName} ${formData.lastName} - ${formData.carrierName}`,
           html: emailHtml,
           attachments: bolAttachment ? [bolAttachment] : [],
