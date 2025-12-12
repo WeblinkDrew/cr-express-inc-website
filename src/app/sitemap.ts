@@ -2,6 +2,7 @@ import { type MetadataRoute } from 'next'
 import { loadArticles, loadCaseStudies } from '@/lib/mdx'
 import { citiesData } from '@/lib/location-data'
 import { drayageCitiesData } from '@/lib/drayage-city-data'
+import { logisticsCitiesData } from '@/lib/logistics-city-data'
 import { getSeobotArticles } from '@/lib/seobot'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -131,6 +132,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
+  // Dynamic logistics city pages
+  const logisticsRoutes: MetadataRoute.Sitemap = logisticsCitiesData.map((city) => ({
+    url: `${baseUrl}/services/logistics/${city.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }))
+
   // Dynamic work/case study pages
   const caseStudies = await loadCaseStudies()
   const workRoutes: MetadataRoute.Sitemap = caseStudies.map((caseStudy) => ({
@@ -147,6 +156,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...seobotBlogRoutes,
     ...locationRoutes,
     ...drayageRoutes,
+    ...logisticsRoutes,
     ...workRoutes,
   ]
 }
