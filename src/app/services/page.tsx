@@ -97,7 +97,7 @@ function Services() {
     <Container className="mt-40">
       <FadeIn>
         <h2 className="font-display text-2xl font-semibold text-neutral-950">
-          Our Services
+          Our Logistics & Transportation Services
         </h2>
       </FadeIn>
       <div className="mt-10 space-y-20 sm:space-y-24 lg:space-y-32">
@@ -232,23 +232,33 @@ function Certifications() {
 }
 
 export const metadata: Metadata = {
-  title: 'Comprehensive Logistics Services | CR Express Inc',
+  title: 'Logistics Services | Trucking Company & Transportation | CR Express',
   description:
-    'Full-service logistics including FTL freight, LTL shipping, bonded warehouse, cross docking, container freight, and air cargo services. CBW Class 3 certified, TSA approved, 26+ years experience.',
+    'Full-service logistics transportation company offering freight trucking, bonded warehouse, cross-docking, drayage, and air cargo services in Chicago. TSA approved logistics trucking company with 26+ years experience.',
+  keywords: [
+    'logistics services',
+    'logistics transportation',
+    'logistics trucking company',
+    'logistics services near me',
+    'freight trucking company',
+    'transportation logistics',
+    'Chicago logistics company',
+  ],
 }
 
 export default function ServicesPage() {
   return (
     <RootLayout>
       <PageIntro
-        eyebrow="Our Services"
-        title="Comprehensive logistics solutions for your supply chain"
+        eyebrow="Logistics Services"
+        title="Full-service logistics transportation & trucking company"
       >
         <p>
-          From our 227,000 sq ft bonded warehouse to nationwide freight services,
-          CR Express delivers integrated logistics solutions that keep your business moving.
-          With 26+ years of experience and strategic positioning near O'Hare, we're your
-          trusted partner for all transportation and warehousing needs.
+          CR Express is a leading logistics trucking company providing comprehensive
+          transportation services throughout Chicago and nationwide. From our 227,000 sq ft
+          bonded warehouse to freight trucking and drayage, we deliver integrated logistics
+          solutions that keep your supply chain moving. With 26+ years of experience near
+          O'Hare, we're your trusted logistics services partner.
         </p>
       </PageIntro>
 
